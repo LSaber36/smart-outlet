@@ -45,6 +45,7 @@ rules:
     - never
   indent:                                  # require tab for indentations
     - error
+    - tab
     - SwitchCase: 1
   keyword-spacing:                         # require spaces before/after a keyword 
     - error
