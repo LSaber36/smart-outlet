@@ -5,33 +5,27 @@ import { Button } from 'react-native-elements';
 
 const SplashScreen = () => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
-	const { textStyle, buttonView, buttonStyle, loginTextView } = loginStyles;
+	const { textStyle, buttonView, buttonStyle } = deviceStyles;
 
 	return (
 		<View style = { container }>
-			<Text style = { textStyle }> Signup Page </Text>
+			<Text style = { textStyle }> Device Page </Text>
 			<View style = { [buttonView, center] }>
 				<Button
-					title = 'Sign Up'
+					title = 'Back'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
 				/>
-			</View>
-			<View style = { [loginTextView, center] }>
-				<Text>{ 'Already have an account? ' } </Text>
-				<Text style = {{ color: colors.secondaryDark }}>
-					Log in
-				</Text>
 			</View>
 		</View>
 	);
 };
 
-const loginStyles = {
+const deviceStyles = {
 	textStyle: {
 		color: colors.dark,
 		fontSize: 40,
-		marginTop: '65%'
+		paddingTop: '65%'
 	},
 	buttonView: {
 		height: '10%',
@@ -40,9 +34,10 @@ const loginStyles = {
 	},
 	buttonStyle: {
 		width: '80%',
-		height: '80%'
+		height: '80%',
+		backgroundColor: 'red'
 	},
-	loginTextView: {
+	registerTextView: {
 		marginTop: '5%'
 	}
 };

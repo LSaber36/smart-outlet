@@ -5,12 +5,19 @@ import { Button } from 'react-native-elements';
 
 const SplashScreen = () => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
-	const { textStyle, buttonView, buttonStyle } = dashboardStyles;
+	const { textStyle, navButtonView, buttonStyle, deviceButtonView } = dashboardStyles;
 
 	return (
 		<View style = { container }>
 			<Text style = { textStyle }> Dashboard Page </Text>
-			<View style = { buttonView }>
+			<View style = { deviceButtonView }>
+				<Button
+					title = 'Device 1'
+					containerStyle = { [buttonContainer, buttonStyle] }
+					buttonStyle = { [fullWidthHeight] }
+				/>
+			</View>
+			<View style = { navButtonView }>
 				<Button
 					title = '?'
 					containerStyle = { [buttonContainer, buttonStyle] }
@@ -33,18 +40,24 @@ const dashboardStyles = {
 		fontSize: 40,
 		marginTop: '65%'
 	},
-	buttonView: {
+	deviceButtonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '40%',
+		marginTop: '20%',
+		justifyContent: 'space-around',
+		alignItems: 'center'
+	},
+	navButtonView: {
+		height: '10%',
+		width: '80%',
+		marginTop: '20%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center'
 	},
 	buttonStyle: {
 		width: '35%',
-		height: '80%',
-		backgroundColor: 'red'
+		height: '80%'
 	}
 };
 

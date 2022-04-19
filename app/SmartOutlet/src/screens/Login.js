@@ -40,8 +40,7 @@ const loginStyles = {
 	},
 	buttonStyle: {
 		width: '80%',
-		height: '80%',
-		backgroundColor: 'red'
+		height: '80%'
 	},
 	registerTextView: {
 		marginTop: '5%'

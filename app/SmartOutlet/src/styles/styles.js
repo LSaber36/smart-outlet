@@ -16,7 +16,8 @@ export const styles = {
 		height: '7%',
 		justifyContent: 'center',
 		alignItems: 'center',
-		elevation: 50
+		elevation: 50,
+		borderRadius: 6
 	},
 	center: {
 		justifyContent: 'center',
