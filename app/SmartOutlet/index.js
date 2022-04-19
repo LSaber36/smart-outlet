@@ -1,13 +1,11 @@
-/**
- * @format
- */
-
 import { AppRegistry } from 'react-native';
-// import App from './src/App';
-import ReactSplash from './src/screens/ReactSplash';
-// import SplashScreen from './src/screens/SplashScreen';
-import { name as appName } from './app.json';
+// Should launch App, which will then go to the splash page and contain the navigation stack
+import App from './src/App';
+import Splash from './src/screens/Splash';
+import Login from './src/screens/Login';
+import Signup from './src/screens/Signup';
+import Dashboard from './src/screens/Dashboard';
+import Settings from './src/screens/Settings';
+import { name as appName } from './src/app.json';
 
-// AppRegistry.registerComponent(appName, () => App);
-AppRegistry.registerComponent(appName, () => ReactSplash);
-// AppRegistry.registerComponent(appName, () => ReactSplash);
+AppRegistry.registerComponent(appName, () => Login);
