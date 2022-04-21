@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 
-const Splash = () => {
+export const Splash = ({ navigation }) => {
 	const {	container } = styles;
 	const { textStyle } = splashStyles;
 
@@ -20,5 +20,3 @@ const splashStyles = {
 		marginTop: '65%'
 	}
 };
-
-export default Splash;

@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 
-const SplashScreen = () => {
+export const Device = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, buttonView, buttonStyle } = deviceStyles;
 
@@ -15,6 +15,7 @@ const SplashScreen = () => {
 					title = 'Back'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
+					onPress = { () => navigation.goBack() }
 				/>
 			</View>
 		</View>
@@ -41,5 +42,3 @@ const deviceStyles = {
 		marginTop: '5%'
 	}
 };
-
-export default SplashScreen;

@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 
-const SplashScreen = () => {
+export const Settings = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
 	const { textStyle, buttonView, buttonStyle } = dashboardStyles;
 
@@ -15,12 +15,14 @@ const SplashScreen = () => {
 					title = 'Back'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
+					onPress = { () => navigation.goBack() }
 				/>
 
 				<Button
 					title = 'Log Out'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
+					onPress = { () => { navigation.navigate('Login') } }
 				/>
 			</View>
 		</View>
@@ -47,5 +49,3 @@ const dashboardStyles = {
 		backgroundColor: 'red'
 	}
 };
-
-export default SplashScreen;

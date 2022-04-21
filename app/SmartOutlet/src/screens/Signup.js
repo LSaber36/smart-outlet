@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 
-const SplashScreen = () => {
+export const Signup = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, buttonView, buttonStyle, loginTextView } = loginStyles;
 
@@ -46,5 +46,3 @@ const loginStyles = {
 		marginTop: '5%'
 	}
 };
-
-export default SplashScreen;
