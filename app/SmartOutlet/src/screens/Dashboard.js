@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 
@@ -12,8 +12,8 @@ export const Dashboard = ({ navigation }) => {
 		addDeviceButtonView,
 		scrollViewContainer,
 		scrollViewStyle,
-		deviceItemStyle,
 		deviceItemContainer,
+		deviceItemStyle,
 		contentStyle,
 		itemTextStyle
 	} = dashboardStyles;
@@ -56,7 +56,12 @@ export const Dashboard = ({ navigation }) => {
 						items.map((item, i) => (
 							<ListItem
 								key = { i }
+								style = { deviceItemStyle }
 								containerStyle = { deviceItemContainer }
+								onPress = { () => {
+									console.log(item.value + ' ' + item.key + ' pressed');
+									navigation.navigate('Device', { value: item.value, key: item.key });
+								} }
 							>
 								<ListItem.Content style = { contentStyle }>
 									<ListItem.Title style = { itemTextStyle }>
@@ -120,10 +125,46 @@ const dashboardStyles = {
 		marginBottom: '4%',
 		backgroundColor: colors.secondaryLight
 	},
+	deviceItemStyle: {
+		width: '85%',
+		height: 48,
+		alignSelf: 'center',
+		marginVertical: '2%',
+		backgroundColor: colors.primaryLight,
+		borderBottomRightRadius: 30,
+		borderTopRightRadius: 5,
+		borderBottomLeftRadius: 5,
+		borderTopLeftRadius: 5,
+
+		shadowColor: 'black',
+		shadowOffset: {
+			width: 0,
+			height: 4
+		},
+		shadowOpacity: 1,
+		shadowRadius: 5,
+
+		elevation: 6
+	},
 	deviceItemContainer: {
-		marginBottom: '5%',
-		borderRadius: 10,
-		backgroundColor: colors.secondaryDark
+		width: '100%',
+		height: 48,
+		backgroundColor: colors.primaryDark,
+		padding: '0%',
+		borderBottomRightRadius: 30,
+		borderTopRightRadius: 5,
+		borderBottomLeftRadius: 5,
+		borderTopLeftRadius: 5,
+
+		shadowColor: 'black',
+		shadowOffset: {
+			width: 15,
+			height: 8
+		},
+		shadowOpacity: 1,
+		shadowRadius: 2,
+
+		elevation: 3
 	},
 	contentStyle: {
 		alignItems: 'center'
