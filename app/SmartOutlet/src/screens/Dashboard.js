@@ -129,21 +129,12 @@ const dashboardStyles = {
 		width: '85%',
 		height: 48,
 		alignSelf: 'center',
-		marginVertical: '2%',
+		marginVertical: '3%',
 		backgroundColor: colors.primaryLight,
 		borderBottomRightRadius: 30,
-		borderTopRightRadius: 5,
-		borderBottomLeftRadius: 5,
-		borderTopLeftRadius: 5,
-
-		shadowColor: 'black',
-		shadowOffset: {
-			width: 0,
-			height: 4
-		},
-		shadowOpacity: 1,
-		shadowRadius: 5,
-
+		borderTopRightRadius: 10,
+		borderBottomLeftRadius: 10,
+		borderTopLeftRadius: 10,
 		elevation: 6
 	},
 	deviceItemContainer: {
@@ -152,18 +143,9 @@ const dashboardStyles = {
 		backgroundColor: colors.primaryDark,
 		padding: '0%',
 		borderBottomRightRadius: 30,
-		borderTopRightRadius: 5,
-		borderBottomLeftRadius: 5,
-		borderTopLeftRadius: 5,
-
-		shadowColor: 'black',
-		shadowOffset: {
-			width: 15,
-			height: 8
-		},
-		shadowOpacity: 1,
-		shadowRadius: 2,
-
+		borderTopRightRadius: 10,
+		borderBottomLeftRadius: 10,
+		borderTopLeftRadius: 10,
 		elevation: 3
 	},
 	contentStyle: {

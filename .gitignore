@@ -1,1 +1,7 @@
+# Arduino environment config
 .vscode/
+
+# Firebase API for arduino
+/firmware/smartOutlet/firebaseInfo.h
+
+# Firebase API for app
