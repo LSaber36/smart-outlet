@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 
@@ -60,6 +60,7 @@ export const Dashboard = ({ navigation }) => {
 								containerStyle = { deviceItemContainer }
 								onPress = { () => {
 									console.log(item.value + ' ' + item.key + ' pressed');
+									// TO-DO: replace with Redux
 									navigation.navigate('Device', { value: item.value, key: item.key });
 								} }
 							>
