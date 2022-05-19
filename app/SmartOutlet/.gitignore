@@ -30,6 +30,9 @@ local.properties
 *.iml
 *.hprof
 
+# Firebase API
+/android/app/google-services.json
+
 # node.js
 #
 node_modules/
