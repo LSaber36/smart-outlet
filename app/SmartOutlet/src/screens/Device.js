@@ -1,19 +1,16 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import database from '@react-native-firebase/database';
+import { useSelector } from 'react-redux';
 
-export const Device = ({ navigation, route }) => {
+export const Device = ({ navigation }) => {
 	const [deviceState, setDeviceState] = useState(false);
-	const [deviceID, setDeviceID] = useState(0);
+	const { deviceID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle } = deviceStyles;
-
-	// TO-DO: replace with Redux
-	const deviceValue = route.params.value;
-	const deviceKey = route.params.key;
 
 	// Realtime database reference object
 	const deviceStateRef = database().ref('/test');
@@ -22,14 +19,12 @@ export const Device = ({ navigation, route }) => {
 		deviceStateRef.on('value', snapshot => {
 			console.log('User data: ', snapshot.val());
 			setDeviceState(snapshot.val().state);
-			setDeviceID(snapshot.val().id);
 		});
 	});
 
 	return (
 		<View style = { container }>
 			<Text style = { textStyle }> Device Page </Text>
-			<Text style = { deviceInfoText }> { deviceValue } { deviceKey } </Text>
 			<Text style = { deviceInfoText }> Device ID: { deviceID } </Text>
 			<Text style = { deviceInfoText }> Device State: { deviceState ? 'On' : 'Off' } </Text>
 			<View style = { [buttonView, center] }>

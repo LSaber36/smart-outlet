@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
+import { setID } from '../redux';
 
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -34,6 +36,8 @@ export const Dashboard = ({ navigation }) => {
 		{ value: 'Device', key: 12 }
 	];
 
+	const dispatch = useDispatch();
+
 	return (
 		<View style = { container }>
 			<View style = { navButtonView }>
@@ -60,8 +64,8 @@ export const Dashboard = ({ navigation }) => {
 								containerStyle = { deviceItemContainer }
 								onPress = { () => {
 									console.log(item.value + ' ' + item.key + ' pressed');
-									// TO-DO: replace with Redux
-									navigation.navigate('Device', { value: item.value, key: item.key });
+									dispatch(setID(item.key));
+									navigation.navigate('Device');
 								} }
 							>
 								<ListItem.Content style = { contentStyle }>
