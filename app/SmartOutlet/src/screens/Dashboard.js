@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
@@ -20,21 +20,18 @@ export const Dashboard = ({ navigation }) => {
 		itemTextStyle
 	} = dashboardStyles;
 
-	// Use a static list for now, but use a dynamic one later
-	const items = [
-		{ value: 'Device', key: 1 },
-		{ value: 'Device', key: 2 },
-		{ value: 'Device', key: 3 },
-		{ value: 'Device', key: 4 },
-		{ value: 'Device', key: 5 },
-		{ value: 'Device', key: 6 },
-		{ value: 'Device', key: 7 },
-		{ value: 'Device', key: 8 },
-		{ value: 'Device', key: 9 },
-		{ value: 'Device', key: 10 },
-		{ value: 'Device', key: 11 },
-		{ value: 'Device', key: 12 }
-	];
+	const [items, setItems] = useState([
+		{ key: 1 },
+		{ key: 2 }
+	]);
+
+	function addOutlet(name) {
+		const newId = items.length + 1;
+		const newItem = { key: newId };
+
+		setItems(oldArray => [...oldArray, newItem]);
+		console.log('Adding Outlet: ' + name + ' (ID : ' + newId + ')');
+	}
 
 	const dispatch = useDispatch();
 
@@ -63,14 +60,14 @@ export const Dashboard = ({ navigation }) => {
 								style = { deviceItemStyle }
 								containerStyle = { deviceItemContainer }
 								onPress = { () => {
-									console.log(item.value + ' ' + item.key + ' pressed');
+									console.log('Device ' + item.key + ' pressed');
 									dispatch(setID(item.key));
 									navigation.navigate('Device');
 								} }
 							>
 								<ListItem.Content style = { contentStyle }>
 									<ListItem.Title style = { itemTextStyle }>
-										{ item.value } { item.key }
+										Device { item.key }
 									</ListItem.Title>
 								</ListItem.Content>
 							</ListItem>
@@ -84,7 +81,7 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-
+						addOutlet('Living Room');
 					} }
 				/>
 			</View>
