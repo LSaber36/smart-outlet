@@ -7,19 +7,24 @@ import { useSelector } from 'react-redux';
 
 export const Device = ({ navigation }) => {
 	const [deviceState, setDeviceState] = useState(false);
+	const [deviceName, setDeviceName] = useState('');
 	const { deviceID } = useSelector(state => state.user);
-	const outletsColection = firestore().collection('Outlets');
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle } = deviceStyles;
 
 	useEffect(() => {
-		outletsColection
+		const unsubscribe = firestore()
+			.collection('Outlets')
 			.doc(deviceID.toString())
 			.onSnapshot(documentSnapshot => {
 				console.log('Outlet ' + deviceID + ' State: ' + documentSnapshot.get('state'));
+				console.log('Outlet ' + deviceID + ' Name: ' + documentSnapshot.get('name'));
 				setDeviceState(documentSnapshot.get('state'));
+				setDeviceName(documentSnapshot.get('name'));
 			});
+
+		return () => unsubscribe();
 	}, []);
 
 	return (
@@ -27,6 +32,7 @@ export const Device = ({ navigation }) => {
 			<Text style = { textStyle }> Device Page </Text>
 			<Text style = { deviceInfoText }> Device ID: { deviceID } </Text>
 			<Text style = { deviceInfoText }> Device State: { (deviceState != undefined) ? (deviceState ? 'On' : 'Off') : 'Undefined' } </Text>
+			<Text style = { deviceInfoText }> Device Name: { (deviceName != undefined) ? deviceName : 'Undefined' } </Text>
 			<View style = { [buttonView, center] }>
 				<Button
 					title = 'Back'
@@ -53,7 +59,7 @@ const deviceStyles = {
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '60%'
+		marginTop: '55%'
 	},
 	buttonStyle: {
 		width: '80%',
