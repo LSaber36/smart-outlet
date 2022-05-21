@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { setID } from '../redux';
 
@@ -20,17 +21,53 @@ export const Dashboard = ({ navigation }) => {
 		itemTextStyle
 	} = dashboardStyles;
 
-	const [items, setItems] = useState([
-		{ key: 1 },
-		{ key: 2 }
-	]);
+	const [outletIDList, setOutletIDList] = useState([]);
 
-	function addOutlet(name) {
-		const newId = items.length + 1;
-		const newItem = { key: newId };
+	useEffect(() => {
+		const unsubscribe = firestore()
+			.collection('Users')
+			.doc('testAccount@smartoutlet.com')
+			.onSnapshot(documentSnapshot => {
+				const currentOutlets = [];
 
-		setItems(oldArray => [...oldArray, newItem]);
-		console.log('Adding Outlet: ' + name + ' (ID : ' + newId + ')');
+				documentSnapshot.get('outletIds').map((id) => {
+					currentOutlets.push(id);
+				});
+
+				setOutletIDList(currentOutlets);
+			});
+
+		return () => unsubscribe();
+	}, []);
+
+	function addOutlet(newOutletName) {
+		const newOutletId = outletIDList.length + 1;
+
+		console.log('Current List: ' + outletIDList);
+		console.log('New List: ' + [outletIDList, newOutletId]);
+
+		// Add a new device to the device collection
+		firestore()
+			.collection('Outlets')
+			.doc(newOutletId.toString())
+			.set({
+				name: newOutletName,
+				state: false
+			})
+			.then(() => {
+				console.log('Added outlet: ' + newOutletName + ' (ID: ' + newOutletId + ')');
+			});
+
+		// Add the device to the user's device list
+		firestore()
+			.collection('Users')
+			.doc('testAccount@smartoutlet.com')
+			.set({
+				outletIds: [...outletIDList, newOutletId]
+			})
+			.then(() => {
+				console.log('Added new outlet to account (ID: ' + newOutletId + ')');
+			});
 	}
 
 	const dispatch = useDispatch();
@@ -54,20 +91,20 @@ export const Dashboard = ({ navigation }) => {
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
 					{
-						items.map((item, i) => (
+						outletIDList.map((outletID) => (
 							<ListItem
-								key = { i }
+								key = { outletID }
 								style = { deviceItemStyle }
 								containerStyle = { deviceItemContainer }
 								onPress = { () => {
-									console.log('Device ' + item.key + ' pressed');
-									dispatch(setID(item.key));
+									console.log('Device ' + outletID + ' pressed');
+									dispatch(setID(outletID));
 									navigation.navigate('Device');
 								} }
 							>
 								<ListItem.Content style = { contentStyle }>
 									<ListItem.Title style = { itemTextStyle }>
-										Device { item.key }
+										Device { outletID }
 									</ListItem.Title>
 								</ListItem.Content>
 							</ListItem>
