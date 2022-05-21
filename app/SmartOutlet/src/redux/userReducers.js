@@ -53,7 +53,6 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 
 export const setID = (newId) => dispatch => {
 	dispatch({ type: ACTIONS.DEVICE_ID, payload: newId });
-	console.log('Set ID to: ' + newId);
 };
 
 export default userReducers;

@@ -15,10 +15,10 @@ export const Device = ({ navigation }) => {
 
 	useEffect(() => {
 		outletsColection
-			.doc('outlets')
+			.doc(deviceID.toString())
 			.onSnapshot(documentSnapshot => {
-				console.log('Outlet ' + deviceID + ' State: ' + documentSnapshot.get(deviceID.toString()));
-				setDeviceState(documentSnapshot.get(deviceID.toString()));
+				console.log('Outlet ' + deviceID + ' State: ' + documentSnapshot.get('state'));
+				setDeviceState(documentSnapshot.get('state'));
 			});
 	}, []);
 
