@@ -2,25 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
-import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 
 export const Device = ({ navigation }) => {
 	const [deviceState, setDeviceState] = useState(false);
 	const { deviceID } = useSelector(state => state.user);
+	const outletsColection = firestore().collection('Outlets');
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle } = deviceStyles;
 
-	// Realtime database reference object
-	const deviceStateRef = database().ref('/test');
-
 	useEffect(() => {
-		deviceStateRef.on('value', snapshot => {
-			console.log('User data: ', snapshot.val());
-			setDeviceState(snapshot.val().state);
-		});
-	});
+		outletsColection
+			.doc('outlets')
+			.onSnapshot(documentSnapshot => {
+				console.log('Outlet ' + deviceID + ' State: ' + documentSnapshot.get(deviceID.toString()));
+				setDeviceState(documentSnapshot.get(deviceID.toString()));
+			});
+	}, []);
 
 	return (
 		<View style = { container }>
