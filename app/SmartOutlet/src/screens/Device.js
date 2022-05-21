@@ -26,7 +26,7 @@ export const Device = ({ navigation }) => {
 		<View style = { container }>
 			<Text style = { textStyle }> Device Page </Text>
 			<Text style = { deviceInfoText }> Device ID: { deviceID } </Text>
-			<Text style = { deviceInfoText }> Device State: { deviceState ? 'On' : 'Off' } </Text>
+			<Text style = { deviceInfoText }> Device State: { (deviceState != undefined) ? (deviceState ? 'On' : 'Off') : 'Undefined' } </Text>
 			<View style = { [buttonView, center] }>
 				<Button
 					title = 'Back'
