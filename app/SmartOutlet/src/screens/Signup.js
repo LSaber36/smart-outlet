@@ -132,6 +132,7 @@ const modalStyles = {
 		color: colors.dark,
 		fontSize: 15,
 		textAlign: 'center',
-		padding: '6%'
+		padding: '6%',
+		lineHeight: 20
 	}
 };
