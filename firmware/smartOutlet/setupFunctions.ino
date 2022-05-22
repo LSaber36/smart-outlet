@@ -27,29 +27,12 @@ void setupFirebase()
   auth.user.email = USER_EMAIL;
   auth.user.password = USER_PASSWORD;
 
-  // Assign the RTDB URL (required)
-  config.database_url = DATABASE_URL;
-
   // Assign the callback function for the long running token generation task
   config.token_status_callback = tokenStatusCallback;
+
+  fbdo.setResponseSize(2048);
 
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
   Firebase.setDoubleDigits(5);
-}
-
-void blinkLED(uint8_t led)
-{
-  digitalWrite(led, HIGH);
-  delay(100);
-  digitalWrite(led, LOW);
-  delay(200);
-  digitalWrite(led, HIGH);
-  delay(100);
-  digitalWrite(led, LOW);
-}
-
-void printSensorData()
-{
-  
 }

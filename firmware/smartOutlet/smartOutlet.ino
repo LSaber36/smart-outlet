@@ -1,5 +1,6 @@
 #include <WiFi.h>
-#include <FirebaseESP32.h>
+// #include <FirebaseESP32.h>
+#include <Firebase_ESP_Client.h>
 #include <addons/TokenHelper.h>
 #include "firebaseInfo.h"
 
@@ -16,12 +17,9 @@ FirebaseConfig config;
 unsigned long sendDataPrevMillis = 0;
 unsigned long count = 0;
 
-// Status results
-bool boolResult, intResult;
-
 // Realtime Data
+int deviceID = 1; 
 bool deviceState;
-int deviceID; 
 
 void setup()
 {
@@ -37,28 +35,32 @@ void loop()
   printSensorData();
 
   // Firebase.ready() should be called repeatedly to handle authentication tasks.
-  if (Firebase.ready() && (millis() - sendDataPrevMillis > SEND_INTERVAL || sendDataPrevMillis == 0))
+  if (WiFi.status() == WL_CONNECTED && Firebase.ready() && (millis() - sendDataPrevMillis > SEND_INTERVAL || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
     blinkLED(LED);
 
-    // Boolean test
-    boolResult = Firebase.setBool(fbdo, F("/test/state"), (count % 2 == 0));
-    Serial.printf("Set state: %s\n", boolResult ? "ok" : fbdo.errorReason().c_str());
+    String documentPath = "Outlets/" + String(deviceID);
+    FirebaseJson content;
 
-    boolResult = Firebase.getBool(fbdo, F("/test/state"), &deviceState);
-    Serial.printf("Get state: %s\n", boolResult ? (deviceState ? "true" : "false") : fbdo.errorReason().c_str());
+    deviceState = (count % 2) == 0;
+    content.clear();
+    content.set("fields/state/booleanValue", deviceState);
 
+    Serial.println("Updating document...");
 
-    // Int test
-    intResult = Firebase.setInt(fbdo, F("/test/id"), count);
-    Serial.printf("Set id:  %s\n", intResult ? "ok" : fbdo.errorReason().c_str());
-
-    intResult = Firebase.getInt(fbdo, F("/test/id"), &deviceID);
-    Serial.printf("Get id:  %s\n", intResult ? String(deviceID).c_str() : fbdo.errorReason().c_str());
+    if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "state"))
+    {  
+      Serial.printf("ok\n%s\n", fbdo.payload().c_str());
+    }else{
+      Serial.println(fbdo.errorReason());
+    }
 
     // Print newline for formatting
     Serial.println();
     count++;
   }
+
+  // This is necessary for watchdog timer errors
+  delay(5);
 }
