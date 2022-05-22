@@ -121,7 +121,6 @@ const modalStyles = {
 	promptText: {
 		color: colors.dark,
 		fontSize: 22,
-		paddingTop: '5%',
 		margin: '10%',
 		paddingBottom: '3%',
 		borderBottomWidth: 1,
