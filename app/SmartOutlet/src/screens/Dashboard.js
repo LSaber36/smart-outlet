@@ -22,6 +22,7 @@ export const Dashboard = ({ navigation }) => {
 	} = dashboardStyles;
 
 	const [outletIDList, setOutletIDList] = useState([]);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const unsubscribe = firestore()
@@ -69,8 +70,6 @@ export const Dashboard = ({ navigation }) => {
 				console.log('Added new outlet to account (ID: ' + newOutletId + ')');
 			});
 	}
-
-	const dispatch = useDispatch();
 
 	return (
 		<View style = { container }>
