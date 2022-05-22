@@ -9,7 +9,7 @@ const ACTIONS = createActionTypes([
 	'USER_STATUS',
 	'APP_LOADING',
 	'LOAD_USER',
-	'DEVICE_ID'
+	'OUTLET_ID'
 ]);
 
 // Initial State
@@ -17,7 +17,7 @@ const INITIAL_STATE = {
 	isLoggedIn: false,
 	isLoading: true,
 	activeUser: {},
-	deviceID: 0
+	outletID: 0
 };
 
 // Actions
@@ -30,8 +30,8 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 			return { ...state, isLoading: payload };
 		case ACTIONS.LOAD_USER:
 			return { ...state, activeUser: payload };
-		case ACTIONS.DEVICE_ID:
-			return { ...state, deviceID: payload };
+		case ACTIONS.OUTLET_ID:
+			return { ...state, outletID: payload };
 		default:
 			return state;
 	}
@@ -52,7 +52,7 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 // };
 
 export const setID = (newId) => dispatch => {
-	dispatch({ type: ACTIONS.DEVICE_ID, payload: newId });
+	dispatch({ type: ACTIONS.OUTLET_ID, payload: newId });
 };
 
 export default userReducers;

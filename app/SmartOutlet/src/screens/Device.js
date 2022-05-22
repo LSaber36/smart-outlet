@@ -6,10 +6,11 @@ import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 
 export const Device = ({ navigation }) => {
-	const [deviceState, setDeviceState] = useState(false);
-	const [deviceName, setDeviceName] = useState('');
-	const [deviceList, setDeviceList] = useState([]);
-	const { deviceID } = useSelector(state => state.user);
+	const [outletState, setOutletState] = useState(false);
+	const [outletName, setOutletName] = useState('');
+	const [outletIDList, setOutletIDList] = useState([]);
+	// TODO: Replace with outletID
+	const { outletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
@@ -17,20 +18,20 @@ export const Device = ({ navigation }) => {
 	useEffect(() => {
 		const unsubscribeOutlets = firestore()
 			.collection('Outlets')
-			.doc(deviceID.toString())
+			.doc(outletID.toString())
 			.onSnapshot(documentSnapshot => {
-				console.log('Outlet ' + deviceID + ' State: ' + documentSnapshot.get('state'));
-				console.log('Outlet ' + deviceID + ' Name: ' + documentSnapshot.get('name'));
-				setDeviceState(documentSnapshot.get('state'));
-				setDeviceName(documentSnapshot.get('name'));
+				console.log('Outlet ' + outletID + ' State: ' + documentSnapshot.get('state'));
+				console.log('Outlet ' + outletID + ' Name: ' + documentSnapshot.get('name'));
+				setOutletState(documentSnapshot.get('state'));
+				setOutletName(documentSnapshot.get('name'));
 			});
 
 		const unsubscribeUser = firestore()
 			.collection('Users')
 			.doc('testAccount@smartoutlet.com')
 			.onSnapshot(documentSnapshot => {
-				console.log('Current device list: ' + documentSnapshot.get('outletIds'));
-				setDeviceList(documentSnapshot.get('outletIds'));
+				console.log('Current outlet list: ' + documentSnapshot.get('outletIds'));
+				setOutletIDList(documentSnapshot.get('outletIds'));
 			});
 
 		return () => {
@@ -39,37 +40,37 @@ export const Device = ({ navigation }) => {
 		};
 	}, []);
 
-	function deleteDevice() {
-		console.log('Deleting outlet with ID: ' + deviceID);
-		console.log('Filtered List: ' + deviceList.filter(element => element != deviceID));
+	function deleteOutlet() {
+		console.log('Deleting outlet with ID: ' + outletID);
+		console.log('Filtered List: ' + outletIDList.filter(element => element != outletID));
 
-		// Remove the device from the user's device list
+		// Remove the outlet from the user's outlet list
 		firestore()
 			.collection('Users')
 			.doc('testAccount@smartoutlet.com')
 			.set({
-				outletIds: deviceList.filter(element => element != deviceID)
+				outletIds: outletIDList.filter(element => element != outletID)
 			})
 			.then(() => {
-				console.log('Removed outlet from account (ID: ' + deviceID + ')');
+				console.log('Removed outlet from account (ID: ' + outletID + ')');
 			});
 
-		// Delete the device from the device collection
+		// Delete the outlet from the outlet collection
 		firestore()
 			.collection('Outlets')
-			.doc(deviceID.toString())
+			.doc(outletID.toString())
 			.delete()
 			.then(() => {
-				console.log('Deleted outlet: ' + deviceName + ' (ID: ' + deviceID + ')');
+				console.log('Deleted outlet: ' + outletName + ' (ID: ' + outletID + ')');
 			});
 	}
 
 	return (
 		<View style = { container }>
 			<Text style = { textStyle }> Device Page </Text>
-			<Text style = { deviceInfoText }> Device ID: { deviceID } </Text>
-			<Text style = { deviceInfoText }> Device Name: { (deviceName != undefined) ? deviceName : 'Undefined' } </Text>
-			<Text style = { deviceInfoText }> Device State: { (deviceState != undefined) ? (deviceState ? 'On' : 'Off') : 'Undefined' } </Text>
+			<Text style = { deviceInfoText }> Outlet ID: { outletID } </Text>
+			<Text style = { deviceInfoText }> Outlet Name: { (outletName != undefined) ? outletName : 'Undefined' } </Text>
+			<Text style = { deviceInfoText }> Outlet State: { (outletState != undefined) ? (outletState ? 'On' : 'Off') : 'Undefined' } </Text>
 			<View style = { [buttonView, center] }>
 				<Button
 					title = 'Delete'
@@ -77,7 +78,7 @@ export const Device = ({ navigation }) => {
 					buttonStyle = { [fullWidthHeight, deleteButton] }
 					onPress = { () => {
 						// Trigger modal to popup asking if you're sure
-						deleteDevice();
+						deleteOutlet();
 						navigation.goBack();
 					} }
 				/>

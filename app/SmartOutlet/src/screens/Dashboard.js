@@ -46,7 +46,7 @@ export const Dashboard = ({ navigation }) => {
 		console.log('Current List: ' + outletIDList);
 		console.log('New List: ' + [outletIDList, newOutletId]);
 
-		// Add a new device to the device collection
+		// Add a new outlet to the outlet collection
 		firestore()
 			.collection('Outlets')
 			.doc(newOutletId.toString())
@@ -58,7 +58,7 @@ export const Dashboard = ({ navigation }) => {
 				console.log('Added outlet: ' + newOutletName + ' (ID: ' + newOutletId + ')');
 			});
 
-		// Add the device to the user's device list
+		// Add the outlet to the user's outlet list
 		firestore()
 			.collection('Users')
 			.doc('testAccount@smartoutlet.com')
