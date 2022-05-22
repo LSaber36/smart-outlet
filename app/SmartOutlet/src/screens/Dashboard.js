@@ -83,7 +83,7 @@ export const Dashboard = ({ navigation }) => {
 					title = 'Settings'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
-					onPress = { () => { navigation.navigate('Settings') } }
+					onPress = { () => navigation.navigate('Settings') }
 				/>
 			</View>
 			<Text style = { textStyle }> Dashboard Page </Text>

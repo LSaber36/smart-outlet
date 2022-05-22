@@ -15,7 +15,7 @@ export const Login = ({ navigation }) => {
 					title = 'Login'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
-					onPress = { () => { navigation.navigate('Dashboard') } }
+					onPress = { () => navigation.navigate('Dashboard') }
 				/>
 			</View>
 			<View style = { [registerTextView, center] }>

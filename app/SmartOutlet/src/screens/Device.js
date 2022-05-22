@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Modal, KeyboardAvoidingView, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 
+const { height, width } = Dimensions.get('screen');
+
 export const Device = ({ navigation }) => {
+	const { outletID } = useSelector(state => state.user);
 	const [outletState, setOutletState] = useState(false);
 	const [outletName, setOutletName] = useState('');
 	const [outletIDList, setOutletIDList] = useState([]);
-	// TODO: Replace with outletID
-	const { outletID } = useSelector(state => state.user);
+	const [modalVisible, setModalVisible] = useState(false);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
@@ -65,8 +67,49 @@ export const Device = ({ navigation }) => {
 			});
 	}
 
+	const renderConfirmDeleteModal = () => {
+		return (
+			<Modal
+				animationType = 'slide'
+				transparent = { true }
+				visible = { modalVisible }
+			>
+				<KeyboardAvoidingView
+					behavior = 'height'
+					enabled
+				>
+					<View style = { modalStyles.modalContainer }>
+						<View style = { modalStyles.modalView }>
+							<Text style = { modalStyles.textStyle }>
+								Are you sure you want to delete this device?
+							</Text>
+							<View style = { modalStyles.buttonView }>
+								<Button
+									title = 'Cancel'
+									containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+									buttonStyle = { fullWidthHeight }
+									onPress = { () => setModalVisible(false) }
+								/>
+								<Button
+									title = 'Delete'
+									containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+									buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
+									onPress = { () => {
+										deleteOutlet();
+										navigation.goBack();
+									} }
+								/>
+							</View>
+						</View>
+					</View>
+				</KeyboardAvoidingView>
+			</Modal>
+		);
+	};
+
 	return (
 		<View style = { container }>
+			{ renderConfirmDeleteModal() }
 			<Text style = { textStyle }> Device Page </Text>
 			<Text style = { deviceInfoText }> Outlet ID: { outletID } </Text>
 			<Text style = { deviceInfoText }> Outlet Name: { (outletName != undefined) ? outletName : 'Undefined' } </Text>
@@ -77,9 +120,7 @@ export const Device = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight, deleteButton] }
 					onPress = { () => {
-						// Trigger modal to popup asking if you're sure
-						deleteOutlet();
-						navigation.goBack();
+						setModalVisible(true);
 					} }
 				/>
 				<Button
@@ -119,5 +160,45 @@ const deviceStyles = {
 	},
 	registerTextView: {
 		marginTop: '5%'
+	}
+};
+
+const modalStyles = {
+	modalContainer: {
+		height: height,
+		width: width,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
+	},
+	modalView: {
+		height: '35%',
+		width: '90%',
+		marginTop: '-30%',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		backgroundColor: colors.offWhite,
+		borderRadius: 10
+	},
+	textStyle: {
+		color: colors.dark,
+		fontSize: 22,
+		paddingTop: '5%',
+		margin: '10%'
+	},
+	buttonView: {
+		height: '30%',
+		width: '90%',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		marginBottom: '5%'
+	},
+	buttonStyle: {
+		width: '40%',
+		height: '65%'
+	},
+	deleteButtonStyle: {
+		backgroundColor: colors.delete
 	}
 };

@@ -22,7 +22,7 @@ export const Settings = ({ navigation }) => {
 					title = 'Log Out'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
-					onPress = { () => { navigation.navigate('Login') } }
+					onPress = { () => navigation.navigate('Login') }
 				/>
 			</View>
 		</View>
