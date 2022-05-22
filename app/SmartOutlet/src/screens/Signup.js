@@ -15,11 +15,15 @@ export const Signup = ({ navigation }) => {
 					title = 'Sign Up'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
+					onPress = { () => navigation.navigate('Login') }
 				/>
 			</View>
 			<View style = { [loginTextView, center] }>
 				<Text>{ 'Already have an account? ' } </Text>
-				<Text style = {{ color: colors.secondaryDark }}>
+				<Text
+					style = {{ color: colors.secondaryDark }}
+					onPress = { () => navigation.navigate('Login') }
+				>
 					Log in
 				</Text>
 			</View>

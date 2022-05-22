@@ -80,7 +80,7 @@ export const Device = ({ navigation }) => {
 				>
 					<View style = { modalStyles.modalContainer }>
 						<View style = { modalStyles.modalView }>
-							<Text style = { modalStyles.textStyle }>
+							<Text style = { modalStyles.promptText }>
 								Are you sure you want to delete this device?
 							</Text>
 							<View style = { modalStyles.buttonView }>
@@ -180,7 +180,7 @@ const modalStyles = {
 		backgroundColor: colors.offWhite,
 		borderRadius: 10
 	},
-	textStyle: {
+	promptText: {
 		color: colors.dark,
 		fontSize: 22,
 		paddingTop: '5%',
