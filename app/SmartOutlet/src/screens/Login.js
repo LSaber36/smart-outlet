@@ -12,22 +12,21 @@ import * as yup from 'yup';
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
 	email: yup.string()
-		.required()
-		.email()
+		.required('please enter your email')
+		.email('please enter a valid email')
 });
 const loginSchema = yup.object({
 	email: yup.string()
-		.required()
-		.email(),
+		.required('please enter your email')
+		.email('please enter a valid email'),
 	password: yup.string()
-		.required()
-		.min(8)
+		.required('please enter your password')
 });
 
 export const Login = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const {
-		textStyle, buttonView, buttonStyle, registerTextView,
+		buttonView, buttonStyle, registerTextView,
 		loginFormStyle, forgotPasswordText, forgotPasswordView
 	} = loginStyles;
 
@@ -102,7 +101,6 @@ export const Login = ({ navigation }) => {
 		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
 			<View style = { container }>
 				{ renderForgotPasswordModal() }
-				<Text style = { textStyle }> Login Page </Text>
 				<Formik
 					initialValues = {{ email: '', password: '' }}
 					validationSchema = { loginSchema }
@@ -110,7 +108,7 @@ export const Login = ({ navigation }) => {
 						console.log('Login Data: ' + JSON.stringify(values));
 						actions.resetForm();
 						// Check if login was successful through firebase first
-						navigation.navigate('Dashboard');
+						// navigation.navigate('Dashboard');
 					} }
 				>
 					{ (props) => (
@@ -122,7 +120,6 @@ export const Login = ({ navigation }) => {
 								value = { props.values.email }
 								errorMesage = { props.touched.email && props.errors.email }
 							/>
-
 							<TextBox
 								header = 'Password'
 								placeholder = 'password'
@@ -130,7 +127,6 @@ export const Login = ({ navigation }) => {
 								value = { props.values.password }
 								errorMesage = { props.touched.password && props.errors.password }
 							/>
-
 							<View style = { [forgotPasswordView, center] }>
 								<Text
 									style = { forgotPasswordText }
@@ -171,9 +167,9 @@ const loginStyles = {
 		paddingTop: '5%'
 	},
 	buttonView: {
-		height: '15%',
+		height: '14%',
 		width: '80%',
-		marginTop: '25%'
+		marginTop: '35%'
 	},
 	buttonStyle: {
 		width: '80%',
@@ -186,12 +182,12 @@ const loginStyles = {
 	forgotPasswordView: {
 		marginTop: '2%'
 	},
-	registerTextView: {
-		marginTop: '5%'
-	},
 	loginFormStyle: {
 		width: '100%',
-		marginTop: '15%'
+		marginTop: '25%'
+	},
+	registerTextView: {
+		marginTop: '5%'
 	}
 };
 
