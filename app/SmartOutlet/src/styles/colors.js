@@ -9,5 +9,6 @@ export const colors = {
 	primaryDark: '#2B88D8',
 	secondaryLight: '#71AFE5',
 	secondaryDark: '#005A9E',
-	delete: '#DA2A2A'
+	delete: '#DA2A2A',
+	lightGray: '#7E7E7E'
 };

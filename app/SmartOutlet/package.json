@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
     "@reduxjs/toolkit": "^1.8.1",
+    "formik": "^2.2.9",
     "react": "17.0.2",
     "react-native": "0.68.1",
     "react-native-elements": "^3.4.2",
@@ -24,7 +25,8 @@
     "react-native-screens": "^3.13.1",
     "react-redux": "^8.0.1",
     "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

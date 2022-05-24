@@ -177,7 +177,7 @@ const modalStyles = {
 		marginTop: '-30%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		backgroundColor: colors.offWhite,
+		backgroundColor: colors.white,
 		borderRadius: 10
 	},
 	promptText: {
