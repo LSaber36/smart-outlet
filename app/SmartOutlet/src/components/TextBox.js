@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { styles, colors } from '../styles';
 
-export const TextBox = ({ header, placeholder, onChangeText, value, errorMesage }) => {
+export const TextBox = ({ header, placeholder, onChangeText, value, errorMesage, style }) => {
 	const {	center, input, errorText } = styles;
 	const { loginInputHeader, loginField } = textBoxStyles;
 
 	return (
-		<View style = { loginField }>
+		<View style = { [loginField, style] }>
 			<Text style = { loginInputHeader }>{ header }</Text>
 			<TextInput
 				style = { input }

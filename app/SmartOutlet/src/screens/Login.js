@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-	View, Text, TextInput, TouchableWithoutFeedback, Keyboard,
+	View, Text, TouchableWithoutFeedback, Keyboard,
 	Modal, KeyboardAvoidingView, Dimensions
 } from 'react-native';
 import { styles, colors } from '../styles';
@@ -8,7 +8,6 @@ import { Button } from 'react-native-elements';
 import { TextBox } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-
 
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
@@ -26,7 +25,7 @@ const loginSchema = yup.object({
 });
 
 export const Login = ({ navigation }) => {
-	const {	container, fullWidthHeight, buttonContainer, center, input, errorText } = styles;
+	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const {
 		textStyle, buttonView, buttonStyle, registerTextView,
 		loginFormStyle, forgotPasswordText, forgotPasswordView
@@ -65,15 +64,15 @@ export const Login = ({ navigation }) => {
 								>
 									{ (props) => (
 										<View style = { [center, modalStyles.formStyle] }>
-											<TextInput
-												style = { [input, modalStyles.textInput] }
+											<TextBox
+												style = { modalStyles.textInput }
+												header = ''
 												placeholder = 'your.name@mail.com'
 												onChangeText = { props.handleChange('email') }
 												value = { props.values.email }
+												errorMesage = { props.touched.email && props.errors.email }
 											/>
-											<Text style = { errorText }>
-												{ props.touched.email && props.errors.email }
-											</Text>
+
 											<View style = { modalStyles.buttonView }>
 												<Button
 													title = 'Cancel'
@@ -205,7 +204,7 @@ const modalStyles = {
 		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	},
 	modalView: {
-		height: '35%',
+		height: '38%',
 		width: '90%',
 		marginTop: '-45%',
 		justifyContent: 'space-evenly',
@@ -216,7 +215,7 @@ const modalStyles = {
 	promptText: {
 		color: colors.dark,
 		fontSize: 22,
-		marginTop: '10%',
+		marginTop: '15%',
 		paddingBottom: '3%',
 		borderBottomWidth: 1,
 		borderBottomColor: colors.dark
@@ -231,12 +230,12 @@ const modalStyles = {
 		lineHeight: 20
 	},
 	buttonView: {
-		height: '35%',
+		height: '30%',
 		width: '85%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		marginBottom: '5%',
+		marginBottom: '10%',
 		marginTop: '3%'
 	},
 	buttonStyle: {
@@ -244,8 +243,7 @@ const modalStyles = {
 		height: '80%'
 	},
 	formStyle: {
-		width: '100%',
-		marginTop: '2%'
+		width: '100%'
 	},
 	textInput: {
 		width: '75%'
