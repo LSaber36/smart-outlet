@@ -72,7 +72,7 @@ export const Signup = ({ navigation }) => {
 					console.log('Signup Data: ' + JSON.stringify(values));
 					actions.resetForm();
 					// Check if signup was successful through firebase first
-					setModalVisible(true);
+					// setModalVisible(true);
 				} }
 			>
 				{ (props) => (
