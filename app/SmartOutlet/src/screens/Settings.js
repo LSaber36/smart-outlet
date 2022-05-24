@@ -33,12 +33,12 @@ const dashboardStyles = {
 	textStyle: {
 		color: colors.dark,
 		fontSize: 40,
-		marginTop: '65%'
+		marginTop: '5%'
 	},
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '40%',
+		marginTop: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center'

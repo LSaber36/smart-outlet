@@ -138,7 +138,7 @@ const deviceStyles = {
 	textStyle: {
 		color: colors.dark,
 		fontSize: 40,
-		paddingTop: '15%'
+		paddingTop: '5%'
 	},
 	deviceInfoText: {
 		color: colors.dark,

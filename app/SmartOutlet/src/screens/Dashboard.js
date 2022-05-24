@@ -73,6 +73,7 @@ export const Dashboard = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
+			<Text style = { textStyle }> Dashboard Page </Text>
 			<View style = { navButtonView }>
 				<Button
 					title = '?'
@@ -86,7 +87,6 @@ export const Dashboard = ({ navigation }) => {
 					onPress = { () => navigation.navigate('Settings') }
 				/>
 			</View>
-			<Text style = { textStyle }> Dashboard Page </Text>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
 					{

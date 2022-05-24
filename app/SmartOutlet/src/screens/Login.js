@@ -98,7 +98,7 @@ export const Login = ({ navigation }) => {
 					{ 'Forgot your password? ' }
 				</Text>
 			</View>
-			<View style = { [buttonView, center] }>
+			<View style = { [center, buttonView] }>
 				<Button
 					title = 'Login'
 					containerStyle = { [buttonContainer, buttonStyle] }
@@ -123,12 +123,12 @@ const loginStyles = {
 	textStyle: {
 		color: colors.dark,
 		fontSize: 40,
-		paddingTop: '45%'
+		paddingTop: '5%'
 	},
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '40%'
+		marginTop: '90%'
 	},
 	buttonStyle: {
 		width: '80%',
