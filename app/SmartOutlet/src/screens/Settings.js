@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
+import { useSelector } from 'react-redux';
+import auth from '@react-native-firebase/auth';
 
 export const Settings = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
 	const { textStyle, buttonView, buttonStyle } = dashboardStyles;
+
+	const { activeUser } = useSelector(state => state.user);
+
+	useEffect(() => {
+		console.log('(Settings)  Active user email: ' + activeUser.email);
+	}, []);
 
 	return (
 		<View style = { container }>
@@ -22,7 +30,14 @@ export const Settings = ({ navigation }) => {
 					title = 'Log Out'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { fullWidthHeight }
-					onPress = { () => navigation.navigate('Login') }
+					onPress = { () => {
+						auth()
+							.signOut()
+							.then(() => {
+								console.log('User signed out!');
+								navigation.navigate('Login');
+							});
+					} }
 				/>
 			</View>
 		</View>

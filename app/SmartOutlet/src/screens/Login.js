@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View, Text, TouchableWithoutFeedback, Keyboard,
 	Modal, KeyboardAvoidingView, Dimensions
@@ -8,6 +8,9 @@ import { Button } from 'react-native-elements';
 import { TextBox } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import auth from '@react-native-firebase/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser } from '../redux';
 
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
@@ -30,7 +33,28 @@ export const Login = ({ navigation }) => {
 		loginFormStyle, forgotPasswordText, forgotPasswordView
 	} = loginStyles;
 
+	const { activeUser } = useSelector(state => state.user);
+
 	const [modalVisible, setModalVisible] = useState(false);
+	const [loginError, setLoginError] = useState('');
+	const dispatch = useDispatch();
+
+	function onAuthStateChanged(user) {
+		dispatch(loadUser(user));
+
+		if (user != null)
+			console.log('User: ' + JSON.stringify(user.email));
+		else
+			console.log('User is null');
+	}
+
+	useEffect(() => {
+		const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
+		console.log('Current User: ' + JSON.stringify(activeUser));
+
+		return subscriber;
+	}, []);
 
 	const renderForgotPasswordModal = () => {
 		return (
@@ -105,10 +129,25 @@ export const Login = ({ navigation }) => {
 					initialValues = {{ email: '', password: '' }}
 					validationSchema = { loginSchema }
 					onSubmit = { (values, actions) => {
-						console.log('Login Data: ' + JSON.stringify(values));
-						actions.resetForm();
-						// Check if login was successful through firebase first
-						// navigation.navigate('Dashboard');
+						auth()
+							.signInWithEmailAndPassword(values.email, values.password)
+							.then(() => {
+								console.log('Signed in successfully');
+								setLoginError('');
+								actions.resetForm();
+								setTimeout(() => {
+									console.log('Current User: ' + JSON.stringify(activeUser));
+									navigation.navigate('Dashboard');
+								}, 250);
+							})
+							.catch((error) => {
+								console.log('Error: ' + error.code);
+
+								if (error.code === 'auth/user-not-found')
+									setLoginError('Invalid Email');
+								else if (error.code === 'auth/wrong-password')
+									setLoginError('Incorrect Password');
+							});
 					} }
 				>
 					{ (props) => (
@@ -118,7 +157,7 @@ export const Login = ({ navigation }) => {
 								placeholder = 'your.name@mail.com'
 								onChangeText = { props.handleChange('email') }
 								value = { props.values.email }
-								errorMesage = { props.touched.email && props.errors.email }
+								errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
 							/>
 							<TextBox
 								header = 'Password'

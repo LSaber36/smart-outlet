@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setID } from '../redux';
 
 export const Dashboard = ({ navigation }) => {
@@ -22,12 +22,15 @@ export const Dashboard = ({ navigation }) => {
 	} = dashboardStyles;
 
 	const [outletIDList, setOutletIDList] = useState([]);
+	const { activeUser } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		console.log('(Dashboard) Active user email: ' + activeUser.email);
+
 		const unsubscribe = firestore()
 			.collection('Users')
-			.doc('testAccount@smartoutlet.com')
+			.doc(activeUser.email)
 			.onSnapshot(documentSnapshot => {
 				const currentOutlets = [];
 

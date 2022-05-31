@@ -47,9 +47,10 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 // 	dispatch({ type: ACTIONS.APP_LOADING, payload: false });
 // };
 
-// export const loadUser = () => dispatch => {
-// 	loadUserData().then(payload => dispatch({ type: ACTIONS.LOAD_USER, payload }));
-// };
+export const loadUser = (user) => dispatch => {
+	// loadUserData().then(payload => dispatch({ type: ACTIONS.LOAD_USER, payload }));
+	dispatch({ type: ACTIONS.LOAD_USER, payload: user });
+};
 
 export const setID = (newId) => dispatch => {
 	dispatch({ type: ACTIONS.OUTLET_ID, payload: newId });

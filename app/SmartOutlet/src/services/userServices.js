@@ -1,0 +1,1 @@
+// This file will be used to make functions that are used to commnicate with firebase
