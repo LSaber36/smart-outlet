@@ -33,8 +33,6 @@ export const Login = ({ navigation }) => {
 		loginFormStyle, forgotPasswordText, forgotPasswordView
 	} = loginStyles;
 
-	const { activeUser } = useSelector(state => state.user);
-
 	const [modalVisible, setModalVisible] = useState(false);
 	const [loginError, setLoginError] = useState('');
 	const dispatch = useDispatch();
