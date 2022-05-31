@@ -9,7 +9,7 @@ import { TextBox } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginStatus } from '../redux';
 
 const { height, width } = Dimensions.get('screen');
