@@ -65,7 +65,7 @@ export const Dashboard = ({ navigation }) => {
 		// Add the outlet to the user's outlet list
 		firestore()
 			.collection('Users')
-			.doc('testAccount@smartoutlet.com')
+			.doc(activeUser.email)
 			.set({
 				outletIds: [...outletIDList, newOutletId]
 			})

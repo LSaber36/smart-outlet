@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
+import { loginStatus } from '../redux';
 
 export const Settings = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
 	const { textStyle, buttonView, buttonStyle } = dashboardStyles;
 
+	const dispatch = useDispatch();
 	const { activeUser } = useSelector(state => state.user);
 
 	useEffect(() => {
@@ -35,7 +37,7 @@ export const Settings = ({ navigation }) => {
 							.signOut()
 							.then(() => {
 								console.log('User signed out!');
-								navigation.navigate('Login');
+								dispatch(loginStatus(false));
 							});
 					} }
 				/>

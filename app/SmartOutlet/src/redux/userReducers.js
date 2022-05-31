@@ -6,7 +6,7 @@ const createActionTypes = actionTypes => actionTypes
 
 // Action Names
 const ACTIONS = createActionTypes([
-	'USER_STATUS',
+	'LOGIN_STATUS',
 	'APP_LOADING',
 	'LOAD_USER',
 	'OUTLET_ID'
@@ -24,7 +24,7 @@ const INITIAL_STATE = {
 // Make a reducer that updated corresponding variables with the payload
 const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 	switch (type) {
-		case ACTIONS.USER_STATUS:
+		case ACTIONS.LOGIN_STATUS:
 			return { ...state, isLoggedIn: payload };
 		case ACTIONS.APP_LOADING:
 			return { ...state, isLoading: payload };
@@ -38,14 +38,14 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 };
 
 // Function calls to be used in dispatch calls
-// export const userStatus = () => dispatch => {
-// 	getUserStatus().then(status =>
-// 		dispatch({ type: ACTIONS.USER_STATUS, payload: status }));
-// };
+export const loginStatus = (status) => dispatch => {
+	// getUserStatus().then(status =>
+	dispatch({ type: ACTIONS.LOGIN_STATUS, payload: status });
+};
 
-// export const appLoading = () => dispatch => {
-// 	dispatch({ type: ACTIONS.APP_LOADING, payload: false });
-// };
+export const appLoading = () => dispatch => {
+	dispatch({ type: ACTIONS.APP_LOADING, payload: false });
+};
 
 export const loadUser = (user) => dispatch => {
 	// loadUserData().then(payload => dispatch({ type: ACTIONS.LOAD_USER, payload }));

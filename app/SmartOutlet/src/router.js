@@ -8,19 +8,37 @@ import {
 	/* Main Screens  */ Dashboard, Device, Settings
 } from './screens';
 
-const Stack = createNativeStackNavigator();
+const SplashStack = createNativeStackNavigator();
+const AuthStack = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator();
 
-const Router = () => {
+const SplashStackNavigator = () => (
+	<SplashStack.Navigator>
+		<SplashStack.Screen name = 'Splash' component = { Splash } />
+	</SplashStack.Navigator>
+);
+
+const AuthStackNavigator = () => (
+	<AuthStack.Navigator>
+		<AuthStack.Screen name = 'Login' component = { Login } />
+		<AuthStack.Screen name = 'Signup' component = { Signup } />
+	</AuthStack.Navigator>
+);
+
+const MainStackNavigator = () => (
+	<MainStack.Navigator>
+		<MainStack.Screen name = 'Dashboard' component = { Dashboard } />
+		<MainStack.Screen name = 'Device' component = { Device } />
+		<MainStack.Screen name = 'Settings' component = { Settings } />
+	</MainStack.Navigator>
+);
+
+const Router = ({ isLoading, isLoggedIn }) => {
 	return (
 		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen name = 'Login' component = { Login } />
-				<Stack.Screen name = 'Signup' component = { Signup } />
-				<Stack.Screen name = 'Dashboard' component = { Dashboard } />
-				<Stack.Screen name = 'Splash' component = { Splash } />
-				<Stack.Screen name = 'Device' component = { Device } />
-				<Stack.Screen name = 'Settings' component = { Settings } />
-			</Stack.Navigator>
+			{ isLoading ? <SplashStackNavigator /> :
+				isLoggedIn ? <MainStackNavigator /> : <AuthStackNavigator />
+			}
 		</NavigationContainer>
 	);
 };

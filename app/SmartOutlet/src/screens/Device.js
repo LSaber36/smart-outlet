@@ -13,6 +13,7 @@ export const Device = ({ navigation }) => {
 	const [outletName, setOutletName] = useState('');
 	const [outletIDList, setOutletIDList] = useState([]);
 	const [modalVisible, setModalVisible] = useState(false);
+	const { activeUser } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
@@ -30,7 +31,7 @@ export const Device = ({ navigation }) => {
 
 		const unsubscribeUser = firestore()
 			.collection('Users')
-			.doc('testAccount@smartoutlet.com')
+			.doc(activeUser.email)
 			.onSnapshot(documentSnapshot => {
 				console.log('Current outlet list: ' + documentSnapshot.get('outletIds'));
 				setOutletIDList(documentSnapshot.get('outletIds'));
@@ -49,7 +50,7 @@ export const Device = ({ navigation }) => {
 		// Remove the outlet from the user's outlet list
 		firestore()
 			.collection('Users')
-			.doc('testAccount@smartoutlet.com')
+			.doc(activeUser.email)
 			.set({
 				outletIds: outletIDList.filter(element => element != outletID)
 			})

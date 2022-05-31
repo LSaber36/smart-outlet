@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	View, Text, TouchableWithoutFeedback, Keyboard,
 	Modal, KeyboardAvoidingView, Dimensions
@@ -10,7 +10,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUser } from '../redux';
+import { loginStatus } from '../redux';
 
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
@@ -38,23 +38,6 @@ export const Login = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [loginError, setLoginError] = useState('');
 	const dispatch = useDispatch();
-
-	function onAuthStateChanged(user) {
-		dispatch(loadUser(user));
-
-		if (user != null)
-			console.log('User: ' + JSON.stringify(user.email));
-		else
-			console.log('User is null');
-	}
-
-	useEffect(() => {
-		const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-
-		console.log('Current User: ' + JSON.stringify(activeUser));
-
-		return subscriber;
-	}, []);
 
 	const renderForgotPasswordModal = () => {
 		return (
@@ -136,9 +119,8 @@ export const Login = ({ navigation }) => {
 								setLoginError('');
 								actions.resetForm();
 								setTimeout(() => {
-									console.log('Current User: ' + JSON.stringify(activeUser));
-									navigation.navigate('Dashboard');
-								}, 250);
+									dispatch(loginStatus(true));
+								}, 500);
 							})
 							.catch((error) => {
 								console.log('Error: ' + error.code);
