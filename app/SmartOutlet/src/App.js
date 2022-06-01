@@ -12,7 +12,6 @@ const App = () => {
 		dispatch(loadUser(user));
 		setTimeout(() => {
 			dispatch(loginStatus(user != null));
-			console.log('Dispatched loginStatus');
 		}, 250);
 		console.log('User: ' + (user != null ? JSON.stringify(user.email) : 'None logged-in'));
 	}
