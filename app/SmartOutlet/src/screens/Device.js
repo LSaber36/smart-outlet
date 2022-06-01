@@ -43,7 +43,7 @@ export const Device = ({ navigation }) => {
 		};
 	}, []);
 
-	function deleteOutlet() {
+	const deleteOutlet = () => {
 		console.log('Deleting outlet with ID: ' + outletID);
 		console.log('Filtered List: ' + outletIDList.filter(element => element != outletID));
 
@@ -66,7 +66,7 @@ export const Device = ({ navigation }) => {
 			.then(() => {
 				console.log('Deleted outlet: ' + outletName + ' (ID: ' + outletID + ')');
 			});
-	}
+	};
 
 	const renderConfirmDeleteModal = () => {
 		return (

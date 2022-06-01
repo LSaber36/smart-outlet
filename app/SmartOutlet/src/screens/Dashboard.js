@@ -44,7 +44,7 @@ export const Dashboard = ({ navigation }) => {
 		return () => unsubscribe();
 	}, []);
 
-	function addOutlet(newOutletName) {
+	const addOutlet = (newOutletName) => {
 		const newOutletId = outletIDList.length + 1;
 
 		console.log('Current List: ' + outletIDList);
@@ -72,7 +72,7 @@ export const Dashboard = ({ navigation }) => {
 			.then(() => {
 				console.log('Added new outlet to account (ID: ' + newOutletId + ')');
 			});
-	}
+	};
 
 	return (
 		<View style = { container }>

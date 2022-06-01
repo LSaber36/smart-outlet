@@ -65,7 +65,7 @@ export const Settings = ({ navigation }) => {
 			<Text style = { textStyle }> Settings Page </Text>
 			<View style = { userDataView }>
 				<Text style = { userDataText }> Email: </Text>
-				<Text style = { userDataText }> { activeUser.email } </Text>
+				<Text style = { userDataText }> { activeUser?.email } </Text>
 			</View>
 			<View style = { buttonView }>
 				<Button
