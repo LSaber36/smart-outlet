@@ -10,7 +10,7 @@ const { height, width } = Dimensions.get('screen');
 
 export const Settings = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
-	const { textStyle, buttonView, buttonStyle } = dashboardStyles;
+	const { textStyle, userDataView, userDataText, buttonView, buttonStyle } = dashboardStyles;
 
 	const dispatch = useDispatch();
 	const { activeUser } = useSelector(state => state.user);
@@ -63,6 +63,10 @@ export const Settings = ({ navigation }) => {
 		<View style = { container }>
 			{ renderConfirmLogoutModal() }
 			<Text style = { textStyle }> Settings Page </Text>
+			<View style = { userDataView }>
+				<Text style = { userDataText }> Email: </Text>
+				<Text style = { userDataText }> { activeUser.email } </Text>
+			</View>
 			<View style = { buttonView }>
 				<Button
 					title = 'Back'
@@ -88,10 +92,18 @@ const dashboardStyles = {
 		fontSize: 40,
 		marginTop: '5%'
 	},
+	userDataView: {
+		marginTop: '10%'
+	},
+	userDataText: {
+		color: colors.dark,
+		fontSize: 20,
+		marginTop: '2%'
+	},
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '100%',
+		marginTop: '80%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center'
