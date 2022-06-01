@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, KeyboardAvoidingView, Dimensions } from 'react-native';
+import { View, Text, Modal, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
@@ -75,35 +75,30 @@ export const Device = ({ navigation }) => {
 				transparent = { true }
 				visible = { modalVisible }
 			>
-				<KeyboardAvoidingView
-					behavior = 'height'
-					enabled
-				>
-					<View style = { modalStyles.modalContainer }>
-						<View style = { modalStyles.modalView }>
-							<Text style = { modalStyles.promptText }>
-								Are you sure you want to delete this device?
-							</Text>
-							<View style = { modalStyles.buttonView }>
-								<Button
-									title = 'Cancel'
-									containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-									buttonStyle = { fullWidthHeight }
-									onPress = { () => setModalVisible(false) }
-								/>
-								<Button
-									title = 'Delete'
-									containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-									buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
-									onPress = { () => {
-										deleteOutlet();
-										navigation.goBack();
-									} }
-								/>
-							</View>
+				<View style = { modalStyles.modalContainer }>
+					<View style = { modalStyles.modalView }>
+						<Text style = { modalStyles.promptText }>
+							Are you sure you want to delete this device?
+						</Text>
+						<View style = { modalStyles.buttonView }>
+							<Button
+								title = 'Cancel'
+								containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+								buttonStyle = { fullWidthHeight }
+								onPress = { () => setModalVisible(false) }
+							/>
+							<Button
+								title = 'Delete'
+								containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+								buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
+								onPress = { () => {
+									deleteOutlet();
+									navigation.goBack();
+								} }
+							/>
 						</View>
 					</View>
-				</KeyboardAvoidingView>
+				</View>
 			</Modal>
 		);
 	};
