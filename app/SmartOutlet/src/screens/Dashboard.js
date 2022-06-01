@@ -10,6 +10,7 @@ export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const {
 		textStyle,
+		noOutletsMessage,
 		navButtonView,
 		buttonStyle,
 		addDeviceButtonView,
@@ -74,6 +75,33 @@ export const Dashboard = ({ navigation }) => {
 			});
 	};
 
+	const renderListOrMessage = (list) => {
+		return (list.length > 0) ?
+			outletIDList.map((outletID) => (
+				<ListItem
+					key = { outletID }
+					style = { deviceItemStyle }
+					containerStyle = { deviceItemContainer }
+					onPress = { () => {
+						console.log('Device ' + outletID + ' pressed');
+						dispatch(setID(outletID));
+						navigation.navigate('Device');
+					} }
+				>
+					<ListItem.Content style = { contentStyle }>
+						<ListItem.Title style = { itemTextStyle }>
+						Device { outletID }
+						</ListItem.Title>
+					</ListItem.Content>
+				</ListItem>
+			)) :
+			(
+				<View style = { center }>
+					<Text style = { noOutletsMessage }> No outlets added </Text>
+				</View>
+			);
+	};
+
 	return (
 		<View style = { container }>
 			<Text style = { textStyle }> Dashboard Page </Text>
@@ -92,26 +120,7 @@ export const Dashboard = ({ navigation }) => {
 			</View>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
-					{
-						outletIDList.map((outletID) => (
-							<ListItem
-								key = { outletID }
-								style = { deviceItemStyle }
-								containerStyle = { deviceItemContainer }
-								onPress = { () => {
-									console.log('Device ' + outletID + ' pressed');
-									dispatch(setID(outletID));
-									navigation.navigate('Device');
-								} }
-							>
-								<ListItem.Content style = { contentStyle }>
-									<ListItem.Title style = { itemTextStyle }>
-										Device { outletID }
-									</ListItem.Title>
-								</ListItem.Content>
-							</ListItem>
-						))
-					}
+					{ renderListOrMessage(outletIDList) }
 				</ScrollView>
 			</View>
 			<View style = { addDeviceButtonView }>
@@ -133,6 +142,11 @@ const dashboardStyles = {
 		color: colors.dark,
 		fontSize: 40,
 		marginTop: '5%'
+	},
+	noOutletsMessage: {
+		color: colors.dark,
+		fontSize: 25,
+		marginTop: '25%'
 	},
 	addDeviceButtonView: {
 		height: '10%',
