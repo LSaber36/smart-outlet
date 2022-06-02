@@ -119,12 +119,6 @@ export const Device = ({ navigation }) => {
 						setModalVisible(true);
 					} }
 				/>
-				<Button
-					title = 'Back'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-					onPress = { () => navigation.goBack() }
-				/>
 			</View>
 		</View>
 	);

@@ -64,13 +64,6 @@ export const Settings = ({ navigation }) => {
 			</View>
 			<View style = { buttonView }>
 				<Button
-					title = 'Back'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-					onPress = { () => navigation.goBack() }
-				/>
-
-				<Button
 					title = 'Log Out'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
