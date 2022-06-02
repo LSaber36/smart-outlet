@@ -7,9 +7,9 @@ import auth from '@react-native-firebase/auth';
 
 const { height, width } = Dimensions.get('screen');
 
-export const Settings = ({ navigation }) => {
+export const Settings = () => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
-	const { textStyle, userDataView, userDataText, buttonView, buttonStyle } = dashboardStyles;
+	const { textStyle, userDataView, userDataHeader, userData, buttonView, buttonStyle } = dashboardStyles;
 
 	const { activeUser } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -59,8 +59,10 @@ export const Settings = ({ navigation }) => {
 			{ renderConfirmLogoutModal() }
 			<Text style = { textStyle }> Settings Page </Text>
 			<View style = { userDataView }>
-				<Text style = { userDataText }> Email: </Text>
-				<Text style = { userDataText }> { activeUser?.email } </Text>
+				<Text style = { userDataHeader }> Display Name: </Text>
+				<Text style = { userData }> { activeUser?.displayName } </Text>
+				<Text style = { userDataHeader }> Email: </Text>
+				<Text style = { userData }> { activeUser?.email } </Text>
 			</View>
 			<View style = { buttonView }>
 				<Button
@@ -82,9 +84,15 @@ const dashboardStyles = {
 	},
 	userDataView: {
 		width: '65%',
-		marginTop: '10%'
+		marginTop: '5%'
 	},
-	userDataText: {
+	userDataHeader: {
+		color: colors.dark,
+		fontSize: 20,
+		marginTop: '10%',
+		alignItems: 'flex-start'
+	},
+	userData: {
 		color: colors.dark,
 		fontSize: 20,
 		marginTop: '2%',
@@ -93,7 +101,7 @@ const dashboardStyles = {
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '80%',
+		marginTop: '70%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center'
