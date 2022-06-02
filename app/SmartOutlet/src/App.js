@@ -11,8 +11,12 @@ const App = () => {
 	const onAuthStateChanged = (user) => {
 		dispatch(loadUser(user));
 		setTimeout(() => {
-			dispatch(loginStatus(user != null));
+			dispatch(loginStatus(user != null && user.emailVerified));
 		}, 250);
+
+		if (user != null)
+			console.log('Email verified: ' + JSON.stringify(user.emailVerified));
+
 		console.log('User: ' + (user != null ? JSON.stringify(user.email) : 'None logged-in'));
 	};
 

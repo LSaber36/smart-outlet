@@ -14,8 +14,8 @@ const ACTIONS = createActionTypes([
 
 // Initial State
 const INITIAL_STATE = {
-	isLoggedIn: false,
 	isLoading: true,
+	isLoggedIn: false,
 	activeUser: {},
 	outletID: 0
 };

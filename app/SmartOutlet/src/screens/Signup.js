@@ -5,6 +5,8 @@ import { Button } from 'react-native-elements';
 import { TextBox } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const { height, width } = Dimensions.get('screen');
 const signupSchema = yup.object({
@@ -26,6 +28,7 @@ export const Signup = ({ navigation }) => {
 	const { buttonView, buttonStyle, loginTextView, signupFormStyle } = signupStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
+	const [loginError, setLoginError] = useState('');
 
 	const renderSignupVerificationModal = () => {
 		return (
@@ -45,7 +48,7 @@ export const Signup = ({ navigation }) => {
 							</Text>
 							<Text style = { modalStyles.mainText }>
 								An email has been sent to you to verify your account.
-								Once you confirm your email. you can successfully login.
+								Once you confirm your email, you can successfully login.
 							</Text>
 							<View style = { modalStyles.buttonView }>
 								<Button
@@ -70,9 +73,37 @@ export const Signup = ({ navigation }) => {
 				validationSchema = { signupSchema }
 				onSubmit = { (values, actions) => {
 					console.log('Signup Data: ' + JSON.stringify(values));
-					actions.resetForm();
-					// Check if signup was successful through firebase first
-					// setModalVisible(true);
+					auth()
+						.createUserWithEmailAndPassword(values.email, values.password)
+						.then((userCredential) => {
+							actions.resetForm();
+
+							// Add the outlet to the user's outlet list
+							firestore()
+								.collection('Users')
+								.doc(userCredential.user.email)
+								.set({
+									outletIds: []
+								})
+								.then(() => {
+									console.log('Added new user to Users collection: ' + userCredential.user.email);
+								});
+
+							userCredential.user.sendEmailVerification();
+							userCredential.user.updateProfile({
+								displayName: values.name
+							});
+							setTimeout(() => {
+								auth().signOut();
+								setModalVisible(true);
+							}, 500);
+						})
+						.catch((error) => {
+							console.log('Signup Error: ' + error.code);
+
+							if (error.code === 'auth/email-already-in-use')
+								setLoginError('Email not available');
+						});
 				} }
 			>
 				{ (props) => (
@@ -89,7 +120,7 @@ export const Signup = ({ navigation }) => {
 							placeholder = 'your.name@mail.com'
 							onChangeText = { props.handleChange('email') }
 							value = { props.values.email }
-							errorMesage = { props.touched.email && props.errors.email }
+							errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
 						/>
 						<TextBox
 							header = 'Password'

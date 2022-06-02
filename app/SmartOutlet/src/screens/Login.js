@@ -9,8 +9,6 @@ import { TextBox } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
-import { useDispatch } from 'react-redux';
-import { loginStatus } from '../redux';
 
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
@@ -35,7 +33,6 @@ export const Login = ({ navigation }) => {
 
 	const [modalVisible, setModalVisible] = useState(false);
 	const [loginError, setLoginError] = useState('');
-	const dispatch = useDispatch();
 
 	const renderForgotPasswordModal = () => {
 		return (
@@ -112,19 +109,23 @@ export const Login = ({ navigation }) => {
 					onSubmit = { (values, actions) => {
 						auth()
 							.signInWithEmailAndPassword(values.email, values.password)
-							.then(() => {
-								console.log('Signed in successfully');
-								setLoginError('');
-								actions.resetForm();
-								setTimeout(() => {
-									dispatch(loginStatus(true));
-								}, 500);
+							.then((userCredential) => {
+								if (userCredential.user.emailVerified) {
+									console.log('Signed in successfully');
+									actions.resetForm();
+									setLoginError('');
+								}
+								else {
+									console.log('Not verified');
+									auth().signOut();
+									setLoginError('Please verify your account');
+								}
 							})
 							.catch((error) => {
-								console.log('Error: ' + error.code);
+								console.log('Login Error: ' + error.code);
 
 								if (error.code === 'auth/user-not-found')
-									setLoginError('Invalid Email');
+									setLoginError('User not found');
 								else if (error.code === 'auth/wrong-password')
 									setLoginError('Incorrect Password');
 							});
@@ -166,7 +167,13 @@ export const Login = ({ navigation }) => {
 								<Text>{ 'Don\'t have an account? ' }</Text>
 								<Text
 									style = {{ color: colors.secondaryDark }}
-									onPress = { () => navigation.navigate('Signup') }
+									onPress = { () => {
+										navigation.navigate('Signup');
+										setTimeout(() => {
+											props.resetForm();
+											setLoginError('');
+										}, 250);
+									} }
 								>
 									Register here
 								</Text>

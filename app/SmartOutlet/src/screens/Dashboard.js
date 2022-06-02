@@ -35,9 +35,11 @@ export const Dashboard = ({ navigation }) => {
 			.onSnapshot(documentSnapshot => {
 				const currentOutlets = [];
 
-				documentSnapshot.get('outletIds').map((id) => {
-					currentOutlets.push(id);
-				});
+				if (documentSnapshot != undefined) {
+					documentSnapshot.get('outletIds').map((id) => {
+						currentOutlets.push(id);
+					});
+				}
 
 				setOutletIDList(currentOutlets);
 			});

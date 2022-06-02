@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
-import { loginStatus } from '../redux';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -12,7 +11,6 @@ export const Settings = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
 	const { textStyle, userDataView, userDataText, buttonView, buttonStyle } = dashboardStyles;
 
-	const dispatch = useDispatch();
 	const { activeUser } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
 
@@ -46,10 +44,7 @@ export const Settings = ({ navigation }) => {
 								onPress = { () => {
 									auth()
 										.signOut()
-										.then(() => {
-											console.log('User signed out!');
-											dispatch(loginStatus(false));
-										});
+										.then(() => { console.log('User signed out!') });
 								} }
 							/>
 						</View>
@@ -78,7 +73,7 @@ export const Settings = ({ navigation }) => {
 				<Button
 					title = 'Log Out'
 					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
+					buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
 					onPress = { () => setModalVisible(true) }
 				/>
 			</View>
@@ -93,12 +88,14 @@ const dashboardStyles = {
 		marginTop: '5%'
 	},
 	userDataView: {
+		width: '65%',
 		marginTop: '10%'
 	},
 	userDataText: {
 		color: colors.dark,
 		fontSize: 20,
-		marginTop: '2%'
+		marginTop: '2%',
+		alignItems: 'flex-start'
 	},
 	buttonView: {
 		height: '10%',
