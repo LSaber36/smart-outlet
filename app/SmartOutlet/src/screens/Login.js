@@ -52,13 +52,17 @@ export const Login = ({ navigation }) => {
 									Reset Password
 								</Text>
 								<Text style = { modalStyles.mainText }>
-									Please enter your email so we can send you a password reset link
+									Please enter your email so we can send you a password reset link.
+								</Text>
+								<Text style = { modalStyles.mainText }>
+									Note: It may be in your spam folder
 								</Text>
 								<Formik
 									initialValues = {{ email: '' }}
 									validationSchema = { forgotPasswordSchema }
 									onSubmit = { (values, actions) => {
 										console.log('Forgot Password Data: ' + JSON.stringify(values));
+										auth().sendPasswordResetEmail(values.email);
 										actions.resetForm();
 										setModalVisible(false);
 									} }
@@ -226,9 +230,9 @@ const modalStyles = {
 		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	},
 	modalView: {
-		height: '38%',
+		height: '40%',
 		width: '90%',
-		marginTop: '-45%',
+		marginTop: '-50%',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		backgroundColor: colors.white,
