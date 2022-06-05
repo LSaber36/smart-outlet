@@ -33,15 +33,8 @@ export const Dashboard = ({ navigation }) => {
 			.collection('Users')
 			.doc(activeUser.email)
 			.onSnapshot(documentSnapshot => {
-				const currentOutlets = [];
-
-				if (documentSnapshot != undefined) {
-					documentSnapshot.get('outletIds').map((id) => {
-						currentOutlets.push(id);
-					});
-				}
-
-				setOutletIDList(currentOutlets);
+				if (documentSnapshot != undefined)
+					setOutletIDList(documentSnapshot.get('outletIds'));
 			});
 
 		return () => unsubscribe();
