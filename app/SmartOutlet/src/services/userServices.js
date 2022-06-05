@@ -1,1 +1,1 @@
-// This file will be used to make functions that are used to commnicate with firebase
+// This file will have functions that are used to interact with user data

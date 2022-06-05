@@ -1,0 +1,1 @@
+// This file will have functions that are used to interact with outlet data
