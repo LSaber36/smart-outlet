@@ -94,9 +94,10 @@ const dashboardStyles = {
 	},
 	userData: {
 		color: colors.dark,
-		fontSize: 20,
+		fontSize: 15,
 		marginTop: '2%',
-		alignItems: 'flex-start'
+		alignItems: 'flex-start',
+		marginLeft: '1%'
 	},
 	buttonView: {
 		height: '10%',
