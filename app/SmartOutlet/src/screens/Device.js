@@ -8,11 +8,10 @@ import { useSelector } from 'react-redux';
 const { height, width } = Dimensions.get('screen');
 
 export const Device = ({ navigation }) => {
-	const { outletID } = useSelector(state => state.user);
 	const [outletState, setOutletState] = useState(false);
 	const [outletName, setOutletName] = useState('');
 	const [modalVisible, setModalVisible] = useState(false);
-	const { activeUser, outletIDList } = useSelector(state => state.user);
+	const { activeUser, outletIDList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
@@ -20,10 +19,10 @@ export const Device = ({ navigation }) => {
 	useEffect(() => {
 		const unsubscribeOutlets = firestore()
 			.collection('Outlets')
-			.doc(outletID.toString())
+			.doc(selectedOutletID.toString())
 			.onSnapshot(documentSnapshot => {
-				console.log('Outlet ' + outletID + ' State: ' + documentSnapshot.get('state'));
-				console.log('Outlet ' + outletID + ' Name: ' + documentSnapshot.get('name'));
+				console.log('Outlet ' + selectedOutletID + ' State: ' + documentSnapshot.get('state'));
+				console.log('Outlet ' + selectedOutletID + ' Name: ' + documentSnapshot.get('name'));
 				setOutletState(documentSnapshot.get('state'));
 				setOutletName(documentSnapshot.get('name'));
 			});
@@ -34,27 +33,27 @@ export const Device = ({ navigation }) => {
 	}, []);
 
 	const deleteOutlet = () => {
-		console.log('Deleting outlet with ID: ' + outletID);
-		console.log('Filtered List: ' + outletIDList.filter(element => element != outletID));
+		console.log('Deleting outlet with ID: ' + selectedOutletID);
+		console.log('Filtered List: ' + outletIDList.filter(element => element != selectedOutletID));
 
 		// Remove the outlet from the user's outlet list
 		firestore()
 			.collection('Users')
 			.doc(activeUser.email)
 			.set({
-				outletIds: outletIDList.filter(element => element != outletID)
+				outletIds: outletIDList.filter(element => element != selectedOutletID)
 			})
 			.then(() => {
-				console.log('Removed outlet from account (ID: ' + outletID + ')');
+				console.log('Removed outlet from account (ID: ' + selectedOutletID + ')');
 			});
 
 		// Delete the outlet from the outlet collection
 		firestore()
 			.collection('Outlets')
-			.doc(outletID.toString())
+			.doc(selectedOutletID.toString())
 			.delete()
 			.then(() => {
-				console.log('Deleted outlet: ' + outletName + ' (ID: ' + outletID + ')');
+				console.log('Deleted outlet: ' + outletName + ' (ID: ' + selectedOutletID + ')');
 			});
 	};
 
@@ -97,7 +96,7 @@ export const Device = ({ navigation }) => {
 		<View style = { container }>
 			{ renderConfirmDeleteModal() }
 			<Text style = { textStyle }> Device Page </Text>
-			<Text style = { deviceInfoText }> Outlet ID: { outletID } </Text>
+			<Text style = { deviceInfoText }> Outlet ID: { selectedOutletID } </Text>
 			<Text style = { deviceInfoText }> Outlet Name: { (outletName != undefined) ? outletName : 'Undefined' } </Text>
 			<Text style = { deviceInfoText }> Outlet State: { (outletState != undefined) ? (outletState ? 'On' : 'Off') : 'Undefined' } </Text>
 			<View style = { [buttonView, center] }>
