@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
@@ -22,23 +22,8 @@ export const Dashboard = ({ navigation }) => {
 		itemTextStyle
 	} = dashboardStyles;
 
-	const [outletIDList, setOutletIDList] = useState([]);
-	const { activeUser } = useSelector(state => state.user);
+	const { activeUser, outletIDList } = useSelector(state => state.user);
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		console.log('(Dashboard) Active user email: ' + activeUser.email);
-
-		const unsubscribe = firestore()
-			.collection('Users')
-			.doc(activeUser.email)
-			.onSnapshot(documentSnapshot => {
-				if (documentSnapshot != undefined)
-					setOutletIDList(documentSnapshot.get('outletIds'));
-			});
-
-		return () => unsubscribe();
-	}, []);
 
 	const addOutlet = (newOutletName) => {
 		const newOutletId = outletIDList.length + 1;
@@ -71,7 +56,7 @@ export const Dashboard = ({ navigation }) => {
 	};
 
 	const renderListOrMessage = (list) => {
-		return (list.length > 0) ?
+		return (list != undefined && list.length > 0) ?
 			outletIDList.map((outletID) => (
 				<ListItem
 					key = { outletID }

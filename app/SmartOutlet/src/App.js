@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from './router';
-import { loadUser, loginStatus } from './redux';
+import { loadUser, loginStatus, setIDList } from './redux';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const App = () => {
 	const dispatch = useDispatch();
-	const { isLoggedIn, isLoading } = useSelector(state => state.user);
+	const { isLoggedIn, isLoading, activeUser } = useSelector(state => state.user);
 
 	const onAuthStateChanged = (user) => {
 		dispatch(loadUser(user));
@@ -21,10 +22,28 @@ const App = () => {
 	};
 
 	useEffect(() => {
-		const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+		const authUnsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
 
-		return subscriber;
+		return () => {
+			authUnsubscribe();
+		};
 	}, []);
+
+	useEffect(() => {
+		const outletListUnsubscribe = firestore()
+			.collection('Users')
+			.doc(activeUser.email)
+			.onSnapshot(documentSnapshot => {
+				if (documentSnapshot != undefined)
+					dispatch(setIDList(documentSnapshot.get('outletIds')));
+
+				console.log('Dispatched ID List: ' + documentSnapshot.get('outletIds'));
+			});
+
+		return () => {
+			outletListUnsubscribe();
+		};
+	}, [activeUser]);
 
 	return (
 		<Router isLoggedIn = { isLoggedIn } isLoading = { isLoading } />

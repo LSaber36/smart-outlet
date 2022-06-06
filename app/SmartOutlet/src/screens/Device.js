@@ -11,9 +11,8 @@ export const Device = ({ navigation }) => {
 	const { outletID } = useSelector(state => state.user);
 	const [outletState, setOutletState] = useState(false);
 	const [outletName, setOutletName] = useState('');
-	const [outletIDList, setOutletIDList] = useState([]);
 	const [modalVisible, setModalVisible] = useState(false);
-	const { activeUser } = useSelector(state => state.user);
+	const { activeUser, outletIDList } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
@@ -29,17 +28,8 @@ export const Device = ({ navigation }) => {
 				setOutletName(documentSnapshot.get('name'));
 			});
 
-		const unsubscribeUser = firestore()
-			.collection('Users')
-			.doc(activeUser.email)
-			.onSnapshot(documentSnapshot => {
-				console.log('Current outlet list: ' + documentSnapshot.get('outletIds'));
-				setOutletIDList(documentSnapshot.get('outletIds'));
-			});
-
 		return () => {
 			unsubscribeOutlets();
-			unsubscribeUser();
 		};
 	}, []);
 
