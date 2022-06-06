@@ -78,7 +78,7 @@ export const Signup = ({ navigation }) => {
 						.then((userCredential) => {
 							actions.resetForm();
 
-							// Add the outlet to the user's outlet list
+							// Create and initialize the user's outlet list as empty
 							firestore()
 								.collection('Users')
 								.doc(userCredential.user.email)

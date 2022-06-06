@@ -4,6 +4,7 @@ import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
+import { deleteOutlet } from '../services/outletServices';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -32,31 +33,6 @@ export const Device = ({ navigation }) => {
 		};
 	}, []);
 
-	const deleteOutlet = () => {
-		console.log('Deleting outlet with ID: ' + selectedOutletID);
-		console.log('Filtered List: ' + outletIDList.filter(element => element != selectedOutletID));
-
-		// Remove the outlet from the user's outlet list
-		firestore()
-			.collection('Users')
-			.doc(activeUser.email)
-			.set({
-				outletIds: outletIDList.filter(element => element != selectedOutletID)
-			})
-			.then(() => {
-				console.log('Removed outlet from account (ID: ' + selectedOutletID + ')');
-			});
-
-		// Delete the outlet from the outlet collection
-		firestore()
-			.collection('Outlets')
-			.doc(selectedOutletID.toString())
-			.delete()
-			.then(() => {
-				console.log('Deleted outlet: ' + outletName + ' (ID: ' + selectedOutletID + ')');
-			});
-	};
-
 	const renderConfirmDeleteModal = () => {
 		return (
 			<Modal
@@ -81,7 +57,7 @@ export const Device = ({ navigation }) => {
 								containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
 								buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
 								onPress = { () => {
-									deleteOutlet();
+									deleteOutlet(activeUser, outletIDList, selectedOutletID);
 									navigation.goBack();
 								} }
 							/>

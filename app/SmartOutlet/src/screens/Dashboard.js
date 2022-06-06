@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
-import firestore from '@react-native-firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { setID } from '../redux';
+import { addOutlet } from '../services/outletServices';
 
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -24,36 +24,6 @@ export const Dashboard = ({ navigation }) => {
 
 	const { activeUser, outletIDList } = useSelector(state => state.user);
 	const dispatch = useDispatch();
-
-	const addOutlet = (newOutletName) => {
-		const newOutletId = outletIDList.length + 1;
-
-		console.log('Current List: ' + outletIDList);
-		console.log('New List: ' + [outletIDList, newOutletId]);
-
-		// Add a new outlet to the outlet collection
-		firestore()
-			.collection('Outlets')
-			.doc(newOutletId.toString())
-			.set({
-				name: newOutletName,
-				state: false
-			})
-			.then(() => {
-				console.log('Added outlet: ' + newOutletName + ' (ID: ' + newOutletId + ')');
-			});
-
-		// Add the outlet to the user's outlet list
-		firestore()
-			.collection('Users')
-			.doc(activeUser.email)
-			.set({
-				outletIds: [...outletIDList, newOutletId]
-			})
-			.then(() => {
-				console.log('Added new outlet to account (ID: ' + newOutletId + ')');
-			});
-	};
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
@@ -109,7 +79,7 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						addOutlet('Living Room');
+						addOutlet(activeUser, outletIDList, 'Living Room');
 					} }
 				/>
 			</View>
