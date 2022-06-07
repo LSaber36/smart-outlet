@@ -22,25 +22,25 @@ export const Dashboard = ({ navigation }) => {
 		itemTextStyle
 	} = dashboardStyles;
 
-	const { activeUser, outletIDList } = useSelector(state => state.user);
+	const { activeUser, outletRefList } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
-			outletIDList.map((outletID) => (
+			outletRefList.map((outletRef) => (
 				<ListItem
-					key = { outletID }
+					key = { outletRef.id }
 					style = { deviceItemStyle }
 					containerStyle = { deviceItemContainer }
 					onPress = { () => {
-						console.log('Device ' + outletID + ' pressed');
-						dispatch(setActiveID(outletID));
+						console.log('Device ' + outletRef.id + ' pressed');
+						dispatch(setActiveID(outletRef.id));
 						navigation.navigate('Device');
 					} }
 				>
 					<ListItem.Content style = { contentStyle }>
 						<ListItem.Title style = { itemTextStyle }>
-						Device { outletID }
+							{ outletRef.name }
 						</ListItem.Title>
 					</ListItem.Content>
 				</ListItem>
@@ -70,7 +70,7 @@ export const Dashboard = ({ navigation }) => {
 			</View>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
-					{ renderListOrMessage(outletIDList) }
+					{ renderListOrMessage(outletRefList) }
 				</ScrollView>
 			</View>
 			<View style = { addDeviceButtonView }>
@@ -79,7 +79,7 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						addOutlet(activeUser, outletIDList, 'Living Room');
+						addOutlet(activeUser, outletRefList, 'Living Room');
 					} }
 				/>
 			</View>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from './router';
-import { loadUser, loginStatus, setIDList } from './redux';
+import { loadUser, loginStatus, setOutletRefList } from './redux';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -28,17 +28,17 @@ const App = () => {
 	}, []);
 
 	useEffect(() => {
-		const outletListUnsubscribe = firestore()
+		const outletRefListUnsubscribe = firestore()
 			.collection('Users')
 			.doc(activeUser.email)
 			.onSnapshot(documentSnapshot => {
 				if (documentSnapshot != undefined)
-					dispatch(setIDList(documentSnapshot.get('outletIds')));
+					dispatch(setOutletRefList(documentSnapshot.get('outletRefs')));
 
-				console.log('Dispatched ID List: ' + documentSnapshot.get('outletIds'));
+				console.log('Dispatched ID List: ' + documentSnapshot.get('outletRefs'));
 			});
 
-		return () => outletListUnsubscribe();
+		return () => outletRefListUnsubscribe();
 	}, [activeUser]);
 
 	return (

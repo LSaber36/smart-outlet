@@ -9,7 +9,7 @@ const ACTIONS = createActionTypes([
 	'LOGIN_STATUS',
 	'APP_LOADING',
 	'LOAD_USER',
-	'OUTLET_ID_LIST',
+	'OUTLET_REF_LIST',
 	'SELECTED_OUTLET_ID'
 ]);
 
@@ -18,7 +18,7 @@ const INITIAL_STATE = {
 	isLoading: true,
 	isLoggedIn: false,
 	activeUser: {},
-	outletIDList: [],
+	outletRefList: [],
 	selectedOutletID: 0
 };
 
@@ -32,8 +32,8 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 			return { ...state, isLoading: payload };
 		case ACTIONS.LOAD_USER:
 			return { ...state, activeUser: payload };
-		case ACTIONS.OUTLET_ID_LIST:
-			return { ...state, outletIDList: payload };
+		case ACTIONS.OUTLET_REF_LIST:
+			return { ...state, outletRefList: payload };
 		case ACTIONS.SELECTED_OUTLET_ID:
 			return { ...state, selectedOutletID: payload };
 		default:
@@ -54,8 +54,8 @@ export const loadUser = (user) => dispatch => {
 	dispatch({ type: ACTIONS.LOAD_USER, payload: user });
 };
 
-export const setIDList = (newIdList) => dispatch => {
-	dispatch({ type: ACTIONS.OUTLET_ID_LIST, payload: newIdList });
+export const setOutletRefList = (newOutletRefList) => dispatch => {
+	dispatch({ type: ACTIONS.OUTLET_REF_LIST, payload: newOutletRefList });
 };
 
 export const setActiveID = (newId) => dispatch => {
