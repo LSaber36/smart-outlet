@@ -22,7 +22,6 @@ export const Device = ({ navigation }) => {
 			.doc(selectedOutletID.toString())
 			.onSnapshot(documentSnapshot => {
 				setOutletData(documentSnapshot.data());
-				console.log('Set outlet data: ' + documentSnapshot.data());
 			});
 
 		return () => {
