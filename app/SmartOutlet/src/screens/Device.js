@@ -9,8 +9,7 @@ import { deleteOutlet } from '../services/outletServices';
 const { height, width } = Dimensions.get('screen');
 
 export const Device = ({ navigation }) => {
-	const [outletState, setOutletState] = useState(false);
-	const [outletName, setOutletName] = useState('');
+	const [outletData, setOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
 	const { activeUser, outletIDList, selectedOutletID } = useSelector(state => state.user);
 
@@ -22,10 +21,8 @@ export const Device = ({ navigation }) => {
 			.collection('Outlets')
 			.doc(selectedOutletID.toString())
 			.onSnapshot(documentSnapshot => {
-				console.log('Outlet ' + selectedOutletID + ' State: ' + documentSnapshot.get('state'));
-				console.log('Outlet ' + selectedOutletID + ' Name: ' + documentSnapshot.get('name'));
-				setOutletState(documentSnapshot.get('state'));
-				setOutletName(documentSnapshot.get('name'));
+				setOutletData(documentSnapshot.data());
+				console.log('Set outlet data: ' + documentSnapshot.data());
 			});
 
 		return () => {
@@ -73,8 +70,8 @@ export const Device = ({ navigation }) => {
 			{ renderConfirmDeleteModal() }
 			<Text style = { textStyle }> Device Page </Text>
 			<Text style = { deviceInfoText }> Outlet ID: { selectedOutletID } </Text>
-			<Text style = { deviceInfoText }> Outlet Name: { (outletName != undefined) ? outletName : 'Undefined' } </Text>
-			<Text style = { deviceInfoText }> Outlet State: { (outletState != undefined) ? (outletState ? 'On' : 'Off') : 'Undefined' } </Text>
+			<Text style = { deviceInfoText }> Outlet Name: { (outletData.name != undefined) ? outletData.name : 'Undefined' } </Text>
+			<Text style = { deviceInfoText }> Outlet State: { (outletData.state != undefined) ? (outletData.state ? 'On' : 'Off') : 'Undefined' } </Text>
 			<View style = { [buttonView, center] }>
 				<Button
 					title = 'Delete'
