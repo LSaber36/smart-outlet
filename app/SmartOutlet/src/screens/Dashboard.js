@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
-import { setID } from '../redux';
+import { setActiveID } from '../redux';
 import { addOutlet } from '../services/outletServices';
 
 export const Dashboard = ({ navigation }) => {
@@ -34,7 +34,7 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { deviceItemContainer }
 					onPress = { () => {
 						console.log('Device ' + outletID + ' pressed');
-						dispatch(setID(outletID));
+						dispatch(setActiveID(outletID));
 						navigation.navigate('Device');
 					} }
 				>

@@ -60,7 +60,7 @@ export const setIDList = (newIdList) => dispatch => {
 	dispatch({ type: ACTIONS.OUTLET_ID_LIST, payload: newIdList });
 };
 
-export const setID = (newId) => dispatch => {
+export const setActiveID = (newId) => dispatch => {
 	dispatch({ type: ACTIONS.SELECTED_OUTLET_ID, payload: newId });
 };
 
