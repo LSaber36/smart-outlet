@@ -43,7 +43,6 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 
 // Function calls to be used in dispatch calls
 export const loginStatus = (status) => dispatch => {
-	// getUserStatus().then(status =>
 	dispatch({ type: ACTIONS.LOGIN_STATUS, payload: status });
 };
 
@@ -52,7 +51,6 @@ export const appLoading = () => dispatch => {
 };
 
 export const loadUser = (user) => dispatch => {
-	// loadUserData().then(payload => dispatch({ type: ACTIONS.LOAD_USER, payload }));
 	dispatch({ type: ACTIONS.LOAD_USER, payload: user });
 };
 
