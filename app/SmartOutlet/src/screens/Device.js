@@ -17,16 +17,14 @@ export const Device = ({ navigation }) => {
 	const { textStyle, deviceInfo, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
 
 	useEffect(() => {
-		const unsubscribeOutlets = firestore()
+		const outletUnsubscribe = firestore()
 			.collection('Outlets')
 			.doc(selectedOutletID.toString())
 			.onSnapshot(documentSnapshot => {
 				setOutletData(documentSnapshot.data());
 			});
 
-		return () => {
-			unsubscribeOutlets();
-		};
+		return () => outletUnsubscribe();
 	}, []);
 
 	const renderConfirmDeleteModal = () => {

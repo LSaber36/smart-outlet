@@ -24,9 +24,7 @@ const App = () => {
 	useEffect(() => {
 		const authUnsubscribe = auth().onAuthStateChanged(onAuthStateChanged);
 
-		return () => {
-			authUnsubscribe();
-		};
+		return () => authUnsubscribe();
 	}, []);
 
 	useEffect(() => {
@@ -40,9 +38,7 @@ const App = () => {
 				console.log('Dispatched ID List: ' + documentSnapshot.get('outletIds'));
 			});
 
-		return () => {
-			outletListUnsubscribe();
-		};
+		return () => outletListUnsubscribe();
 	}, [activeUser]);
 
 	return (
