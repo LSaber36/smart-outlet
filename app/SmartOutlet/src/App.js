@@ -28,9 +28,10 @@ const App = () => {
 	}, []);
 
 	useEffect(() => {
+		// activeUser must be checked because it can be null when no user is logged in
 		const outletRefListUnsubscribe = firestore()
 			.collection('Users')
-			.doc(activeUser.email)
+			.doc((activeUser != undefined) ? activeUser.email : null)
 			.onSnapshot(documentSnapshot => {
 				if (documentSnapshot != undefined)
 					dispatch(setOutletRefList(documentSnapshot.get('outletRefs')));

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Modal, KeyboardAvoidingView, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
-import { TextBox } from '../components';
+import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
@@ -108,28 +108,28 @@ export const Signup = ({ navigation }) => {
 			>
 				{ (props) => (
 					<View style = { [center, signupFormStyle] }>
-						<TextBox
+						<TextBoxEntry
 							header = 'Name'
 							placeholder = 'your name'
 							onChangeText = { props.handleChange('name') }
 							value = { props.values.name }
 							errorMesage = { props.touched.name && props.errors.name }
 						/>
-						<TextBox
+						<TextBoxEntry
 							header = 'Email'
 							placeholder = 'your.name@mail.com'
 							onChangeText = { props.handleChange('email') }
 							value = { props.values.email }
 							errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
 						/>
-						<TextBox
+						<TextBoxEntry
 							header = 'Password'
 							placeholder = 'password'
 							onChangeText = { props.handleChange('password') }
 							value = { props.values.password }
 							errorMesage = { props.touched.password && props.errors.password }
 						/>
-						<TextBox
+						<TextBoxEntry
 							header = 'Verify Password'
 							placeholder = 'password'
 							onChangeText = { props.handleChange('verifyPassword') }

@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
-import { TextBox } from '../components';
+import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
@@ -69,7 +69,7 @@ export const Login = ({ navigation }) => {
 								>
 									{ (props) => (
 										<View style = { [center, modalStyles.formStyle] }>
-											<TextBox
+											<TextBoxEntry
 												style = { modalStyles.textInput }
 												header = ''
 												placeholder = 'your.name@mail.com'
@@ -137,14 +137,14 @@ export const Login = ({ navigation }) => {
 				>
 					{ (props) => (
 						<View style = { [center, loginFormStyle] }>
-							<TextBox
+							<TextBoxEntry
 								header = 'Email'
 								placeholder = 'your.name@mail.com'
 								onChangeText = { props.handleChange('email') }
 								value = { props.values.email }
 								errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
 							/>
-							<TextBox
+							<TextBoxEntry
 								header = 'Password'
 								placeholder = 'password'
 								onChangeText = { props.handleChange('password') }

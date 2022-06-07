@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 import { deleteOutlet } from '../services/outletServices';
+import { InfoBox } from '../components';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -14,7 +15,7 @@ export const Device = ({ navigation }) => {
 	const { activeUser, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
-	const { textStyle, deviceInfo, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
+	const { textStyle, deviceInfo, buttonView, buttonStyle, deleteButton } = deviceStyles;
 
 	useEffect(() => {
 		const outletUnsubscribe = firestore()
@@ -67,9 +68,18 @@ export const Device = ({ navigation }) => {
 			{ renderConfirmDeleteModal() }
 			<Text style = { textStyle }> Device Page </Text>
 			<View style = { deviceInfo }>
-				<Text style = { deviceInfoText }> Outlet ID: { selectedOutletID } </Text>
-				<Text style = { deviceInfoText }> Outlet Name: { (outletData.name != undefined) ? outletData.name : 'Undefined' } </Text>
-				<Text style = { deviceInfoText }> Outlet State: { (outletData.state != undefined) ? (outletData.state ? 'On' : 'Off') : 'Undefined' } </Text>
+				<InfoBox
+					header = 'Outlet ID'
+					value = { selectedOutletID }
+				/>
+				<InfoBox
+					header = 'Outlet Name'
+					value = { (outletData.name != undefined) ? outletData.name : 'Undefined' }
+				/>
+				<InfoBox
+					header = 'Outlet State'
+					value = { (outletData.state != undefined) ? (outletData.state ? 'On' : 'Off') : 'Undefined' }
+				/>
 			</View>
 			<View style = { [buttonView, center] }>
 				<Button
@@ -92,18 +102,14 @@ const deviceStyles = {
 		paddingTop: '5%'
 	},
 	deviceInfo: {
-		width: '60%',
-		alignItems: 'flex-start'
-	},
-	deviceInfoText: {
-		color: colors.dark,
-		fontSize: 20,
-		paddingTop: '10%'
+		width: '90%',
+		alignItems: 'flex-start',
+		marginTop: '8%'
 	},
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '55%'
+		marginTop: '45%'
 	},
 	buttonStyle: {
 		width: '80%',

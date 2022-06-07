@@ -154,7 +154,8 @@ const dashboardStyles = {
 		elevation: 3
 	},
 	contentStyle: {
-		alignItems: 'center'
+		alignItems: 'flex-start',
+		marginLeft: '6%'
 	},
 	itemTextStyle: {
 		color: colors.offWhite
