@@ -53,7 +53,7 @@ export const Settings = () => {
 	return (
 		<View style = { container }>
 			{ renderConfirmLogoutModal() }
-			<Text style = { textStyle }> Settings Page </Text>
+			<Text style = { textStyle }> Account </Text>
 			<View style = { userDataView }>
 				<Text style = { userDataHeader }> Display Name: </Text>
 				<Text style = { userData }> { activeUser?.displayName } </Text>

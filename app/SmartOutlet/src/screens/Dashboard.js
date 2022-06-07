@@ -53,20 +53,7 @@ export const Dashboard = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			<Text style = { textStyle }> Dashboard Page </Text>
-			<View style = { navButtonView }>
-				<Button
-					title = '?'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-				/>
-				<Button
-					title = 'Settings'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-					onPress = { () => navigation.navigate('Settings') }
-				/>
-			</View>
+			<Text style = { textStyle }> Devices </Text>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
 					{ renderListOrMessage(outletRefList) }
@@ -80,6 +67,19 @@ export const Dashboard = ({ navigation }) => {
 					onPress = { () => {
 						addOutlet(activeUser, outletRefList, 'Living Room');
 					} }
+				/>
+			</View>
+			<View style = { navButtonView }>
+				<Button
+					title = '?'
+					containerStyle = { [buttonContainer, buttonStyle] }
+					buttonStyle = { fullWidthHeight }
+				/>
+				<Button
+					title = 'Settings'
+					containerStyle = { [buttonContainer, buttonStyle] }
+					buttonStyle = { fullWidthHeight }
+					onPress = { () => navigation.navigate('Settings') }
 				/>
 			</View>
 		</View>
