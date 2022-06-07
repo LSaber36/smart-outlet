@@ -33,7 +33,6 @@ export const Dashboard = ({ navigation }) => {
 					style = { deviceItemStyle }
 					containerStyle = { deviceItemContainer }
 					onPress = { () => {
-						console.log('Device ' + outletRef.id + ' pressed');
 						dispatch(setActiveID(outletRef.id));
 						navigation.navigate('Device');
 					} }

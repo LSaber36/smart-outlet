@@ -15,10 +15,10 @@ const App = () => {
 			dispatch(loginStatus(user != null && user.emailVerified));
 		}, 250);
 
+		console.log('User: ' + (user != null ? JSON.stringify(user.email) : 'None logged in'));
+
 		if (user != null)
 			console.log('Email verified: ' + JSON.stringify(user.emailVerified));
-
-		console.log('User: ' + (user != null ? JSON.stringify(user.email) : 'None logged-in'));
 	};
 
 	useEffect(() => {
@@ -29,6 +29,7 @@ const App = () => {
 
 	useEffect(() => {
 		// activeUser must be checked because it can be null when no user is logged in
+		// It's important to dispatch an undefined user so an old user's data is not maintained
 		const outletRefListUnsubscribe = firestore()
 			.collection('Users')
 			.doc((activeUser != undefined) ? activeUser.email : null)
@@ -36,7 +37,7 @@ const App = () => {
 				if (documentSnapshot != undefined)
 					dispatch(setOutletRefList(documentSnapshot.get('outletRefs')));
 
-				console.log('Dispatched ID List: ' + documentSnapshot.get('outletRefs'));
+				console.log('Dispatched Ref List');
 			});
 
 		return () => outletRefListUnsubscribe();

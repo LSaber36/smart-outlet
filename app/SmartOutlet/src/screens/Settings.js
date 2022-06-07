@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Modal, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
@@ -13,10 +13,6 @@ export const Settings = () => {
 
 	const { activeUser } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
-
-	useEffect(() => {
-		console.log('(Settings)  Active user email: ' + activeUser.email);
-	}, []);
 
 	const renderConfirmLogoutModal = () => {
 		return (

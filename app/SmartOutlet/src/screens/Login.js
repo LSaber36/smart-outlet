@@ -61,7 +61,6 @@ export const Login = ({ navigation }) => {
 									initialValues = {{ email: '' }}
 									validationSchema = { forgotPasswordSchema }
 									onSubmit = { (values, actions) => {
-										console.log('Forgot Password Data: ' + JSON.stringify(values));
 										auth().sendPasswordResetEmail(values.email);
 										actions.resetForm();
 										setModalVisible(false);
@@ -126,7 +125,7 @@ export const Login = ({ navigation }) => {
 								}
 							})
 							.catch((error) => {
-								console.log('Login Error: ' + error.code);
+								console.warn('Login Error: ' + error.code);
 
 								if (error.code === 'auth/user-not-found')
 									setLoginError('User not found');

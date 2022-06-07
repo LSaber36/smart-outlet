@@ -72,7 +72,6 @@ export const Signup = ({ navigation }) => {
 				initialValues = {{ name: '', email: '', password: '', verifyPassword: '' }}
 				validationSchema = { signupSchema }
 				onSubmit = { (values, actions) => {
-					console.log('Signup Data: ' + JSON.stringify(values));
 					auth()
 						.createUserWithEmailAndPassword(values.email, values.password)
 						.then((userCredential) => {
@@ -99,7 +98,7 @@ export const Signup = ({ navigation }) => {
 							}, 500);
 						})
 						.catch((error) => {
-							console.log('Signup Error: ' + error.code);
+							console.warn('Signup Error: ' + error.code);
 
 							if (error.code === 'auth/email-already-in-use')
 								setLoginError('Email not available');

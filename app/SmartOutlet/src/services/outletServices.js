@@ -3,9 +3,6 @@ import firestore from '@react-native-firebase/firestore';
 export const addOutlet = (activeUser, outletRefList, newOutletName) => {
 	const newOutletId = outletRefList.length + 1;
 
-	console.log('Current List: ' + outletRefList);
-	console.log('New List: ' + [outletRefList, newOutletId]);
-
 	// Add a new outlet to the outlet collection
 	firestore()
 		.collection('Outlets')
@@ -15,7 +12,7 @@ export const addOutlet = (activeUser, outletRefList, newOutletName) => {
 			state: false
 		})
 		.then(() => {
-			console.log('Added outlet: ' + newOutletName + ' (ID: ' + newOutletId + ')');
+			console.log('Added outlet to database: ' + newOutletName + ' (ID: ' + newOutletId + ')');
 		});
 
 	// Add the outlet to the user's outlet list
@@ -31,9 +28,6 @@ export const addOutlet = (activeUser, outletRefList, newOutletName) => {
 };
 
 export const deleteOutlet = (activeUser, outletRefList, outletID) => {
-	console.log('Deleting outlet with ID: ' + outletID);
-	console.log('Filtered List: ' + outletRefList.filter(outletRef => outletRef != outletID));
-
 	// Remove the outlet from the user's outlet list
 	firestore()
 		.collection('Users')
@@ -51,6 +45,6 @@ export const deleteOutlet = (activeUser, outletRefList, outletID) => {
 		.doc(outletID.toString())
 		.delete()
 		.then(() => {
-			console.log('Deleted outlet (ID: ' + outletID + ')');
+			console.log('Deleted outlet from database (ID: ' + outletID + ')');
 		});
 };
