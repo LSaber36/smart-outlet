@@ -14,7 +14,7 @@ export const Device = ({ navigation }) => {
 	const { activeUser, outletIDList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
-	const { textStyle, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
+	const { textStyle, deviceInfo, deviceInfoText, buttonView, buttonStyle, deleteButton } = deviceStyles;
 
 	useEffect(() => {
 		const unsubscribeOutlets = firestore()
@@ -68,9 +68,11 @@ export const Device = ({ navigation }) => {
 		<View style = { container }>
 			{ renderConfirmDeleteModal() }
 			<Text style = { textStyle }> Device Page </Text>
-			<Text style = { deviceInfoText }> Outlet ID: { selectedOutletID } </Text>
-			<Text style = { deviceInfoText }> Outlet Name: { (outletData.name != undefined) ? outletData.name : 'Undefined' } </Text>
-			<Text style = { deviceInfoText }> Outlet State: { (outletData.state != undefined) ? (outletData.state ? 'On' : 'Off') : 'Undefined' } </Text>
+			<View style = { deviceInfo }>
+				<Text style = { deviceInfoText }> Outlet ID: { selectedOutletID } </Text>
+				<Text style = { deviceInfoText }> Outlet Name: { (outletData.name != undefined) ? outletData.name : 'Undefined' } </Text>
+				<Text style = { deviceInfoText }> Outlet State: { (outletData.state != undefined) ? (outletData.state ? 'On' : 'Off') : 'Undefined' } </Text>
+			</View>
 			<View style = { [buttonView, center] }>
 				<Button
 					title = 'Delete'
@@ -90,6 +92,10 @@ const deviceStyles = {
 		color: colors.dark,
 		fontSize: 40,
 		paddingTop: '5%'
+	},
+	deviceInfo: {
+		width: '60%',
+		alignItems: 'flex-start'
 	},
 	deviceInfoText: {
 		color: colors.dark,
