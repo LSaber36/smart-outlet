@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('screen');
 
 export const Settings = () => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
-	const { textStyle, avatar, userDataView, userDataHeader, userData, buttonView, buttonStyle } = dashboardStyles;
+	const { avatar, userDataView, userDataHeader, userData, buttonView, buttonStyle } = dashboardStyles;
 
 	const { activeUser } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
@@ -93,7 +93,7 @@ export const Settings = () => {
 				<Avatar
 					size = { 200 }
 					rounded = { true }
-					source = { (activeUser.photoURL) ? { uri: activeUser.photoURL } : require('../assets/default_profile_icon.png') }
+					source = { (activeUser && activeUser.photoURL) ? { uri: activeUser.photoURL } : require('../assets/default_profile_icon.png') }
 				>
 					<Avatar.Accessory
 						size = { 50 }
@@ -122,11 +122,6 @@ export const Settings = () => {
 };
 
 const dashboardStyles = {
-	textStyle: {
-		color: colors.dark,
-		fontSize: 40,
-		marginTop: '5%'
-	},
 	avatar: {
 		marginTop: '5%'
 	},
