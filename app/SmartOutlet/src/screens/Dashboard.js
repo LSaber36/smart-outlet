@@ -26,23 +26,25 @@ export const Dashboard = ({ navigation }) => {
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
-			outletRefList.map((outletRef) => (
-				<ListItem
-					key = { outletRef.id }
-					style = { deviceItemStyle }
-					containerStyle = { deviceItemContainer }
-					onPress = { () => {
-						dispatch(setActiveID(outletRef.id));
-						navigation.navigate('Device');
-					} }
-				>
-					<ListItem.Content style = { contentStyle }>
-						<ListItem.Title style = { itemTextStyle }>
-							{ outletRef.name }
-						</ListItem.Title>
-					</ListItem.Content>
-				</ListItem>
-			)) :
+			outletRefList
+				.sort((a, b) => a.name.localeCompare(b.name))
+				.map((outletRef) => (
+					<ListItem
+						key = { outletRef.id }
+						style = { deviceItemStyle }
+						containerStyle = { deviceItemContainer }
+						onPress = { () => {
+							dispatch(setActiveID(outletRef.id));
+							navigation.navigate('Device');
+						} }
+					>
+						<ListItem.Content style = { contentStyle }>
+							<ListItem.Title style = { itemTextStyle }>
+								{ outletRef.name }
+							</ListItem.Title>
+						</ListItem.Content>
+					</ListItem>
+				)) :
 			(
 				<View style = { center }>
 					<Text style = { noOutletsMessage }> No outlets added </Text>
