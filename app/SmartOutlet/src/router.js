@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -27,7 +28,19 @@ const AuthStackNavigator = () => (
 
 const MainStackNavigator = () => (
 	<MainStack.Navigator>
-		<MainStack.Screen name = 'Dashboard' component = { Dashboard } />
+		<MainStack.Screen
+			name = 'Dashboard'
+			component = { Dashboard }
+			options = { ({ navigation }) => ({
+				headerRight: () => (
+					<Icon
+						name = 'gear'
+						size = { 30 }
+						onPress = { () => navigation.navigate('Settings') }
+					/>
+				)
+			}) }
+		/>
 		<MainStack.Screen name = 'Device' component = { Device } />
 		<MainStack.Screen name = 'Settings' component = { Settings } />
 	</MainStack.Navigator>

@@ -11,7 +11,6 @@ export const Dashboard = ({ navigation }) => {
 	const {
 		textStyle,
 		noOutletsMessage,
-		navButtonView,
 		buttonStyle,
 		addDeviceButtonView,
 		scrollViewContainer,
@@ -69,19 +68,6 @@ export const Dashboard = ({ navigation }) => {
 					} }
 				/>
 			</View>
-			<View style = { navButtonView }>
-				<Button
-					title = '?'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-				/>
-				<Button
-					title = 'Settings'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-					onPress = { () => navigation.navigate('Settings') }
-				/>
-			</View>
 		</View>
 	);
 };
@@ -98,23 +84,15 @@ const dashboardStyles = {
 		marginTop: '25%'
 	},
 	addDeviceButtonView: {
-		height: '10%',
+		height: '15%',
 		width: '80%',
-		marginTop: '5%',
+		alignItems: 'center',
 		justifyContent: 'space-around',
-		alignItems: 'center'
-	},
-	navButtonView: {
-		height: '10%',
-		width: '80%',
-		marginTop: '5%',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center'
+		marginTop: '15%'
 	},
 	buttonStyle: {
-		width: '40%',
-		height: '80%'
+		width: '50%',
+		height: '60%'
 	},
 	scrollViewContainer: {
 		height: '55%',
