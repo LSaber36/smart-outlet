@@ -9,7 +9,8 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 		.doc(newOutletId.toString())
 		.set({
 			name: newOutletName,
-			state: false
+			state: false,
+			data: 0
 		})
 		.then(() => {
 			console.log('Added outlet to database: ' + newOutletName + ' (ID: ' + newOutletId + ')');

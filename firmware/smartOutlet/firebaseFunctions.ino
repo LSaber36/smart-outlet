@@ -14,10 +14,11 @@ void syncFirebase()
     deviceState = (count % 2) == 0;
     content.clear();
     content.set("fields/state/booleanValue", deviceState);
+    content.set("fields/data/integerValue", String(devicePower).c_str());
 
     Serial.println("Updating document...");
 
-    if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "state"))
+    if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "state,data"))
       Serial.printf("ok\n%s\n", fbdo.payload().c_str());
     else
       Serial.println(fbdo.errorReason());

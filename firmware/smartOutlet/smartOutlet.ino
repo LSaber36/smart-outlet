@@ -20,6 +20,7 @@ unsigned long count = 0;
 // Realtime Data
 int deviceID = 1; 
 bool deviceState;
+int devicePower = 0;
 
 void setup()
 {

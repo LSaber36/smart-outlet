@@ -80,6 +80,10 @@ export const Device = ({ navigation }) => {
 					header = 'Outlet State'
 					value = { (currentOutletData.state != undefined) ? (currentOutletData.state ? 'On' : 'Off') : 'Undefined' }
 				/>
+				<InfoBox
+					header = 'Outlet Power'
+					value = { (currentOutletData.data != undefined) ? currentOutletData.data : 'Undefined' }
+				/>
 			</View>
 			<View style = { [buttonView, center] }>
 				<Button
@@ -117,7 +121,7 @@ const deviceStyles = {
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '35%'
+		marginTop: '15%'
 	},
 	buttonStyle: {
 		width: '80%',
