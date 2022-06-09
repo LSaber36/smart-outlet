@@ -6,7 +6,7 @@ import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import { initNewUser } from '../services/userServices';
 
 const { height, width } = Dimensions.get('screen');
 const signupSchema = yup.object({
@@ -77,17 +77,7 @@ export const Signup = ({ navigation }) => {
 						.then((userCredential) => {
 							actions.resetForm();
 
-							// Create and initialize the user's outlet list as empty
-							firestore()
-								.collection('Users')
-								.doc(userCredential.user.email)
-								.set({
-									outletIds: []
-								})
-								.then(() => {
-									console.log('Added new user to Users collection: ' + userCredential.user.email);
-								});
-
+							initNewUser(userCredential.user);
 							userCredential.user.sendEmailVerification();
 							userCredential.user.updateProfile({
 								displayName: values.name
