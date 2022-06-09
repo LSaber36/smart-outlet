@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('screen');
 export const Device = ({ navigation }) => {
 	const [currentOutletData, setCurrentOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
-	const { activeUser, outletRefList, selectedOutletID } = useSelector(state => state.user);
+	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const { textStyle, deviceInfo, buttonView, buttonStyle, deleteButton } = deviceStyles;
@@ -52,7 +52,7 @@ export const Device = ({ navigation }) => {
 								containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
 								buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
 								onPress = { () => {
-									deleteOutlet(activeUser, outletRefList, selectedOutletID);
+									deleteOutlet(activeUserData, outletRefList, selectedOutletID);
 									navigation.goBack();
 								} }
 							/>

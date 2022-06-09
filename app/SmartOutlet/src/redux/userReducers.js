@@ -8,7 +8,7 @@ const createActionTypes = actionTypes => actionTypes
 const ACTIONS = createActionTypes([
 	'LOGIN_STATUS',
 	'APP_LOADING',
-	'LOAD_USER',
+	'LOAD_USER_DATA',
 	'OUTLET_REF_LIST',
 	'SELECTED_OUTLET_ID'
 ]);
@@ -17,7 +17,7 @@ const ACTIONS = createActionTypes([
 const INITIAL_STATE = {
 	isLoading: true,
 	isLoggedIn: false,
-	activeUser: {},
+	activeUserData: {},
 	outletRefList: [],
 	selectedOutletID: 0
 };
@@ -30,8 +30,8 @@ const userReducers = (state = INITIAL_STATE, { payload, type }) => {
 			return { ...state, isLoggedIn: payload };
 		case ACTIONS.APP_LOADING:
 			return { ...state, isLoading: payload };
-		case ACTIONS.LOAD_USER:
-			return { ...state, activeUser: payload };
+		case ACTIONS.LOAD_USER_DATA:
+			return { ...state, activeUserData: payload };
 		case ACTIONS.OUTLET_REF_LIST:
 			return { ...state, outletRefList: payload };
 		case ACTIONS.SELECTED_OUTLET_ID:
@@ -50,8 +50,8 @@ export const appLoading = () => dispatch => {
 	dispatch({ type: ACTIONS.APP_LOADING, payload: false });
 };
 
-export const loadUser = (user) => dispatch => {
-	dispatch({ type: ACTIONS.LOAD_USER, payload: user });
+export const loadUserData = (user) => dispatch => {
+	dispatch({ type: ACTIONS.LOAD_USER_DATA, payload: user });
 };
 
 export const setOutletRefList = (newOutletRefList) => dispatch => {

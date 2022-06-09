@@ -22,7 +22,7 @@ export const Dashboard = ({ navigation }) => {
 		itemTextStyle
 	} = dashboardStyles;
 
-	const { activeUser, outletRefList } = useSelector(state => state.user);
+	const { activeUserData, outletRefList } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 	const renderListOrMessage = (list) => {
@@ -65,7 +65,7 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						addOutlet(activeUser, outletRefList, 'Living Room');
+						addOutlet(activeUserData, outletRefList, 'Living Room');
 					} }
 				/>
 			</View>

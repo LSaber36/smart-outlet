@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
-import { loadUser } from '../redux';
+import { loadUserData } from '../redux';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -14,7 +14,7 @@ export const Settings = () => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
 	const { avatar, userDataView, userDataHeader, userData, buttonView, buttonStyle } = dashboardStyles;
 
-	const { activeUser } = useSelector(state => state.user);
+	const { activeUserData } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
 	const dispatch = useDispatch();
 
@@ -64,7 +64,7 @@ export const Settings = () => {
 				cropperCircleOverlay: true
 			})
 			.then(image => {
-				let imageRef = storage().ref(activeUser.email + '/profileImage.png');
+				let imageRef = storage().ref(activeUserData.email + '/profileImage.png');
 
 				imageRef
 					.putFile(image.path, { contentType: 'image/jpg' })
@@ -79,7 +79,7 @@ export const Settings = () => {
 								})
 								.then(() => {
 									auth().currentUser.reload();
-									dispatch(loadUser(auth().currentUser));
+									dispatch(loadUserData(auth().currentUser));
 								});
 						});
 					});
@@ -93,7 +93,7 @@ export const Settings = () => {
 				<Avatar
 					size = { 200 }
 					rounded = { true }
-					source = { (activeUser && activeUser.photoURL) ? { uri: activeUser.photoURL } : require('../assets/default_profile_icon.png') }
+					source = { (activeUserData && activeUserData.photoURL) ? { uri: activeUserData.photoURL } : require('../assets/default_profile_icon.png') }
 				>
 					<Avatar.Accessory
 						size = { 50 }
@@ -105,9 +105,9 @@ export const Settings = () => {
 			</View>
 			<View style = { userDataView }>
 				<Text style = { userDataHeader }> Display Name: </Text>
-				<Text style = { userData }> { activeUser?.displayName } </Text>
+				<Text style = { userData }> { activeUserData?.displayName } </Text>
 				<Text style = { userDataHeader }> Email: </Text>
-				<Text style = { userData }> { activeUser?.email } </Text>
+				<Text style = { userData }> { activeUserData?.email } </Text>
 			</View>
 			<View style = { buttonView }>
 				<Button
