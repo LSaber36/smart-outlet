@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, Dimensions } from 'react-native';
+import { View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
@@ -15,7 +15,10 @@ export const Device = ({ navigation }) => {
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
-	const { textStyle, deviceInfo, buttonView, buttonStyle, deleteButton } = deviceStyles;
+	const {
+		textStyle, scrollViewContainer, scrollViewStyle,
+		buttonView, buttonStyle, deleteButton
+	} = deviceStyles;
 
 	useEffect(() => {
 		const outletUnsubscribe = firestore()
@@ -67,23 +70,25 @@ export const Device = ({ navigation }) => {
 		<View style = { container }>
 			{ renderConfirmDeleteModal() }
 			<Text style = { textStyle }> Device Page </Text>
-			<View style = { deviceInfo }>
-				<InfoBox
-					header = 'Outlet ID'
-					value = { selectedOutletID }
-				/>
-				<InfoBox
-					header = 'Outlet Name'
-					value = { (currentOutletData.name != undefined) ? currentOutletData.name : 'Undefined' }
-				/>
-				<InfoBox
-					header = 'Outlet State'
-					value = { (currentOutletData.state != undefined) ? (currentOutletData.state ? 'On' : 'Off') : 'Undefined' }
-				/>
-				<InfoBox
-					header = 'Outlet Power'
-					value = { (currentOutletData.data != undefined) ? currentOutletData.data : 'Undefined' }
-				/>
+			<View style = { [center, scrollViewContainer] }>
+				<ScrollView style = { scrollViewStyle }>
+					<InfoBox
+						header = 'ID'
+						value = { selectedOutletID }
+					/>
+					<InfoBox
+						header = 'Name'
+						value = { (currentOutletData.name != undefined) ? currentOutletData.name : 'Undefined' }
+					/>
+					<InfoBox
+						header = 'State'
+						value = { (currentOutletData.state != undefined) ? (currentOutletData.state ? 'On' : 'Off') : 'Undefined' }
+					/>
+					<InfoBox
+						header = 'Power'
+						value = { (currentOutletData.data != undefined) ? currentOutletData.data : 'Undefined' }
+					/>
+				</ScrollView>
 			</View>
 			<View style = { [buttonView, center] }>
 				<Button
@@ -113,10 +118,18 @@ const deviceStyles = {
 		fontSize: 40,
 		paddingTop: '5%'
 	},
-	deviceInfo: {
+	scrollViewContainer: {
+		height: '55%',
 		width: '90%',
-		alignItems: 'flex-start',
-		marginTop: '8%'
+		marginTop: '5%',
+		borderRadius: 10,
+		backgroundColor: colors.secondaryLight
+	},
+	scrollViewStyle: {
+		width: '90%',
+		marginTop: '4%',
+		marginBottom: '4%',
+		backgroundColor: colors.secondaryLight
 	},
 	buttonView: {
 		height: '10%',
