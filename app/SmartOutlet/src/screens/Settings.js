@@ -12,11 +12,50 @@ const { height, width } = Dimensions.get('screen');
 
 export const Settings = () => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
-	const { avatar, userDataView, userDataHeader, userData, buttonView, buttonStyle } = dashboardStyles;
+	const {
+		avatarView, avatarStyle, userDataView, userDataHeader,
+		userData, buttonView, buttonStyle
+	} = dashboardStyles;
 
 	const { activeUserData } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
 	const dispatch = useDispatch();
+
+	const handleImagePicker = async () => {
+		ImagePicker
+			.openPicker({
+				width: 400,
+				height: 400,
+				cropping: true,
+				freeStyleCropEnabled: true,
+				cropperCircleOverlay: true
+			})
+			.then(image => {
+				let imageRef = storage().ref(activeUserData.email + '/profileImage.png');
+
+				imageRef
+					.putFile(image.path, { contentType: 'image/jpg' })
+					.then(() => {
+						console.log('Image uploaded to firebase storage');
+
+						imageRef.getDownloadURL().then((url) => {
+							auth()
+								.currentUser
+								.updateProfile({
+									photoURL: url
+								})
+								.then(() => {
+									auth().currentUser.reload();
+									dispatch(loadUserData(auth().currentUser));
+								});
+						});
+					});
+			})
+			.catch((error) => {
+				if (error.code !== 'E_PICKER_CANCELLED')
+					console.warn(error);
+			});
+	};
 
 	const renderConfirmLogoutModal = () => {
 		return (
@@ -54,50 +93,18 @@ export const Settings = () => {
 		);
 	};
 
-	const handleImagePicker = async () => {
-		ImagePicker
-			.openPicker({
-				width: 400,
-				height: 400,
-				cropping: true,
-				freeStyleCropEnabled: true,
-				cropperCircleOverlay: true
-			})
-			.then(image => {
-				let imageRef = storage().ref(activeUserData.email + '/profileImage.png');
-
-				imageRef
-					.putFile(image.path, { contentType: 'image/jpg' })
-					.then(() => {
-						console.log('Image uploaded to firebase storage');
-
-						imageRef.getDownloadURL().then((url) => {
-							auth()
-								.currentUser
-								.updateProfile({
-									photoURL: url
-								})
-								.then(() => {
-									auth().currentUser.reload();
-									dispatch(loadUserData(auth().currentUser));
-								});
-						});
-					});
-			});
-	};
-
 	return (
 		<View style = { container }>
 			{ renderConfirmLogoutModal() }
-			<View style = { avatar }>
+			<View style = { avatarView }>
 				<Avatar
 					size = { 200 }
 					rounded = { true }
+					containerStyle = { avatarStyle }
 					source = { (activeUserData && activeUserData.photoURL) ? { uri: activeUserData.photoURL } : require('../assets/default_profile_icon.png') }
 				>
 					<Avatar.Accessory
-						size = { 50 }
-						color = { colors.offWhite }
+						size = { 45 }
 						underlayColor = { colors.offWhite }
 						onPress = { () => handleImagePicker() }
 					/>
@@ -122,8 +129,11 @@ export const Settings = () => {
 };
 
 const dashboardStyles = {
-	avatar: {
+	avatarView: {
 		marginTop: '5%'
+	},
+	avatarStyle: {
+		elevation: 3
 	},
 	userDataView: {
 		width: '65%',
