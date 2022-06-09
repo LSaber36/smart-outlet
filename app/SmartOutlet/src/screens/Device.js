@@ -4,13 +4,13 @@ import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
-import { deleteOutlet } from '../services/outletServices';
+import { deleteOutlet, setOutletState } from '../services/outletServices';
 import { InfoBox } from '../components';
 
 const { height, width } = Dimensions.get('screen');
 
 export const Device = ({ navigation }) => {
-	const [outletData, setOutletData] = useState({});
+	const [currentOutletData, setCurrentOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
 	const { activeUser, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
@@ -22,7 +22,7 @@ export const Device = ({ navigation }) => {
 			.collection('Outlets')
 			.doc(selectedOutletID.toString())
 			.onSnapshot(documentSnapshot => {
-				setOutletData(documentSnapshot.data());
+				setCurrentOutletData(documentSnapshot.data());
 			});
 
 		return () => outletUnsubscribe();
@@ -74,14 +74,22 @@ export const Device = ({ navigation }) => {
 				/>
 				<InfoBox
 					header = 'Outlet Name'
-					value = { (outletData.name != undefined) ? outletData.name : 'Undefined' }
+					value = { (currentOutletData.name != undefined) ? currentOutletData.name : 'Undefined' }
 				/>
 				<InfoBox
 					header = 'Outlet State'
-					value = { (outletData.state != undefined) ? (outletData.state ? 'On' : 'Off') : 'Undefined' }
+					value = { (currentOutletData.state != undefined) ? (currentOutletData.state ? 'On' : 'Off') : 'Undefined' }
 				/>
 			</View>
 			<View style = { [buttonView, center] }>
+				<Button
+					title = 'Toggle State'
+					containerStyle = { [buttonContainer, buttonStyle] }
+					buttonStyle = { fullWidthHeight }
+					onPress = { () => {
+						setOutletState(selectedOutletID, !currentOutletData.state);
+					} }
+				/>
 				<Button
 					title = 'Delete'
 					containerStyle = { [buttonContainer, buttonStyle] }
@@ -109,7 +117,7 @@ const deviceStyles = {
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '45%'
+		marginTop: '35%'
 	},
 	buttonStyle: {
 		width: '80%',

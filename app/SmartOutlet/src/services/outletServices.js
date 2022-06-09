@@ -48,3 +48,15 @@ export const deleteOutlet = (activeUser, outletRefList, outletID) => {
 			console.log('Deleted outlet from database (ID: ' + outletID + ')');
 		});
 };
+
+export const setOutletState = (outletID, targetState) => {
+	firestore()
+		.collection('Outlets')
+		.doc(outletID.toString())
+		.update({
+			state: targetState
+		})
+		.then(() => {
+			console.log('Set outlet state (State: ' + targetState + '  ID: ' + outletID + ')');
+		});
+};
