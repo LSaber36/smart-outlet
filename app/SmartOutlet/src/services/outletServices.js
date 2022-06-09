@@ -1,7 +1,8 @@
 import firestore from '@react-native-firebase/firestore';
+import uuid from 'react-native-uuid';
 
 export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
-	const newOutletId = outletRefList.length + 1;
+	const newOutletId = uuid.v4();
 
 	// Add a new outlet to the outlet collection
 	firestore()
@@ -13,7 +14,7 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 			data: 0
 		})
 		.then(() => {
-			console.log('Added outlet to database: ' + newOutletName + ' (ID: ' + newOutletId + ')');
+			console.log('Added outlet to database    (ID: ' + newOutletId + ')');
 		});
 
 	// Add the outlet to the user's outlet list
@@ -37,7 +38,7 @@ export const deleteOutlet = (activeUserData, outletRefList, outletID) => {
 			outletRefs: outletRefList.filter(outletRef => outletRef.id != outletID)
 		})
 		.then(() => {
-			console.log('Removed outlet from account (ID: ' + outletID + ')');
+			console.log('Removed outlet from account  (ID: ' + outletID + ')');
 		});
 
 	// Delete the outlet from the outlet collection

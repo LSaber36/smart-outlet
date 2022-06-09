@@ -73,10 +73,6 @@ export const Device = ({ navigation }) => {
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
 					<InfoBox
-						header = 'ID'
-						value = { selectedOutletID }
-					/>
-					<InfoBox
 						header = 'Name'
 						value = { (currentOutletData.name != undefined) ? currentOutletData.name : 'Undefined' }
 					/>
@@ -87,6 +83,10 @@ export const Device = ({ navigation }) => {
 					<InfoBox
 						header = 'Power'
 						value = { (currentOutletData.data != undefined) ? currentOutletData.data : 'Undefined' }
+					/>
+					<InfoBox
+						header = 'ID'
+						value = { selectedOutletID }
 					/>
 				</ScrollView>
 			</View>
@@ -137,7 +137,7 @@ const deviceStyles = {
 		marginTop: '15%'
 	},
 	buttonStyle: {
-		width: '80%',
+		width: '50%',
 		height: '80%',
 		marginTop: '5%'
 	},

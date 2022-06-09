@@ -17,9 +17,9 @@ const ACTIONS = createActionTypes([
 const INITIAL_STATE = {
 	isLoading: true,
 	isLoggedIn: false,
-	activeUserData: {},
+	selectedOutletID: '',
 	outletRefList: [],
-	selectedOutletID: 0
+	activeUserData: {}
 };
 
 // Actions
