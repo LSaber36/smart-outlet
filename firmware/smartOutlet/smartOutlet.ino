@@ -20,7 +20,7 @@ unsigned long count = 0;
 
 // Realtime Data
 volatile bool dataChanged = false;
-String deviceID = "1"; 
+String deviceID = "4df8ed81-1c65-4d2e-acbd-1d8eb01a9195"; 
 bool deviceState;
 int devicePower = 0;
 
