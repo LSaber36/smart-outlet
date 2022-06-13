@@ -17,11 +17,14 @@ void setupWiFi()
 
 void setupFirebase()
 {
+  String dataPath = "/" + deviceID + "/state";
+
   Serial.println("Setting up firebase connection");
   Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
 
   // Assign the api key (required)
   config.api_key = API_KEY;
+  config.database_url = DATABASE_URL;
 
   // Assign the user sign in credentials
   auth.user.email = USER_EMAIL;
@@ -35,4 +38,9 @@ void setupFirebase()
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
   Firebase.setDoubleDigits(5);
+
+  if (!Firebase.RTDB.beginStream(&stream, dataPath))
+    Serial.printf("Stream begin error, %s\n\n", stream.errorReason().c_str());
+
+  Firebase.RTDB.setStreamCallback(&stream, streamCallback, streamTimeoutCallback);
 }

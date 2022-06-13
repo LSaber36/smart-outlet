@@ -8,23 +8,32 @@ void syncFirebase()
     sendDataPrevMillis = millis();
     blinkLED(LED);
 
-    String documentPath = "Outlets/" + String(deviceID);
-    FirebaseJson content;
+    /*
+    // This is the code that can update the state of the database, it should do so because of a button
+    // ================================================================================================
+    Serial.println("Updating realtime database...");
+    Firebase.RTDB.setBool(&fbdo, F("/" + deviceID + "/state"), deviceState);
+    Serial.printf("Get bool: %s", Firebase.RTDB.getBool(&fbdo, F("/1/state"), &deviceState) ? deviceState ? "True" : "False" : fbdo.errorReason().c_str());
 
-    deviceState = (count % 2) == 0;
-    content.clear();
-    content.set("fields/state/booleanValue", deviceState);
-    content.set("fields/data/integerValue", String(devicePower).c_str());
-
-    Serial.println("Updating document...");
-
-    if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "state,data"))
-      Serial.printf("ok\n%s\n", fbdo.payload().c_str());
-    else
-      Serial.println(fbdo.errorReason());
-
-    // Print newline for formatting
+    Print newline for formatting
     Serial.println();
-    count++;
+    */
   }
+}
+
+void streamCallback(FirebaseStream data)
+{
+  // Save the captured data to variables for later processing
+  deviceState = data.boolData();
+
+  dataChanged = true;
+}
+
+void streamTimeoutCallback(bool timeout)
+{
+  if (timeout)
+    Serial.println("Stream timed out, resuming...\n");
+
+  if (!stream.httpConnected())
+    Serial.printf("Error code: %d, reason: %s\n\n", stream.httpCode(), stream.errorReason().c_str());
 }

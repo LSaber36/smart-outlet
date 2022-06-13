@@ -9,6 +9,7 @@
 
 // Define Firebase Data objects
 FirebaseData fbdo;
+FirebaseData stream;
 
 // Define Firebase auth and config objects
 FirebaseAuth auth;
@@ -18,7 +19,8 @@ unsigned long sendDataPrevMillis = 0;
 unsigned long count = 0;
 
 // Realtime Data
-int deviceID = 1; 
+volatile bool dataChanged = false;
+String deviceID = "1"; 
 bool deviceState;
 int devicePower = 0;
 
@@ -36,6 +38,13 @@ void loop()
   printSensorData();
   syncFirebase();
 
-  // This is necessary for watchdog timer errors
+  if (dataChanged)
+  {
+    // Process new data received away from callback for efficiency
+    dataChanged = false;
+    Serial.printf("Received stream update: %s\n", deviceState ? "true" : "false");
+  }
+
+  // This is necessary to avoid watchdog timer errors
   delay(5);
 }
