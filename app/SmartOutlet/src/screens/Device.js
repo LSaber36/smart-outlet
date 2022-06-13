@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
-import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 import { useSelector } from 'react-redux';
 import { deleteOutlet, setOutletState } from '../services/outletServices';
 import { InfoBox } from '../components';
@@ -21,14 +21,13 @@ export const Device = ({ navigation }) => {
 	} = deviceStyles;
 
 	useEffect(() => {
-		const outletUnsubscribe = firestore()
-			.collection('Outlets')
-			.doc(selectedOutletID.toString())
-			.onSnapshot(documentSnapshot => {
-				setCurrentOutletData(documentSnapshot.data());
+		const outletReference = database()
+			.ref('/' + selectedOutletID.toString())
+			.on('value', snapshot => {
+				setCurrentOutletData(snapshot.val());
 			});
 
-		return () => outletUnsubscribe();
+		return () => database().ref('/' + selectedOutletID.toString()).off('value', outletReference);
 	}, []);
 
 	const renderConfirmDeleteModal = () => {

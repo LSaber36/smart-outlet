@@ -1,13 +1,13 @@
 import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 import uuid from 'react-native-uuid';
 
 export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 	const newOutletId = uuid.v4();
 
 	// Add a new outlet to the outlet collection
-	firestore()
-		.collection('Outlets')
-		.doc(newOutletId.toString())
+	database()
+		.ref('/' + newOutletId.toString())
 		.set({
 			name: newOutletName,
 			state: false,
@@ -42,19 +42,17 @@ export const deleteOutlet = (activeUserData, outletRefList, outletID) => {
 		});
 
 	// Delete the outlet from the outlet collection
-	firestore()
-		.collection('Outlets')
-		.doc(outletID.toString())
-		.delete()
+	database()
+		.ref('/' + outletID.toString())
+		.remove()
 		.then(() => {
 			console.log('Deleted outlet from database (ID: ' + outletID + ')');
 		});
 };
 
 export const setOutletState = (outletID, targetState) => {
-	firestore()
-		.collection('Outlets')
-		.doc(outletID.toString())
+	database()
+		.ref('/' + outletID.toString())
 		.update({
 			state: targetState
 		})
