@@ -22,12 +22,12 @@ export const Device = ({ navigation }) => {
 
 	useEffect(() => {
 		const outletReference = database()
-			.ref('/' + selectedOutletID.toString())
+			.ref('/' + selectedOutletID)
 			.on('value', snapshot => {
 				setCurrentOutletData(snapshot.val());
 			});
 
-		return () => database().ref('/' + selectedOutletID.toString()).off('value', outletReference);
+		return () => database().ref('/' + selectedOutletID).off('value', outletReference);
 	}, []);
 
 	const renderConfirmDeleteModal = () => {
