@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { colors } from './styles';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -35,6 +36,7 @@ const MainStackNavigator = () => (
 				headerRight: () => (
 					<Icon
 						name = 'gear'
+						color = { colors.lightGray }
 						size = { 30 }
 						onPress = { () => navigation.navigate('Settings') }
 					/>
