@@ -8,8 +8,3 @@ void blinkLED(uint8_t led)
   delay(100);
   digitalWrite(led, LOW);
 }
-
-void printSensorData()
-{
-  
-}

@@ -1,3 +1,4 @@
+#include <Adafruit_ADS1X15.h>
 #include <WiFi.h>
 // #include <FirebaseESP32.h>
 #include <Firebase_ESP_Client.h>
@@ -6,6 +7,11 @@
 
 #define LED 2
 #define SEND_INTERVAL 10000
+#define RELAY_PIN 17
+#define BUTTON_PIN 16
+
+// Define ADC object
+Adafruit_ADS1115 ads;
 
 // Define Firebase Data objects
 FirebaseData fbdo;
@@ -24,18 +30,36 @@ String deviceID = "4df8ed81-1c65-4d2e-acbd-1d8eb01a9195";
 bool deviceState;
 int devicePower = 0;
 
+// ADC data
+float ADCMultiplier = 0.1875F;
+int16_t ADCResult;
+float ADCValue;
+
+// Button data
+uint8_t currButtonState;
+uint8_t prevButtonState;
+bool relayState = false;
+
 void setup()
 {
   Serial.begin(115200);
 
+  // Init pinmodes
   pinMode(LED, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  digitalWrite(RELAY_PIN, LOW);
+
   setupWiFi();
   setupFirebase();
+  setupADC();
 }
 
 void loop()
 {
-  printSensorData();
+  getButtons();
+  getADCReading();
   syncFirebase();
 
   if (dataChanged)
