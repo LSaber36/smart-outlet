@@ -11,11 +11,22 @@ void setupADC()
 
 void getADCReading()
 {
-  ADCResult = ads.readADC_Differential_0_1();
-  ADCValue = ADCResult * ADCMultiplier / 1000;
+  uint16_t i;
+  int sumValues;
 
-  Serial.print("Differential Voltage: ");
-  Serial.println(ADCValue); 
+  // Take an average of NUM_SAMPLES samples to smooth out data
+  for (i = 0; i < NUM_SAMPLES; i++)
+  {
+    sumValues += ( (ads.readADC_Differential_0_1() * ADCMultiplier) / 1000 );
+  }
 
-  delay(500);
+  averageVoltage = sumValues / NUM_SAMPLES;
+
+  Serial.print("Averaged Differential Voltage: ");
+  Serial.println(averageVoltage); 
+
+  // This is where we should use averageVoltage to calculate the average current
+  // With average voltage, current, and assumed 120V AC from the wall, we should
+  // be able to figure out the average power of the system, which is the last 
+  // thing this function should calculate
 }

@@ -8,6 +8,7 @@
 #define SEND_INTERVAL 10000
 #define RELAY_PIN 17
 #define BUTTON_PIN 16
+#define NUM_SAMPLES 50
 
 // Define ADC object
 Adafruit_ADS1115 ads;
@@ -31,8 +32,7 @@ int devicePower = 0;
 
 // ADC data
 float ADCMultiplier = 0.1875F;
-int16_t ADCResult;
-float ADCValue;
+float averageVoltage;
 
 // Button data
 uint8_t currButtonState;
