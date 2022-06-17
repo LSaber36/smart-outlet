@@ -1,6 +1,5 @@
 #include <Adafruit_ADS1X15.h>
 #include <WiFi.h>
-// #include <FirebaseESP32.h>
 #include <Firebase_ESP_Client.h>
 #include <addons/TokenHelper.h>
 #include "firebaseInfo.h"
