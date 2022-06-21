@@ -15,6 +15,7 @@ export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMe
 				placeholderTextColor = { colors.lightGray }
 				onChangeText = { onChangeText }
 				value = { value }
+				autoCapitalize = { 'none' }
 			/>
 			<View style = { center }>
 				<Text style = { errorText }>{ errorMesage }</Text>
