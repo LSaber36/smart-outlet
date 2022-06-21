@@ -14,7 +14,7 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 			data: 0
 		})
 		.then(() => {
-			console.log('Added outlet to database    (ID: ' + newOutletId + ')');
+			console.log('Added outlet to database     (ID: ' + newOutletId + ')');
 		});
 
 	// Add the outlet to the user's outlet list
@@ -25,7 +25,7 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 			outletRefs: [...outletRefList, { id: newOutletId, name: newOutletName }]
 		})
 		.then(() => {
-			console.log('Added new outlet to account (ID: ' + newOutletId + ')');
+			console.log('Added new outlet to account  (ID: ' + newOutletId + ')');
 		});
 };
 
