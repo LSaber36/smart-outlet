@@ -10,6 +10,9 @@
 #define BUTTON_PIN 16
 #define NUM_SAMPLES 50
 
+#define SHORT_PRESS_TIME 500
+#define LONG_PRESS_TIME 1000
+
 // Define ADC object
 Adafruit_ADS1115 ads;
 
