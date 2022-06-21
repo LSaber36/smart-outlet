@@ -23,14 +23,6 @@ export const styles = {
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	input: {
-		width: '100%',
-		borderWidth: 1,
-		borderColor: colors.lightGray,
-		padding: 10,
-		fontSize: 16,
-		borderRadius: 6
-	},
 	errorText: {
 		color: colors.delete,
 		marginTop: '1%'

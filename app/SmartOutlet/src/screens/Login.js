@@ -28,7 +28,7 @@ export const Login = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const {
 		buttonView, buttonStyle, registerTextView,
-		loginFormStyle, forgotPasswordText, forgotPasswordView
+		loginFormStyle, forgotPasswordText, forgotPasswordView, signupPromptText
 	} = loginStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
@@ -167,7 +167,7 @@ export const Login = ({ navigation }) => {
 								/>
 							</View>
 							<View style = { [registerTextView, center] }>
-								<Text>{ 'Don\'t have an account? ' }</Text>
+								<Text style = { signupPromptText }>{ 'Don\'t have an account? ' }</Text>
 								<Text
 									style = {{ color: colors.secondaryDark }}
 									onPress = { () => {
@@ -217,6 +217,9 @@ const loginStyles = {
 	},
 	registerTextView: {
 		marginTop: '5%'
+	},
+	signupPromptText: {
+		color: colors.dark
 	}
 };
 

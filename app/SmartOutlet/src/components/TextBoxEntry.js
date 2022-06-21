@@ -3,15 +3,16 @@ import { View, Text, TextInput } from 'react-native';
 import { styles, colors } from '../styles';
 
 export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMesage, style }) => {
-	const {	center, input, errorText } = styles;
-	const { loginInputHeader, loginField } = textBoxStyles;
+	const {	center, errorText } = styles;
+	const { loginInputHeader, loginField, typedTextStyle } = textBoxStyles;
 
 	return (
 		<View style = { [loginField, style] }>
 			<Text style = { loginInputHeader }>{ header }</Text>
 			<TextInput
-				style = { input }
+				style = { typedTextStyle }
 				placeholder = { placeholder }
+				placeholderTextColor = { colors.lightGray }
 				onChangeText = { onChangeText }
 				value = { value }
 			/>
@@ -45,5 +46,14 @@ const textBoxStyles = {
 	loginField: {
 		width: '75%',
 		marginTop: '5%'
+	},
+	typedTextStyle: {
+		width: '100%',
+		borderWidth: 1,
+		borderColor: colors.darkGray,
+		padding: 10,
+		fontSize: 16,
+		borderRadius: 6,
+		color: colors.dark
 	}
 };

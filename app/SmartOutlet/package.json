@@ -21,6 +21,7 @@
     "formik": "^2.2.9",
     "react": "17.0.2",
     "react-native": "0.68.1",
+    "react-native-ble-plx": "^2.0.3",
     "react-native-elements": "^3.4.2",
     "react-native-fontawesome": "^7.0.0",
     "react-native-image-crop-picker": "^0.37.3",

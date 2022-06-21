@@ -1,10 +1,13 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, PermissionsAndroid } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveID } from '../redux';
 import { addOutlet } from '../services/outletServices';
+import { BleManager } from 'react-native-ble-plx';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -22,7 +25,47 @@ export const Dashboard = ({ navigation }) => {
 	} = dashboardStyles;
 
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
+	const [bleConnected, setBleConnected] = useState(false);
 	const dispatch = useDispatch();
+	const manager = new BleManager();
+
+	useEffect(() => {
+		const subscription = manager.onStateChange((state) => {
+			setBleConnected(state === 'PoweredOn');
+		}, true);
+
+		return () => subscription.remove();
+	}, [manager]);
+
+	const scanDevices = () => {
+		PermissionsAndroid.request(
+			PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+			{
+				title: 'Permission Localisation Bluetooth',
+				message: 'Requirement for Bluetooth',
+				buttonNeutral: 'Later',
+				buttonNegative: 'Cancel',
+				buttonPositive: 'OK'
+			}
+		)
+			.then(() => {
+				manager.startDeviceScan(null, null, (error, device) => {
+					console.log('Scanning for devices...');
+					if (error) {
+						console.log(JSON.stringify(error));
+
+						return;
+					}
+
+					if (device)
+						console.log('Device ID: ' + device.id);
+				});
+
+				setTimeout(() => {
+					manager.stopDeviceScan();
+				}, 5000);
+			});
+	};
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
@@ -66,7 +109,9 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						addOutlet(activeUserData, outletRefList, 'Living Room');
+						// addOutlet(activeUserData, outletRefList, 'Living Room');
+						if (bleConnected)
+							scanDevices();
 					} }
 				/>
 			</View>

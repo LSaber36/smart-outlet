@@ -25,7 +25,7 @@ const signupSchema = yup.object({
 
 export const Signup = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
-	const { buttonView, buttonStyle, loginTextView, signupFormStyle } = signupStyles;
+	const { buttonView, buttonStyle, loginTextView, signupFormStyle, loginPromptText } = signupStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
 	const [loginError, setLoginError] = useState('');
@@ -134,7 +134,7 @@ export const Signup = ({ navigation }) => {
 							/>
 						</View>
 						<View style = { [loginTextView, center] }>
-							<Text>{ 'Already have an account? ' } </Text>
+							<Text style = { loginPromptText }>{ 'Already have an account? ' } </Text>
 							<Text
 								style = {{ color: colors.secondaryDark }}
 								onPress = { () => navigation.navigate('Login') }
@@ -169,6 +169,9 @@ const signupStyles = {
 	},
 	signupFormStyle: {
 		width: '100%'
+	},
+	loginPromptText: {
+		color: colors.dark
 	}
 };
 
