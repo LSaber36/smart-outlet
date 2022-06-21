@@ -31,7 +31,7 @@ void getButtons()
       if (pressTime <= SHORT_PRESS_TIME)
       {
         Serial.println("Short press");
-        
+
         relayState = !relayState;
         Serial.print("Button status: " + currButtonState);
         Serial.println("  Relay status: " + relayState);
@@ -42,8 +42,6 @@ void getButtons()
       }
     }
   }
-
-  digitalWrite(RELAY_PIN, relayState);
   
   prevButtonState = currButtonState;
 }

@@ -59,8 +59,8 @@ void syncFirebase()
     // This is the code that can update the state of the database, it should do so because of a button
     // ================================================================================================
     Serial.println("Updating realtime database...");
-    Firebase.RTDB.setBool(&fbdo, F("/" + deviceID + "/state"), deviceState);
-    Serial.printf("Get bool: %s", Firebase.RTDB.getBool(&fbdo, F("/1/state"), &deviceState) ? deviceState ? "True" : "False" : fbdo.errorReason().c_str());
+    Firebase.RTDB.setBool(&fbdo, F("/" + deviceID + "/state"), relayState);
+    Serial.printf("Get bool: %s", Firebase.RTDB.getBool(&fbdo, F("/1/state"), &relayState) ? relayState ? "True" : "False" : fbdo.errorReason().c_str());
 
     Print newline for formatting
     Serial.println();
@@ -71,7 +71,7 @@ void syncFirebase()
 void streamCallback(FirebaseStream data)
 {
   // Save the captured data to variables for later processing
-  deviceState = data.boolData();
+  relayState = data.boolData();
 
   dataChanged = true;
 }

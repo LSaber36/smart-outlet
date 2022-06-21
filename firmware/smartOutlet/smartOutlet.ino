@@ -30,7 +30,6 @@ unsigned long count = 0;
 // Realtime Data
 volatile bool dataChanged = false;
 String deviceID = "4df8ed81-1c65-4d2e-acbd-1d8eb01a9195"; 
-bool deviceState;
 int devicePower = 0;
 
 // ADC data
@@ -40,7 +39,7 @@ float averageVoltage;
 // Button data
 uint8_t currButtonState;
 uint8_t prevButtonState;
-bool relayState = false;
+bool prevRelayState, relayState = false;
 
 void setup()
 {
@@ -68,8 +67,16 @@ void loop()
   {
     // Process new data received away from callback for efficiency
     dataChanged = false;
-    Serial.printf("Received stream update: %s\n", deviceState ? "true" : "false");
+    Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
   }
+
+  // Only call digitalWrite if the state has changed (reduces unnecessary calls)
+  if (relayState != prevRelayState)
+  {
+    digitalWrite(RELAY_PIN, relayState);
+  }
+
+  prevRelayState = relayState;
 
   // This is necessary to avoid watchdog timer errors
   delay(5);
