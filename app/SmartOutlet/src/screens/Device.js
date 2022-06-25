@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import { useSelector } from 'react-redux';
 import { deleteOutlet, setOutletState } from '../services/outletServices';
@@ -12,6 +13,7 @@ const { height, width } = Dimensions.get('screen');
 export const Device = ({ navigation }) => {
 	const [currentOutletData, setCurrentOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
+	const [historicalData, setHistoricalData] = useState([]);
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -27,7 +29,20 @@ export const Device = ({ navigation }) => {
 				setCurrentOutletData(snapshot.val());
 			});
 
-		return () => database().ref('/' + selectedOutletID).off('value', outletReference);
+		const outletHistoricalDataUnsubscribe = firestore()
+			.collection('Outlets')
+			.doc(selectedOutletID)
+			.onSnapshot(documentSnapshot => {
+				if (documentSnapshot != undefined) {
+					console.log('Historical Data: ' + JSON.stringify(documentSnapshot.get('historicalData')));
+					setHistoricalData(documentSnapshot.get('historicalData'));
+				}
+			});
+
+		return () => {
+			database().ref('/' + selectedOutletID).off('value', outletReference);
+			outletHistoricalDataUnsubscribe();
+		};
 	}, []);
 
 	const renderConfirmDeleteModal = () => {
