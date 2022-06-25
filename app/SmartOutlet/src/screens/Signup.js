@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, KeyboardAvoidingView, Dimensions } from 'react-native';
+import {
+	View, Text, TouchableWithoutFeedback, Keyboard,
+	Modal, KeyboardAvoidingView, Dimensions
+} from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import { TextBoxEntry } from '../components';
@@ -66,86 +69,88 @@ export const Signup = ({ navigation }) => {
 	};
 
 	return (
-		<View style = { container }>
-			{ renderSignupVerificationModal() }
-			<Formik
-				initialValues = {{ name: '', email: '', password: '', verifyPassword: '' }}
-				validationSchema = { signupSchema }
-				onSubmit = { (values, actions) => {
-					auth()
-						.createUserWithEmailAndPassword(values.email, values.password)
-						.then((userCredential) => {
-							actions.resetForm();
+		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
+			<View style = { container }>
+				{ renderSignupVerificationModal() }
+				<Formik
+					initialValues = {{ name: '', email: '', password: '', verifyPassword: '' }}
+					validationSchema = { signupSchema }
+					onSubmit = { (values, actions) => {
+						auth()
+							.createUserWithEmailAndPassword(values.email, values.password)
+							.then((userCredential) => {
+								actions.resetForm();
 
-							initNewUser(userCredential.user);
-							userCredential.user.sendEmailVerification();
-							userCredential.user.updateProfile({
-								displayName: values.name
+								initNewUser(userCredential.user);
+								userCredential.user.sendEmailVerification();
+								userCredential.user.updateProfile({
+									displayName: values.name
+								});
+								setTimeout(() => {
+									auth().signOut();
+									setModalVisible(true);
+								}, 500);
+							})
+							.catch((error) => {
+								console.warn('Signup Error: ' + error.code);
+
+								if (error.code === 'auth/email-already-in-use')
+									setLoginError('Email not available');
 							});
-							setTimeout(() => {
-								auth().signOut();
-								setModalVisible(true);
-							}, 500);
-						})
-						.catch((error) => {
-							console.warn('Signup Error: ' + error.code);
-
-							if (error.code === 'auth/email-already-in-use')
-								setLoginError('Email not available');
-						});
-				} }
-			>
-				{ (props) => (
-					<View style = { [center, signupFormStyle] }>
-						<TextBoxEntry
-							header = 'Name'
-							placeholder = 'your name'
-							onChangeText = { props.handleChange('name') }
-							value = { props.values.name }
-							errorMesage = { props.touched.name && props.errors.name }
-						/>
-						<TextBoxEntry
-							header = 'Email'
-							placeholder = 'your.name@mail.com'
-							onChangeText = { props.handleChange('email') }
-							value = { props.values.email }
-							errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
-						/>
-						<TextBoxEntry
-							header = 'Password'
-							placeholder = 'password'
-							onChangeText = { props.handleChange('password') }
-							value = { props.values.password }
-							errorMesage = { props.touched.password && props.errors.password }
-						/>
-						<TextBoxEntry
-							header = 'Verify Password'
-							placeholder = 'password'
-							onChangeText = { props.handleChange('verifyPassword') }
-							value = { props.values.verifyPassword }
-							errorMesage = { props.touched.verifyPassword && props.errors.verifyPassword }
-						/>
-						<View style = { [buttonView, center] }>
-							<Button
-								title = 'Sign Up'
-								containerStyle = { [buttonContainer, buttonStyle] }
-								buttonStyle = { fullWidthHeight }
-								onPress = { props.handleSubmit }
+					} }
+				>
+					{ (props) => (
+						<View style = { [center, signupFormStyle] }>
+							<TextBoxEntry
+								header = 'Name'
+								placeholder = 'your name'
+								onChangeText = { props.handleChange('name') }
+								value = { props.values.name }
+								errorMesage = { props.touched.name && props.errors.name }
 							/>
-						</View>
-						<View style = { [loginTextView, center] }>
-							<Text style = { loginPromptText }>{ 'Already have an account? ' } </Text>
-							<Text
-								style = {{ color: colors.secondaryDark }}
-								onPress = { () => navigation.navigate('Login') }
-							>
+							<TextBoxEntry
+								header = 'Email'
+								placeholder = 'your.name@mail.com'
+								onChangeText = { props.handleChange('email') }
+								value = { props.values.email }
+								errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
+							/>
+							<TextBoxEntry
+								header = 'Password'
+								placeholder = 'password'
+								onChangeText = { props.handleChange('password') }
+								value = { props.values.password }
+								errorMesage = { props.touched.password && props.errors.password }
+							/>
+							<TextBoxEntry
+								header = 'Verify Password'
+								placeholder = 'password'
+								onChangeText = { props.handleChange('verifyPassword') }
+								value = { props.values.verifyPassword }
+								errorMesage = { props.touched.verifyPassword && props.errors.verifyPassword }
+							/>
+							<View style = { [buttonView, center] }>
+								<Button
+									title = 'Sign Up'
+									containerStyle = { [buttonContainer, buttonStyle] }
+									buttonStyle = { fullWidthHeight }
+									onPress = { props.handleSubmit }
+								/>
+							</View>
+							<View style = { [loginTextView, center] }>
+								<Text style = { loginPromptText }>{ 'Already have an account? ' } </Text>
+								<Text
+									style = {{ color: colors.secondaryDark }}
+									onPress = { () => navigation.navigate('Login') }
+								>
 							Log in
-							</Text>
+								</Text>
+							</View>
 						</View>
-					</View>
-				) }
-			</Formik>
-		</View>
+					) }
+				</Formik>
+			</View>
+		</TouchableWithoutFeedback>
 	);
 };
 

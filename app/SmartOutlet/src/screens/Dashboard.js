@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, Dimensions, ScrollView } from 'react-native';
+import {
+	View, Text, TouchableWithoutFeedback, Keyboard,
+	Modal, Dimensions, ScrollView
+} from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
@@ -90,54 +93,56 @@ export const Dashboard = ({ navigation }) => {
 				transparent = { true }
 				visible = { modalVisible }
 			>
-				<View style = { modalStyles.modalContainer }>
-					<View style = { modalStyles.modalView }>
-						<Text style = { modalStyles.headerText }>
+				<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
+					<View style = { modalStyles.modalContainer }>
+						<View style = { modalStyles.modalView }>
+							<Text style = { modalStyles.headerText }>
 							Add Device
-						</Text>
-						<View style = { modalStyles.indicatorView }>
-							{ renderCheckOrLoadingIndicator(bleIsLoading) }
-						</View>
-						<Formik
-							initialValues = {{ name: '' }}
-							validationSchema = { newOutletSchema }
-							onSubmit = { (values, actions) => {
-								actions.resetForm();
-								addOutlet(activeUserData, outletRefList, values.name);
-								setModalVisible(false);
-							} }
-						>
-							{ (props) => (
-								<View style = { [center, modalStyles.formStyle] }>
-									<TextBoxEntry
-										style = { modalStyles.textInput }
-										header = 'New Device Name'
-										placeholder = 'New outlet name'
-										onChangeText = { props.handleChange('name') }
-										value = { props.values.name }
-										errorMesage = { props.touched.name && props.errors.name }
-									/>
-									<View style = { modalStyles.buttonView }>
-										<Button
-											title = 'Cancel'
-											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-											buttonStyle = { fullWidthHeight }
-											onPress = { () => {
-												setModalVisible(false);
-											} }
+							</Text>
+							<View style = { modalStyles.indicatorView }>
+								{ renderCheckOrLoadingIndicator(bleIsLoading) }
+							</View>
+							<Formik
+								initialValues = {{ name: '' }}
+								validationSchema = { newOutletSchema }
+								onSubmit = { (values, actions) => {
+									actions.resetForm();
+									addOutlet(activeUserData, outletRefList, values.name);
+									setModalVisible(false);
+								} }
+							>
+								{ (props) => (
+									<View style = { [center, modalStyles.formStyle] }>
+										<TextBoxEntry
+											style = { modalStyles.textInput }
+											header = 'New Device Name'
+											placeholder = 'New outlet name'
+											onChangeText = { props.handleChange('name') }
+											value = { props.values.name }
+											errorMesage = { props.touched.name && props.errors.name }
 										/>
-										<Button
-											title = 'Add Device'
-											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-											buttonStyle = { fullWidthHeight }
-											onPress = { props.handleSubmit }
-										/>
+										<View style = { modalStyles.buttonView }>
+											<Button
+												title = 'Cancel'
+												containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+												buttonStyle = { fullWidthHeight }
+												onPress = { () => {
+													setModalVisible(false);
+												} }
+											/>
+											<Button
+												title = 'Add Device'
+												containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+												buttonStyle = { fullWidthHeight }
+												onPress = { props.handleSubmit }
+											/>
+										</View>
 									</View>
-								</View>
-							) }
-						</Formik>
+								) }
+							</Formik>
+						</View>
 					</View>
-				</View>
+				</TouchableWithoutFeedback>
 			</Modal>
 		);
 	};
