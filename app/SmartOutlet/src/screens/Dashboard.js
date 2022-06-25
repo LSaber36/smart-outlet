@@ -76,51 +76,75 @@ export const Dashboard = ({ navigation }) => {
 		return (isLoadingBle) ?
 			(<PacmanIndicator
 				color = { colors.primaryDark }
-				size = { 100 }
+				size = { 115 }
 				hidesWhenStopped = { true }
 				animating = { true }
 			/>) :
 			(<Icon
 				name = 'check-circle'
 				color = { colors.primaryDark }
-				size = { 70 }
+				size = { 80 }
 			/>);
 	};
 
-	const renderConfirmOrInput = (props, isConfirmed) => {
-		return (isConfirmed) ?
-			(<TextBoxEntry
-				style = { modalStyles.textInput }
-				header = 'New Device Name'
-				placeholder = 'New outlet name'
-				onChangeText = { props.handleChange('name') }
-				value = { props.values.name }
-				errorMesage = { props.touched.name && props.errors.name }
-			/>) :
-			(
-				<View style = { modalStyles.confirmBleContainer }>
+	const renderModalBody = (props) => {
+		// Set the header message based on bluetooth states
+		const modalMessage = (
+			(bleIsLoading) ?
+				'We\'re searching for your device, hang tight.' :
+				(bleConfirmed) ?
+					'Please add the name of your new device' :
+					'We found a device and triggered its indicator led to flash. ' +
+					'Please confirm that this is the correct device.'
+		);
+
+		return (
+			<View style = { modalStyles.confirmBleContainer }>
+				<View style = { modalStyles.confirmBleTextView }>
 					<Text style = { modalStyles.confirmBleText }>
-						We found a device and triggered its indicator led to flash.
-						Please confirm that this is the correct device.
+						{ modalMessage }
 					</Text>
-					<View style = { modalStyles.confirmBleButtonView }>
-						<Button
-							title = 'No'
-							containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
-							buttonStyle = { fullWidthHeight }
-							onPress = { () => {
-								setModalVisible(false);
-							} }
-						/>
-						<Button
-							title = 'Yes'
-							containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
-							buttonStyle = { fullWidthHeight }
-							onPress = { () => setBleConfirmed(true) }
-						/>
-					</View>
 				</View>
-			);
+				{ (bleIsLoading) ?
+					(<View />
+					) :
+					(bleConfirmed) ?
+						(<TextBoxEntry
+							style = { modalStyles.textInput }
+							header = 'New Device Name'
+							placeholder = 'New outlet name'
+							onChangeText = { props.handleChange('name') }
+							value = { props.values.name }
+							errorMesage = { props.touched.name && props.errors.name }
+						/>) :
+						(<View style = { modalStyles.confirmBleButtonView }>
+							<Button
+								title = 'Retry'
+								containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+								buttonStyle = { fullWidthHeight }
+								onPress = { () => {
+									// This may need to have a different behavior, maybe retry?
+									setBleIsLoading(true);
+									setBleConfirmed(false);
+
+									// TODO:
+									// Setting addDevice states will be called from bluetooth instead
+									setTimeout(() => {
+										setBleIsLoading(false);
+									}, 3000);
+								} }
+							/>
+							<Button
+								title = 'Confirm'
+								containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+								buttonStyle = { fullWidthHeight }
+								onPress = { () => setBleConfirmed(true) }
+							/>
+						</View>
+						)
+				}
+			</View>
+		);
 	};
 
 	const renderAddDeviceModal = () => {
@@ -151,7 +175,7 @@ export const Dashboard = ({ navigation }) => {
 								{ (props) => (
 									<View style = { [center, modalStyles.formStyle] }>
 										<View style = { modalStyles.inputView }>
-											{ renderConfirmOrInput(props, bleConfirmed) }
+											{ renderModalBody(props) }
 										</View>
 										<View style = { modalStyles.modalButtonView }>
 											<Button
@@ -159,6 +183,8 @@ export const Dashboard = ({ navigation }) => {
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
 												onPress = { () => {
+													// TODO:
+													// This should properly handle cleaning up bluetooth depending on current states
 													setModalVisible(false);
 												} }
 											/>
@@ -168,7 +194,7 @@ export const Dashboard = ({ navigation }) => {
 												buttonStyle = { fullWidthHeight }
 												disabled = { !bleConfirmed }
 												disabledStyle = { disabledButton }
-												onPress = { () => setBleConfirmed(true) }
+												onPress = { props.handleSubmit }
 											/>
 										</View>
 									</View>
@@ -199,6 +225,12 @@ export const Dashboard = ({ navigation }) => {
 						setBleIsLoading(true);
 						setBleConfirmed(false);
 						setModalVisible(true);
+
+						// TODO:
+						// Setting addDevice states will be called from bluetooth instead
+						setTimeout(() => {
+							setBleIsLoading(false);
+						}, 3000);
 					} }
 				/>
 			</View>
@@ -295,19 +327,19 @@ const modalStyles = {
 		marginTop: '10%'
 	},
 	indicatorView: {
-		height: '12%',
-		width: '40%',
+		height: '14%',
+		width: '50%',
 		marginTop: '5%',
 		alignItems: 'center'
 	},
 	inputView: {
+		height: '44%',
 		width: '95%',
-		height: '40%',
 		alignItems: 'center',
-		marginTop: '-8%'
+		marginTop: '-6%'
 	},
 	confirmBleContainer: {
-		height: '85%',
+		height: '90%',
 		width: '95%',
 		alignItems: 'center',
 		padding: '2%',
@@ -315,27 +347,30 @@ const modalStyles = {
 		backgroundColor: colors.primaryLight,
 		borderRadius: 10
 	},
+	confirmBleTextView: {
+		marginTop: '2%'
+	},
 	confirmBleText: {
 		color: colors.dark,
 		fontSize: 16
 	},
 	confirmBleButtonView: {
 		height: '45%',
-		width: '85%',
+		width: '90%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		marginTop: '3%'
+		marginTop: '5%'
 	},
 	confirmButtonStyle: {
 		height: '70%',
-		width: '30%'
+		width: '35%'
 	},
 	formStyle: {
 		width: '100%'
 	},
 	textInput: {
-		width: '75%'
+		width: '80%'
 	},
 	modalButtonView: {
 		height: '18%',
@@ -343,7 +378,7 @@ const modalStyles = {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		marginTop: '30%'
+		marginTop: '25%'
 	},
 	modalButtonStyle: {
 		width: '40%',
