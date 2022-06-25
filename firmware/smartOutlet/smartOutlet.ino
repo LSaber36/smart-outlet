@@ -29,7 +29,7 @@ unsigned long count = 0;
 
 // Realtime Data
 volatile bool dataChanged = false;
-String deviceID = "4df8ed81-1c65-4d2e-acbd-1d8eb01a9195"; 
+String deviceID = "4939c232-e9ff-4b4d-a8cb-5652d199a780"; 
 int devicePower = 0;
 
 // ADC data
