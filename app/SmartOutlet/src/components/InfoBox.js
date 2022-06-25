@@ -8,7 +8,7 @@ export const InfoBox = ({ header, value }) => {
 	return (
 		<View style = { container }>
 			<Text style = { infoHeader }> { header }: </Text>
-			<Text style = { infoText }> { value } </Text>
+			<Text style = { infoText }>{ value }</Text>
 		</View>
 	);
 };
