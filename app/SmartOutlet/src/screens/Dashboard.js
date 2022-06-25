@@ -1,12 +1,24 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Modal, Dimensions, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button, ListItem } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveID } from '../redux';
 import { addOutlet } from '../services/outletServices';
+import { PacmanIndicator } from 'react-native-indicators';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { TextBoxEntry } from '../components';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 import { LogBox } from 'react-native';
+
 LogBox.ignoreLogs(['new NativeEventEmitter']);
+
+const { height, width } = Dimensions.get('screen');
+const newOutletSchema = yup.object({
+	name: yup.string()
+		.required(' Please enter an outlet name')
+});
 
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -24,6 +36,8 @@ export const Dashboard = ({ navigation }) => {
 	} = dashboardStyles;
 
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [bleIsLoading, setBleIsLoading] = useState(true);
 	const dispatch = useDispatch();
 
 	const renderListOrMessage = (list) => {
@@ -54,8 +68,83 @@ export const Dashboard = ({ navigation }) => {
 			);
 	};
 
+	const renderCheckOrLoadingIndicator = (isLoadingBle) => {
+		return (isLoadingBle) ?
+			(<PacmanIndicator
+				color = { colors.primaryDark }
+				size = { 100 }
+				hidesWhenStopped = { true }
+				animating = { true }
+			/>) :
+			(<Icon
+				name = 'check-circle'
+				color = { colors.primaryDark }
+				size = { 70 }
+			/>);
+	};
+
+	const renderAddDeviceModal = () => {
+		return (
+			<Modal
+				animationType = 'slide'
+				transparent = { true }
+				visible = { modalVisible }
+			>
+				<View style = { modalStyles.modalContainer }>
+					<View style = { modalStyles.modalView }>
+						<Text style = { modalStyles.headerText }>
+							Add Device
+						</Text>
+						<View style = { modalStyles.indicatorView }>
+							{ renderCheckOrLoadingIndicator(bleIsLoading) }
+						</View>
+						<Formik
+							initialValues = {{ name: '' }}
+							validationSchema = { newOutletSchema }
+							onSubmit = { (values, actions) => {
+								actions.resetForm();
+								addOutlet(activeUserData, outletRefList, values.name);
+								setModalVisible(false);
+							} }
+						>
+							{ (props) => (
+								<View style = { [center, modalStyles.formStyle] }>
+									<TextBoxEntry
+										style = { modalStyles.textInput }
+										header = 'New Device Name'
+										placeholder = 'New outlet name'
+										onChangeText = { props.handleChange('name') }
+										value = { props.values.name }
+										errorMesage = { props.touched.name && props.errors.name }
+									/>
+									<View style = { modalStyles.buttonView }>
+										<Button
+											title = 'Cancel'
+											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+											buttonStyle = { fullWidthHeight }
+											onPress = { () => {
+												setModalVisible(false);
+											} }
+										/>
+										<Button
+											title = 'Add Device'
+											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+											buttonStyle = { fullWidthHeight }
+											onPress = { props.handleSubmit }
+										/>
+									</View>
+								</View>
+							) }
+						</Formik>
+					</View>
+				</View>
+			</Modal>
+		);
+	};
+
 	return (
 		<View style = { container }>
+			{ renderAddDeviceModal() }
 			<Text style = { textStyle }> Devices </Text>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView style = { scrollViewStyle }>
@@ -68,7 +157,8 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						addOutlet(activeUserData, outletRefList, 'Living Room');
+						setBleIsLoading(true);
+						setModalVisible(true);
 					} }
 				/>
 			</View>
@@ -140,5 +230,55 @@ const dashboardStyles = {
 	},
 	itemTextStyle: {
 		color: colors.offWhite
+	}
+};
+
+const modalStyles = {
+	modalContainer: {
+		height: height,
+		width: width,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
+	},
+	modalView: {
+		height: '75%',
+		width: '90%',
+		marginTop: '-10%',
+		alignItems: 'center',
+		backgroundColor: colors.white,
+		borderRadius: 10
+	},
+	headerText: {
+		color: colors.dark,
+		fontSize: 28,
+		marginTop: '10%'
+	},
+	indicatorView: {
+		height: '12%',
+		width: '40%',
+		marginTop: '5%',
+		alignItems: 'center'
+	},
+	formStyle: {
+		width: '100%'
+	},
+	textInput: {
+		width: '75%'
+	},
+	buttonView: {
+		height: '18%',
+		width: '90%',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		marginTop: '60%'
+	},
+	buttonStyle: {
+		width: '40%',
+		height: '65%'
+	},
+	deleteButtonStyle: {
+		backgroundColor: colors.delete
 	}
 };
