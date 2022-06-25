@@ -20,7 +20,7 @@ LogBox.ignoreLogs(['new NativeEventEmitter']);
 const { height, width } = Dimensions.get('screen');
 const newOutletSchema = yup.object({
 	name: yup.string()
-		.required(' Please enter an outlet name')
+		.required('Please enter an outlet name')
 });
 
 export const Dashboard = ({ navigation }) => {

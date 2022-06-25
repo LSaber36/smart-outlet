@@ -13,15 +13,15 @@ import auth from '@react-native-firebase/auth';
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
 	email: yup.string()
-		.required('please enter your email')
-		.email('please enter a valid email')
+		.required('Please enter your email')
+		.email('Please enter a valid email')
 });
 const loginSchema = yup.object({
 	email: yup.string()
-		.required('please enter your email')
-		.email('please enter a valid email'),
+		.required('Please enter your email')
+		.email('Please enter a valid email'),
 	password: yup.string()
-		.required('please enter your password')
+		.required('Please enter your password')
 });
 
 export const Login = ({ navigation }) => {

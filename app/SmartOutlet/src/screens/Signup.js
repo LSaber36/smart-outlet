@@ -14,16 +14,16 @@ import { initNewUser } from '../services/userServices';
 const { height, width } = Dimensions.get('screen');
 const signupSchema = yup.object({
 	name: yup.string()
-		.required('please enter your name'),
+		.required('Please enter your name'),
 	email: yup.string()
-		.required('please enter your email')
-		.email('please enter a valid email'),
+		.required('Please enter your email')
+		.email('Please enter a valid email'),
 	password: yup.string()
-		.required('please enter your password')
+		.required('Please enter your password')
 		.min(8),
 	verifyPassword: yup.string()
-		.required('please enter your password')
-		.oneOf([yup.ref('password')], 'passwords do not match')
+		.required('Please enter your password')
+		.oneOf([yup.ref('password')], 'Passwords do not match')
 });
 
 export const Signup = ({ navigation }) => {
@@ -31,7 +31,7 @@ export const Signup = ({ navigation }) => {
 	const { buttonView, buttonStyle, loginTextView, signupFormStyle, loginPromptText } = signupStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
-	const [loginError, setLoginError] = useState('');
+	const [signupError, setSignupError] = useState('');
 
 	const renderSignupVerificationModal = () => {
 		return (
@@ -95,7 +95,7 @@ export const Signup = ({ navigation }) => {
 								console.warn('Signup Error: ' + error.code);
 
 								if (error.code === 'auth/email-already-in-use')
-									setLoginError('Email not available');
+									setSignupError('Email not available');
 							});
 					} }
 				>
@@ -113,7 +113,7 @@ export const Signup = ({ navigation }) => {
 								placeholder = 'your.name@mail.com'
 								onChangeText = { props.handleChange('email') }
 								value = { props.values.email }
-								errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
+								errorMesage = { (signupError === '') ? (props.touched.email && props.errors.email) : signupError }
 							/>
 							<TextBoxEntry
 								header = 'Password'
