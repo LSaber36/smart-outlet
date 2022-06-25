@@ -275,6 +275,8 @@ UsedLibrary="C:/Users/LSabe/Documents/EAGLE/libraries/Ultrasonic Sensor.lbr"
 UsedLibrary="C:/Users/LSabe/Documents/EAGLE/libraries/display-lcd.lbr"
 UsedLibrary="C:/Users/LSabe/Documents/EAGLE/libraries/j_usb_hirose_zx62d-b-5p8.lbr"
 UsedLibrary="C:/Users/LSabe/Documents/EAGLE/libraries/switch-tact.lbr"
+UsedLibrary="C:/Users/LSabe/Documents/Eagle/libraries/eagle-lib-master/eagle-lib-master/connectors/microusb.lbr"
+UsedLibrary="C:/Users/LSabe/Documents/Eagle/libraries/eagle-lib-master/eagle-lib-master/connectors/usb.lbr"
 
 [Win_1]
 Type="Control Panel"
