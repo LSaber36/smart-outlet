@@ -41,6 +41,7 @@ export const Dashboard = ({ navigation }) => {
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [bleIsLoading, setBleIsLoading] = useState(true);
+	const [bleConfirmed, setBleConfirmed] = useState(false);
 	const dispatch = useDispatch();
 
 	const renderListOrMessage = (list) => {
@@ -86,6 +87,42 @@ export const Dashboard = ({ navigation }) => {
 			/>);
 	};
 
+	const renderConfirmOrInput = (props, isConfirmed) => {
+		return (isConfirmed) ?
+			(<TextBoxEntry
+				style = { modalStyles.textInput }
+				header = 'New Device Name'
+				placeholder = 'New outlet name'
+				onChangeText = { props.handleChange('name') }
+				value = { props.values.name }
+				errorMesage = { props.touched.name && props.errors.name }
+			/>) :
+			(
+				<View style = { modalStyles.confirmBleContainer }>
+					<Text style = { modalStyles.confirmBleText }>
+						We found a device and triggered its indicator led to flash.
+						Please confirm that this is the correct device.
+					</Text>
+					<View style = { modalStyles.confirmBleButtonView }>
+						<Button
+							title = 'No'
+							containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+							buttonStyle = { fullWidthHeight }
+							onPress = { () => {
+								setModalVisible(false);
+							} }
+						/>
+						<Button
+							title = 'Yes'
+							containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+							buttonStyle = { fullWidthHeight }
+							onPress = { () => setBleConfirmed(true) }
+						/>
+					</View>
+				</View>
+			);
+	};
+
 	const renderAddDeviceModal = () => {
 		return (
 			<Modal
@@ -97,7 +134,7 @@ export const Dashboard = ({ navigation }) => {
 					<View style = { modalStyles.modalContainer }>
 						<View style = { modalStyles.modalView }>
 							<Text style = { modalStyles.headerText }>
-							Add Device
+								Add Device
 							</Text>
 							<View style = { modalStyles.indicatorView }>
 								{ renderCheckOrLoadingIndicator(bleIsLoading) }
@@ -113,18 +150,13 @@ export const Dashboard = ({ navigation }) => {
 							>
 								{ (props) => (
 									<View style = { [center, modalStyles.formStyle] }>
-										<TextBoxEntry
-											style = { modalStyles.textInput }
-											header = 'New Device Name'
-											placeholder = 'New outlet name'
-											onChangeText = { props.handleChange('name') }
-											value = { props.values.name }
-											errorMesage = { props.touched.name && props.errors.name }
-										/>
-										<View style = { modalStyles.buttonView }>
+										<View style = { modalStyles.inputView }>
+											{ renderConfirmOrInput(props, bleConfirmed) }
+										</View>
+										<View style = { modalStyles.modalButtonView }>
 											<Button
 												title = 'Cancel'
-												containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
 												onPress = { () => {
 													setModalVisible(false);
@@ -132,9 +164,10 @@ export const Dashboard = ({ navigation }) => {
 											/>
 											<Button
 												title = 'Add Device'
-												containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
-												onPress = { props.handleSubmit }
+												disabled = { !bleConfirmed }
+												onPress = { () => setBleConfirmed(true) }
 											/>
 										</View>
 									</View>
@@ -163,6 +196,7 @@ export const Dashboard = ({ navigation }) => {
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
 						setBleIsLoading(true);
+						setBleConfirmed(false);
 						setModalVisible(true);
 					} }
 				/>
@@ -265,21 +299,52 @@ const modalStyles = {
 		marginTop: '5%',
 		alignItems: 'center'
 	},
+	inputView: {
+		width: '95%',
+		height: '40%',
+		alignItems: 'center',
+		marginTop: '-8%'
+	},
+	confirmBleContainer: {
+		height: '85%',
+		width: '95%',
+		alignItems: 'center',
+		padding: '2%',
+		marginTop: '2%',
+		backgroundColor: colors.primaryLight,
+		borderRadius: 10
+	},
+	confirmBleText: {
+		color: colors.dark,
+		fontSize: 16
+	},
+	confirmBleButtonView: {
+		height: '45%',
+		width: '85%',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		marginTop: '3%'
+	},
+	confirmButtonStyle: {
+		height: '70%',
+		width: '30%'
+	},
 	formStyle: {
 		width: '100%'
 	},
 	textInput: {
 		width: '75%'
 	},
-	buttonView: {
+	modalButtonView: {
 		height: '18%',
 		width: '90%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		marginTop: '60%'
+		marginTop: '30%'
 	},
-	buttonStyle: {
+	modalButtonStyle: {
 		width: '40%',
 		height: '65%'
 	},
