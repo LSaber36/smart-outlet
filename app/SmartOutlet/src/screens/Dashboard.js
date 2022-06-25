@@ -24,7 +24,7 @@ const newOutletSchema = yup.object({
 });
 
 export const Dashboard = ({ navigation }) => {
-	const {	container, fullWidthHeight, buttonContainer, center } = styles;
+	const {	container, fullWidthHeight, buttonContainer, center, disabledButton } = styles;
 	const {
 		textStyle,
 		noOutletsMessage,
@@ -167,6 +167,7 @@ export const Dashboard = ({ navigation }) => {
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
 												disabled = { !bleConfirmed }
+												disabledStyle = { disabledButton }
 												onPress = { () => setBleConfirmed(true) }
 											/>
 										</View>

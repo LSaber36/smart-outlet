@@ -26,5 +26,8 @@ export const styles = {
 	errorText: {
 		color: colors.delete,
 		marginTop: '1%'
+	},
+	disabledButton: {
+		backgroundColor: colors.lightGray
 	}
 };
