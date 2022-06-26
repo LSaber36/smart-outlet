@@ -5,7 +5,7 @@ import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import { useSelector } from 'react-redux';
-import { deleteOutlet, setOutletState } from '../services/outletServices';
+import { deleteOutlet, setOutletState, setPowerThresh } from '../services/outletServices';
 import { InfoBox } from '../components';
 import { ProgressChart, LineChart } from 'react-native-chart-kit';
 
@@ -14,8 +14,8 @@ const { height, width } = Dimensions.get('screen');
 export const Device = ({ navigation }) => {
 	const [currentOutletData, setCurrentOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
-	const [historicalData, setHistoricalData] = useState([]);
-	const [percentThresh, setPercentThresh] = useState(75);
+	const [historicalData, setHistoricalData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+	const [percentPowerUsed, setPercentPowerUsed] = useState(75);
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -38,7 +38,11 @@ export const Device = ({ navigation }) => {
 			.onSnapshot(documentSnapshot => {
 				if (documentSnapshot != undefined) {
 					console.log('Historical Data: ' + JSON.stringify(documentSnapshot.get('historicalData')));
+					console.log('Power Threshold: ' + JSON.stringify(documentSnapshot.get('powerThreshold')));
 					setHistoricalData(documentSnapshot.get('historicalData'));
+					// TODO:
+					// Set percent power used dynamically based on the max of the sum of historical data
+					// and the threshold. Must update when historical data updates
 				}
 			});
 
@@ -96,22 +100,7 @@ export const Device = ({ navigation }) => {
 						data = {{
 							labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 							datasets: [
-								{
-									data: [
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50,
-										Math.random() * 50
-									]
-								}
+								{ data: historicalData }
 							]
 						}}
 						width = { width * 0.8 }
@@ -140,7 +129,7 @@ export const Device = ({ navigation }) => {
 						<View style = { [progressChartView, center] }>
 							<ProgressChart
 								data = {{
-									data: [percentThresh / 100.0]
+									data: [percentPowerUsed / 100.0]
 								}}
 								width = { width * 0.36 }
 								height = { 130 }
@@ -156,7 +145,7 @@ export const Device = ({ navigation }) => {
 								style = { graphStyle }
 							/>
 							<Text style = { centerProgressText }>
-								{ percentThresh }%
+								{ percentPowerUsed }%
 							</Text>
 						</View>
 						<View style = { infoTextView }>

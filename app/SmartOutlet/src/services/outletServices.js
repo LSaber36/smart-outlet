@@ -23,7 +23,8 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 		.doc(newOutletId.toString())
 		.set({
 			name: newOutletName,
-			historicalData: []
+			powerThreshold: 0,
+			historicalData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		})
 		.then(() => {
 			console.log('Added new outlet to firestore  (ID: ' + newOutletId + ')');
@@ -79,5 +80,17 @@ export const setOutletState = (outletID, targetState) => {
 		})
 		.then(() => {
 			console.log('Set outlet state (State: ' + targetState + '  ID: ' + outletID + ')');
+		});
+};
+
+export const setPowerThresh = (outletID, newThresh) => {
+	firestore()
+		.collections('Users')
+		.doc(outletID.toString())
+		.update({
+			powerThreshold: newThresh
+		})
+		.then(() => {
+			console.log('Set power threshold to ' + newThresh + ' KWH');
 		});
 };
