@@ -11,5 +11,6 @@ export const colors = {
 	secondaryDark: '#005A9E',
 	delete: '#DA2A2A',
 	lightGray: '#7E7E7E',
-	darkGray: '#565656'
+	darkGray: '#565656',
+	graphDotOutline: '#ffa726'
 };
