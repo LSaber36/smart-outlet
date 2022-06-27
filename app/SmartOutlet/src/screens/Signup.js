@@ -143,7 +143,7 @@ export const Signup = ({ navigation }) => {
 									style = {{ color: colors.secondaryDark }}
 									onPress = { () => navigation.navigate('Login') }
 								>
-							Log in
+									Log in
 								</Text>
 							</View>
 						</View>

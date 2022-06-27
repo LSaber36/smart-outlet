@@ -6,16 +6,33 @@ import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import { useSelector } from 'react-redux';
 import { deleteOutlet, setOutletState, setPowerThresh } from '../services/outletServices';
-import { InfoBox } from '../components';
+import { InfoBox, TextBoxEntry } from '../components';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 import { ProgressChart, LineChart } from 'react-native-chart-kit';
 
 const { height, width } = Dimensions.get('screen');
+
+function noWhitespace() {
+	return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
+}
+
+yup.addMethod(yup.number, 'noWhitespace', noWhitespace);
+
+const newThreshSchema = yup.object({
+	thresh: yup.number('The value must be a number')
+		.required('Please enter a threshold value')
+		.min(0, 'The new threshold value must be at least 0')
+		.noWhitespace('No whitespace pls')
+});
 
 export const Device = ({ navigation }) => {
 	const [currentOutletData, setCurrentOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
 	const [historicalData, setHistoricalData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+	const [powerThreshold, setPowerThreshold] = useState(0);
 	const [percentPowerUsed, setPercentPowerUsed] = useState(75);
+	const [deleteOrThreshhold, setDeleteOrThreshhold] = useState(true);
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
@@ -44,6 +61,7 @@ export const Device = ({ navigation }) => {
 					console.log('Historical Data: ' + JSON.stringify(tempHistoricalData));
 					console.log('Power Threshold: ' + JSON.stringify(tempPowerThreshold));
 
+					setPowerThreshold(tempPowerThreshold);
 					setHistoricalData(tempHistoricalData);
 					// Calculate the data, filter out values above 100, and round up to nearest integer
 					tempPercentPowerUsed = (tempPowerThreshold / Math.max(...tempHistoricalData)) * 100;
@@ -61,7 +79,7 @@ export const Device = ({ navigation }) => {
 		};
 	}, []);
 
-	const renderConfirmDeleteModal = () => {
+	const renderModalBody = () => {
 		return (
 			<Modal
 				animationType = 'slide'
@@ -69,28 +87,79 @@ export const Device = ({ navigation }) => {
 				visible = { modalVisible }
 			>
 				<View style = { modalStyles.modalContainer }>
-					<View style = { modalStyles.modalView }>
-						<Text style = { modalStyles.promptText }>
-							Are you sure you want to delete this device?
-						</Text>
-						<View style = { modalStyles.buttonView }>
-							<Button
-								title = 'Cancel'
-								containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-								buttonStyle = { fullWidthHeight }
-								onPress = { () => setModalVisible(false) }
-							/>
-							<Button
-								title = 'Delete'
-								containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-								buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
-								onPress = { () => {
-									deleteOutlet(activeUserData, outletRefList, selectedOutletID);
-									navigation.goBack();
-								} }
-							/>
-						</View>
-					</View>
+					{
+						(deleteOrThreshhold) ?
+							(
+								<View style = { modalStyles.modalView }>
+									<View style = { modalStyles.propmpTextView }>
+										<Text style = { modalStyles.promptText }>
+											Are you sure you want to delete this device?
+										</Text>
+									</View>
+									<View style = { modalStyles.buttonView }>
+										<Button
+											title = 'Cancel'
+											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+											buttonStyle = { fullWidthHeight }
+											onPress = { () => setModalVisible(false) }
+										/>
+										<Button
+											title = 'Delete'
+											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+											buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
+											onPress = { () => {
+												deleteOutlet(activeUserData, outletRefList, selectedOutletID);
+												navigation.goBack();
+											} }
+										/>
+									</View>
+								</View>
+							) :
+							(
+								<Formik
+									initialValues = {{ thresh: '' }}
+									validationSchema = { newThreshSchema }
+									onSubmit = { (values, actions) => {
+										actions.resetForm();
+										console.log('New Thresh: ' + values.thresh);
+										setModalVisible(false);
+									} }
+								>
+									{ (props) => (
+										<View style = { modalStyles.modalView }>
+											<View style = { modalStyles.propmpTextView }>
+												<Text style = { modalStyles.promptText }>
+													Please enter a new threshold
+												</Text>
+											</View>
+											<TextBoxEntry
+												header = 'New Threshold'
+												placeholder = 'ex. 24'
+												onChangeText = { props.handleChange('thresh') }
+												value = { props.values.thresh }
+												style = { modalStyles.textBoxStyle }
+												keyboardType = { 'number-pad' }
+												errorMessage = { 'miguel is short' }
+											/>
+											<View style = { modalStyles.buttonView }>
+												<Button
+													title = 'Cancel'
+													containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+													buttonStyle = { fullWidthHeight }
+													onPress = { () => setModalVisible(false) }
+												/>
+												<Button
+													title = 'Set Threshold'
+													containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+													buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
+													onPress = { props.handleSubmit }
+												/>
+											</View>
+										</View>
+									) }
+								</Formik>
+							)
+					}
 				</View>
 			</Modal>
 		);
@@ -98,7 +167,7 @@ export const Device = ({ navigation }) => {
 
 	return (
 		<View style = { container }>
-			{ renderConfirmDeleteModal() }
+			{ renderModalBody() }
 			<Text style = { textStyle }> Device Page </Text>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView
@@ -180,6 +249,10 @@ export const Device = ({ navigation }) => {
 							header = 'ID'
 							value = { selectedOutletID }
 						/>
+						<InfoBox
+							header = 'Power Threshold'
+							value = { powerThreshold }
+						/>
 					</View>
 				</ScrollView>
 			</View>
@@ -193,10 +266,20 @@ export const Device = ({ navigation }) => {
 					} }
 				/>
 				<Button
+					title = 'Set Threshold'
+					containerStyle = { [buttonContainer, buttonStyle] }
+					buttonStyle = { fullWidthHeight }
+					onPress = { () => {
+						setDeleteOrThreshhold(false);
+						setModalVisible(true);
+					} }
+				/>
+				<Button
 					title = 'Delete'
 					containerStyle = { [buttonContainer, buttonStyle] }
 					buttonStyle = { [fullWidthHeight, deleteButton] }
 					onPress = { () => {
+						setDeleteOrThreshhold(true);
 						setModalVisible(true);
 					} }
 				/>
@@ -294,11 +377,19 @@ const modalStyles = {
 		backgroundColor: colors.white,
 		borderRadius: 10
 	},
+	propmpTextView: {
+		width: '90%',
+		height: '20%',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		marginTop: '5%'
+	},
 	promptText: {
 		color: colors.dark,
-		fontSize: 22,
-		paddingTop: '5%',
-		margin: '10%'
+		fontSize: 20
+	},
+	textBoxStyle: {
+		marginTop: '0%'
 	},
 	buttonView: {
 		height: '30%',
