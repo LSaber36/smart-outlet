@@ -37,12 +37,21 @@ export const Device = ({ navigation }) => {
 			.doc(selectedOutletID)
 			.onSnapshot(documentSnapshot => {
 				if (documentSnapshot != undefined) {
-					console.log('Historical Data: ' + JSON.stringify(documentSnapshot.get('historicalData')));
-					console.log('Power Threshold: ' + JSON.stringify(documentSnapshot.get('powerThreshold')));
-					setHistoricalData(documentSnapshot.get('historicalData'));
-					// TODO:
-					// Set percent power used dynamically based on the max of the sum of historical data
-					// and the threshold. Must update when historical data updates
+					let tempHistoricalData = documentSnapshot.get('historicalData');
+					let tempPowerThreshold = documentSnapshot.get('powerThreshold');
+					let tempPercentPowerUsed;
+
+					console.log('Historical Data: ' + JSON.stringify(tempHistoricalData));
+					console.log('Power Threshold: ' + JSON.stringify(tempPowerThreshold));
+
+					setHistoricalData(tempHistoricalData);
+					// Calculate the data, filter out values above 100, and round up to nearest integer
+					tempPercentPowerUsed = (tempPowerThreshold / Math.max(...tempHistoricalData)) * 100;
+					tempPercentPowerUsed = Math.round(tempPercentPowerUsed);
+					tempPercentPowerUsed = (tempPercentPowerUsed < 100) ? tempPercentPowerUsed : 100;
+
+					console.log('Percent power used: ' + tempPercentPowerUsed);
+					setPercentPowerUsed(tempPercentPowerUsed);
 				}
 			});
 
