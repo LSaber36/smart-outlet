@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View, Text, TouchableWithoutFeedback, Keyboard,
 	Modal, Dimensions, ScrollView
@@ -10,10 +10,12 @@ import { setActiveID } from '../redux';
 import { addOutlet } from '../services/outletServices';
 import { PacmanIndicator } from 'react-native-indicators';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { LogBox } from 'react-native';
 import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { LogBox } from 'react-native';
+import { BleManager } from 'react-native-ble-plx';
+import { requestMultiple, PERMISSIONS } from 'react-native-permissions';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
@@ -42,7 +44,94 @@ export const Dashboard = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [bleIsLoading, setBleIsLoading] = useState(true);
 	const [bleConfirmed, setBleConfirmed] = useState(false);
+	const [bluetoothReady, setBluetoothReady] = useState(false);
 	const dispatch = useDispatch();
+	const manager = new BleManager();
+
+	const SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
+	const CHARACTERISTIC_UUID_RX = '6E400002-B5A3-F393-E0A9-E50E24DCCA9E';
+	const CHARACTERISTIC_UUID_TX1 = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
+	const CHARACTERISTIC_UUID_TX2 = '40d5c8fc-f32e-11ec-b939-0242ac120002';
+
+	useEffect(() => {
+		const subscription = manager.onStateChange((state) => {
+			if (state === 'PoweredOn') {
+				setBluetoothReady(true);
+				subscription.remove();
+			}
+			else {
+				setBluetoothReady(false);
+			}
+		}, true);
+
+		return () => subscription.remove();
+	});
+
+	const scanOutlets = () => {
+		console.log('Getting Permissions...');
+		requestMultiple([
+			PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+			PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+			PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+		])
+			.then((statuses) => {
+				console.log('Scan Status:          ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
+				console.log('Connect Status:       ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT]);
+				console.log('Fine Loaction Status: ' + statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
+
+				console.log('Starting bluetooth scan...');
+				console.log(' ');
+				manager.startDeviceScan(null, null, (error, scannedDevice) => {
+					if (error) {
+						console.log(error);
+						console.log(JSON.stringify(error));
+
+						return;
+					}
+
+					console.log('Device Name: ' + scannedDevice.name);
+
+					if (scannedDevice && scannedDevice.name === 'UART Test') {
+						console.log('Device Name: ' + scannedDevice.name);
+						console.log('HORRAY, WE FOUND IT!');
+						// Prevent future scanning
+						setBluetoothReady(true);
+						manager.stopDeviceScan();
+						connectToOutlet(scannedDevice);
+					}
+				});
+
+				// Stop scanning after 5 seconds
+				setTimeout(() => {
+					manager.stopDeviceScan();
+					console.log('Scanning timed out');
+					console.log(' ');
+				}, 5000);
+			});
+	};
+
+	const connectToOutlet = (device) => {
+		console.log('Connecting to device: ' + device.name);
+
+		device
+			.connect()
+			.then((connectedDevice) => {
+				console.log('Connected to device: ' + connectedDevice.name);
+
+				connectedDevice
+					.discoverAllServicesAndCharacteristics()
+					.then((discoveredDevice) => {
+						// Do work with servies
+						console.log('Discovered Device Info:');
+						console.log('RSSI: ' + discoveredDevice.rssi);
+						console.log('Service UUIDs: ' + JSON.stringify(discoveredDevice.serviceUUIDs));
+					})
+					.catch((error) => {
+						console.log('Connection error: ' + error);
+						console.log(JSON.stringify(error));
+					});
+			});
+	};
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
@@ -223,15 +312,16 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						setBleIsLoading(true);
-						setBleConfirmed(false);
-						setModalVisible(true);
+						// setBleIsLoading(true);
+						// setBleConfirmed(false);
+						// setModalVisible(true);
 
-						// TODO:
-						// Setting addDevice states will be called from bluetooth instead
-						setTimeout(() => {
-							setBleIsLoading(false);
-						}, 3000);
+						// // TODO:
+						// // Setting addDevice states will be called from bluetooth instead
+						// setTimeout(() => {
+						// 	setBleIsLoading(false);
+						// }, 3000);
+						scanOutlets();
 					} }
 				/>
 			</View>
