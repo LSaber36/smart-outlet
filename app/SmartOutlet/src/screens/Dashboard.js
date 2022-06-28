@@ -93,7 +93,7 @@ export const Dashboard = ({ navigation }) => {
 			(bleIsLoading) ?
 				'We\'re searching for your device, hang tight.' :
 				(bleConfirmed) ?
-					'Please add the name of your new device' :
+					'Please add the name of your new device.' :
 					'We found a device and triggered its indicator led to flash. ' +
 					'Please confirm that this is the correct device.'
 		);

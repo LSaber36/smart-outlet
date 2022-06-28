@@ -15,8 +15,8 @@ const { height, width } = Dimensions.get('screen');
 
 const newThreshSchema = yup.object({
 	thresh: yup.number()
-		.typeError('The value must be a number')
 		.required('Please enter a threshold value')
+		.typeError('The value must be a number')
 		.positive('The value must be greater than 0')
 		.integer('The value must be an integer')
 });
