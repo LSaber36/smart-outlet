@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, Dimensions, ScrollView } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Keyboard, Modal, Dimensions, ScrollView } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
@@ -17,7 +17,7 @@ const newThreshSchema = yup.object({
 	thresh: yup.number()
 		.typeError('The value must be a number')
 		.required('Please enter a threshold value')
-		.positive('The value must be positive')
+		.positive('The value must be greater than 0')
 		.integer('The value must be an integer')
 });
 
@@ -54,7 +54,7 @@ export const Device = ({ navigation }) => {
 					let tempPercentPowerUsed;
 
 					console.log('Historical Data: ' + JSON.stringify(tempHistoricalData));
-					console.log('Power Threshold: ' + JSON.stringify(tempPowerThreshold));
+					console.log('Power Threshold: ' + tempPowerThreshold);
 
 					setPowerThreshold(tempPowerThreshold);
 					setHistoricalData(tempHistoricalData);
@@ -81,53 +81,32 @@ export const Device = ({ navigation }) => {
 				transparent = { true }
 				visible = { modalVisible }
 			>
-				<View style = { modalStyles.modalContainer }>
-					{
-						(deleteOrThreshhold) ?
-							(
+				<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
+					<View style = { modalStyles.modalContainer }>
+						<Formik
+							initialValues = {{ thresh: '' }}
+							validationSchema = { newThreshSchema }
+							onSubmit = { (values, actions) => {
+								actions.resetForm();
+								console.log('New Thresh: ' + values.thresh);
+								setPowerThresh(selectedOutletID, values.thresh);
+								setModalVisible(false);
+							} }
+						>
+							{ (props) => (
 								<View style = { modalStyles.modalView }>
 									<View style = { modalStyles.promptTextView }>
 										<Text style = { modalStyles.promptText }>
-											Are you sure you want to delete this device?
+											{ // Choose the text to display based on the modal type
+												(deleteOrThreshhold) ?
+													'Are you sure you want to delete this device?' :
+													'Please enter a new power threshold.'
+											}
 										</Text>
 									</View>
-									<View style = { modalStyles.buttonView }>
-										<Button
-											title = 'Cancel'
-											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-											buttonStyle = { fullWidthHeight }
-											onPress = { () => setModalVisible(false) }
-										/>
-										<Button
-											title = 'Delete'
-											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-											buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
-											onPress = { () => {
-												deleteOutlet(activeUserData, outletRefList, selectedOutletID);
-												navigation.goBack();
-											} }
-										/>
-									</View>
-								</View>
-							) :
-							(
-								<Formik
-									initialValues = {{ thresh: '' }}
-									validationSchema = { newThreshSchema }
-									onSubmit = { (values, actions) => {
-										actions.resetForm();
-										console.log('New Thresh: ' + values.thresh);
-										setPowerThresh(selectedOutletID, values.thresh);
-										setModalVisible(false);
-									} }
-								>
-									{ (props) => (
-										<View style = { modalStyles.modalView }>
-											<View style = { modalStyles.promptTextView }>
-												<Text style = { modalStyles.promptText }>
-													Please enter a new power threshold
-												</Text>
-											</View>
+									{ // Decide if we want to display the text entry based on the modal type
+										(deleteOrThreshhold) ?
+											<View /> :
 											<TextBoxEntry
 												header = 'New Threshold'
 												placeholder = 'ex. 24'
@@ -137,26 +116,38 @@ export const Device = ({ navigation }) => {
 												keyboardType = { 'number-pad' }
 												errorMessage = { props.touched.thresh && props.errors.thresh }
 											/>
-											<View style = { modalStyles.buttonView }>
+									}
+									<View style = { modalStyles.buttonView }>
+										<Button
+											title = 'Cancel'
+											containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
+											buttonStyle = { fullWidthHeight }
+											onPress = { () => setModalVisible(false) }
+										/>
+										{ // Pick the button behavior based on the modal type
+											(deleteOrThreshhold) ?
 												<Button
-													title = 'Cancel'
+													title = 'Delete'
 													containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-													buttonStyle = { fullWidthHeight }
-													onPress = { () => setModalVisible(false) }
-												/>
+													buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
+													onPress = { () => {
+														deleteOutlet(activeUserData, outletRefList, selectedOutletID);
+														navigation.goBack();
+													} }
+												/> :
 												<Button
 													title = 'Set Threshold'
 													containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
 													buttonStyle = { fullWidthHeight }
 													onPress = { props.handleSubmit }
 												/>
-											</View>
-										</View>
-									) }
-								</Formik>
-							)
-					}
-				</View>
+										}
+									</View>
+								</View>
+							) }
+						</Formik>
+					</View>
+				</TouchableWithoutFeedback>
 			</Modal>
 		);
 	};
@@ -341,7 +332,7 @@ const deviceStyles = {
 	scrollViewButtonView: {
 		height: '14%',
 		width: '80%',
-		marginBottom: '35%'
+		marginBottom: '25%'
 	},
 	scrollViewButtonStyle: {
 		marginTop: '5%'
