@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { styles, colors } from '../styles';
 
-export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMesage, style, keyboardType }) => {
+export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMessage, style, keyboardType }) => {
 	const {	center, errorText } = styles;
 	const { loginInputHeader, loginField, typedTextStyle } = textBoxStyles;
 
@@ -19,7 +19,7 @@ export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMe
 				keyboardType = { keyboardType }
 			/>
 			<View style = { center }>
-				<Text style = { errorText }>{ errorMesage }</Text>
+				<Text style = { errorText }>{ errorMessage }</Text>
 			</View>
 		</View>
 	);

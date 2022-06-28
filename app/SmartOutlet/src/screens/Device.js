@@ -135,7 +135,7 @@ export const Device = ({ navigation }) => {
 												value = { props.values.thresh.toString() }
 												style = { modalStyles.textBoxStyle }
 												keyboardType = { 'number-pad' }
-												errorMesage = { props.touched.thresh && props.errors.thresh }
+												errorMessage = { props.touched.thresh && props.errors.thresh }
 											/>
 											<View style = { modalStyles.buttonView }>
 												<Button

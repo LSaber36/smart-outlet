@@ -74,7 +74,7 @@ export const Login = ({ navigation }) => {
 												placeholder = 'your.name@mail.com'
 												onChangeText = { props.handleChange('email') }
 												value = { props.values.email }
-												errorMesage = { props.touched.email && props.errors.email }
+												errorMessage = { props.touched.email && props.errors.email }
 											/>
 
 											<View style = { modalStyles.buttonView }>
@@ -141,14 +141,14 @@ export const Login = ({ navigation }) => {
 								placeholder = 'your.name@mail.com'
 								onChangeText = { props.handleChange('email') }
 								value = { props.values.email }
-								errorMesage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
+								errorMessage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
 							/>
 							<TextBoxEntry
 								header = 'Password'
 								placeholder = 'password'
 								onChangeText = { props.handleChange('password') }
 								value = { props.values.password }
-								errorMesage = { props.touched.password && props.errors.password }
+								errorMessage = { props.touched.password && props.errors.password }
 							/>
 							<View style = { [forgotPasswordView, center] }>
 								<Text

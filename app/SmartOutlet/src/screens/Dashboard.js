@@ -115,7 +115,7 @@ export const Dashboard = ({ navigation }) => {
 							placeholder = 'New outlet name'
 							onChangeText = { props.handleChange('name') }
 							value = { props.values.name }
-							errorMesage = { props.touched.name && props.errors.name }
+							errorMessage = { props.touched.name && props.errors.name }
 						/>
 						) :
 						(<View style = { modalStyles.confirmBleButtonView }>

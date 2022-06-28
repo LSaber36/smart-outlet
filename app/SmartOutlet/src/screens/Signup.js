@@ -106,28 +106,28 @@ export const Signup = ({ navigation }) => {
 								placeholder = 'your name'
 								onChangeText = { props.handleChange('name') }
 								value = { props.values.name }
-								errorMesage = { props.touched.name && props.errors.name }
+								errorMessage = { props.touched.name && props.errors.name }
 							/>
 							<TextBoxEntry
 								header = 'Email'
 								placeholder = 'your.name@mail.com'
 								onChangeText = { props.handleChange('email') }
 								value = { props.values.email }
-								errorMesage = { (signupError === '') ? (props.touched.email && props.errors.email) : signupError }
+								errorMessage = { (signupError === '') ? (props.touched.email && props.errors.email) : signupError }
 							/>
 							<TextBoxEntry
 								header = 'Password'
 								placeholder = 'password'
 								onChangeText = { props.handleChange('password') }
 								value = { props.values.password }
-								errorMesage = { props.touched.password && props.errors.password }
+								errorMessage = { props.touched.password && props.errors.password }
 							/>
 							<TextBoxEntry
 								header = 'Verify Password'
 								placeholder = 'password'
 								onChangeText = { props.handleChange('verifyPassword') }
 								value = { props.values.verifyPassword }
-								errorMesage = { props.touched.verifyPassword && props.errors.verifyPassword }
+								errorMessage = { props.touched.verifyPassword && props.errors.verifyPassword }
 							/>
 							<View style = { [buttonView, center] }>
 								<Button
