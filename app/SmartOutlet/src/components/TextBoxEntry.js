@@ -1,14 +1,18 @@
 import React from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
+
+const { height, width } = Dimensions.get('screen');
 
 export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMessage, style, keyboardType }) => {
 	const {	center, errorText } = styles;
-	const { loginInputHeader, loginField, typedTextStyle } = textBoxStyles;
+	const { loginField, loginInputHeaderView, loginInputHeaderText, typedTextStyle } = textBoxStyles;
 
 	return (
 		<View style = { [loginField, style] }>
-			<Text style = { loginInputHeader }>{ header }</Text>
+			<View style = { loginInputHeaderView }>
+				<Text style = { loginInputHeaderText }>{ header }</Text>
+			</View>
 			<TextInput
 				style = { typedTextStyle }
 				placeholder = { placeholder }
@@ -26,31 +30,24 @@ export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMe
 };
 
 const textBoxStyles = {
-	forgotPasswordText: {
-		color: colors.secondaryDark,
-		marginLeft: '30%'
-	},
-	forgotPasswordView: {
-		marginTop: '2%'
-	},
-	registerTextView: {
-		marginTop: '5%'
-	},
-	loginFormStyle: {
-		width: '100%',
-		marginTop: '15%'
-	},
-	loginInputHeader: {
-		color: colors.dark,
-		marginLeft: '5%',
-		marginBottom: '1%'
-	},
 	loginField: {
 		width: '75%',
-		marginTop: '5%'
+		marginTop: '5%',
+		alignItems: 'center'
+	},
+	loginInputHeaderView: {
+		width: '100%',
+		height: height * 0.025,
+		alignItems: 'flex-start'
+	},
+	loginInputHeaderText: {
+		color: colors.dark,
+		marginLeft: '8%',
+		marginBottom: '1%'
 	},
 	typedTextStyle: {
-		width: '100%',
+		width: '95%',
+		height: height * 0.06,
 		borderWidth: 1,
 		borderColor: colors.darkGray,
 		padding: 10,
