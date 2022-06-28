@@ -10,8 +10,7 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 		.ref('/' + newOutletId.toString())
 		.set({
 			name: newOutletName,
-			state: false,
-			data: 0
+			state: false
 		})
 		.then(() => {
 			console.log('Added outlet to RTDB           (ID: ' + newOutletId + ')');

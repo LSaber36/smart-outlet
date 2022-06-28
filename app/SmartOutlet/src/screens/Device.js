@@ -238,16 +238,12 @@ export const Device = ({ navigation }) => {
 							value = { (currentOutletData.state != undefined) ? (currentOutletData.state ? 'On' : 'Off') : 'Undefined' }
 						/>
 						<InfoBox
-							header = 'Power'
-							value = { (currentOutletData.data != undefined) ? currentOutletData.data : 'Undefined' }
+							header = 'Power Threshold'
+							value = { powerThreshold }
 						/>
 						<InfoBox
 							header = 'ID'
 							value = { selectedOutletID }
-						/>
-						<InfoBox
-							header = 'Power Threshold'
-							value = { powerThreshold }
 						/>
 					</View>
 				</ScrollView>
@@ -392,7 +388,8 @@ const modalStyles = {
 		width: '90%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		alignItems: 'center'
+		alignItems: 'center',
+		marginBottom: '4%'
 	},
 	buttonStyle: {
 		width: '40%',
