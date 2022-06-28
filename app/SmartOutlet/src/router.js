@@ -15,7 +15,11 @@ const AuthStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 
 const SplashStackNavigator = () => (
-	<SplashStack.Navigator>
+	<SplashStack.Navigator
+		screenOptions = {{
+			headerShown: false
+		}}
+	>
 		<SplashStack.Screen name = 'Splash' component = { Splash } />
 	</SplashStack.Navigator>
 );
