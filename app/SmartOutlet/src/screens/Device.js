@@ -34,7 +34,7 @@ export const Device = ({ navigation }) => {
 	const {
 		textStyle, scrollViewContainer, scrollViewStyle, scrollViewContent, graphStyle,
 		percentUsedView, progressChartView, centerProgressText, descProgressText, infoView, infoTextView,
-		buttonView, buttonStyle, deleteButton
+		scrollViewButtonView, mainButtonView, scrollViewButtonStyle, mainButtonStyle, deleteButton
 	} = deviceStyles;
 
 	useEffect(() => {
@@ -246,33 +246,35 @@ export const Device = ({ navigation }) => {
 							value = { selectedOutletID }
 						/>
 					</View>
+					<View style = { [scrollViewButtonView, center] }>
+						<Button
+							title = 'Set Threshold'
+							containerStyle = { [buttonContainer, scrollViewButtonStyle] }
+							buttonStyle = { fullWidthHeight }
+							onPress = { () => {
+								setDeleteOrThreshhold(false);
+								setModalVisible(true);
+							} }
+						/>
+						<Button
+							title = 'Delete'
+							containerStyle = { [buttonContainer, scrollViewButtonStyle] }
+							buttonStyle = { [fullWidthHeight, deleteButton] }
+							onPress = { () => {
+								setDeleteOrThreshhold(true);
+								setModalVisible(true);
+							} }
+						/>
+					</View>
 				</ScrollView>
 			</View>
-			<View style = { [buttonView, center] }>
+			<View style = { [mainButtonView, center] }>
 				<Button
 					title = 'Toggle State'
-					containerStyle = { [buttonContainer, buttonStyle] }
+					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { fullWidthHeight }
 					onPress = { () => {
 						setOutletState(selectedOutletID, !currentOutletData.state);
-					} }
-				/>
-				<Button
-					title = 'Set Threshold'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { fullWidthHeight }
-					onPress = { () => {
-						setDeleteOrThreshhold(false);
-						setModalVisible(true);
-					} }
-				/>
-				<Button
-					title = 'Delete'
-					containerStyle = { [buttonContainer, buttonStyle] }
-					buttonStyle = { [fullWidthHeight, deleteButton] }
-					onPress = { () => {
-						setDeleteOrThreshhold(true);
-						setModalVisible(true);
 					} }
 				/>
 			</View>
@@ -287,7 +289,7 @@ const deviceStyles = {
 		paddingTop: '5%'
 	},
 	scrollViewContainer: {
-		height: '55%',
+		height: '66%',
 		width: '90%',
 		marginTop: '5%',
 		borderRadius: 10,
@@ -326,7 +328,6 @@ const deviceStyles = {
 		fontSize: 25
 	},
 	infoView: {
-		marginBottom: '30%',
 		marginTop: '10%'
 	},
 	infoTextView: {
@@ -337,12 +338,22 @@ const deviceStyles = {
 		color: colors.dark,
 		fontSize: 15
 	},
-	buttonView: {
+	scrollViewButtonView: {
+		height: '14%',
+		width: '80%',
+		marginBottom: '35%'
+	},
+	scrollViewButtonStyle: {
+		width: '50%',
+		height: '38%',
+		marginTop: '5%'
+	},
+	mainButtonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '15%'
+		marginTop: '5%'
 	},
-	buttonStyle: {
+	mainButtonStyle: {
 		width: '50%',
 		height: '80%',
 		marginTop: '5%'
