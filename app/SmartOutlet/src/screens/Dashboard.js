@@ -28,7 +28,7 @@ export const Dashboard = ({ navigation }) => {
 	const {
 		textStyle,
 		noOutletsMessage,
-		buttonStyle,
+		mainButtonStyle,
 		addDeviceButtonView,
 		scrollViewContainer,
 		scrollViewStyle,
@@ -220,7 +220,7 @@ export const Dashboard = ({ navigation }) => {
 			<View style = { addDeviceButtonView }>
 				<Button
 					title = 'Add a device'
-					containerStyle = { [buttonContainer, buttonStyle] }
+					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
 						setBleIsLoading(true);
@@ -251,15 +251,14 @@ const dashboardStyles = {
 		marginTop: '25%'
 	},
 	addDeviceButtonView: {
-		height: '15%',
-		width: '80%',
+		height: '10%',
+		width: '40%',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		marginTop: '15%'
+		marginTop: '20%'
 	},
-	buttonStyle: {
-		width: '50%',
-		height: '60%'
+	mainButtonStyle: {
+		height: height * 0.07
 	},
 	scrollViewContainer: {
 		height: '55%',
@@ -364,14 +363,13 @@ const modalStyles = {
 		marginTop: '5%'
 	},
 	confirmButtonStyle: {
-		height: '70%',
-		width: '35%'
+		width: width * 0.25
 	},
 	formStyle: {
 		width: '100%'
 	},
 	textInput: {
-		width: '80%'
+		width: width * 0.65
 	},
 	modalButtonView: {
 		height: '18%',
@@ -382,8 +380,7 @@ const modalStyles = {
 		marginTop: '25%'
 	},
 	modalButtonStyle: {
-		width: '40%',
-		height: '65%'
+		width: width * 0.3
 	},
 	deleteButtonStyle: {
 		backgroundColor: colors.delete

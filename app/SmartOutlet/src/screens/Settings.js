@@ -14,7 +14,7 @@ export const Settings = () => {
 	const {	container, fullWidthHeight, buttonContainer } = styles;
 	const {
 		avatarView, avatarStyle, userDataView, userDataHeader,
-		userData, buttonView, buttonStyle
+		userData, buttonView, mainButtonStyle
 	} = dashboardStyles;
 
 	const { activeUserData } = useSelector(state => state.user);
@@ -67,7 +67,7 @@ export const Settings = () => {
 				<View style = { modalStyles.modalContainer }>
 					<View style = { modalStyles.modalView }>
 						<Text style = { modalStyles.promptText }>
-							Are you sure you want to delete this device?
+							Are you sure you want to logout?
 						</Text>
 						<View style = { modalStyles.buttonView }>
 							<Button
@@ -119,7 +119,7 @@ export const Settings = () => {
 			<View style = { buttonView }>
 				<Button
 					title = 'Log Out'
-					containerStyle = { [buttonContainer, buttonStyle] }
+					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
 					onPress = { () => setModalVisible(true) }
 				/>
@@ -158,9 +158,8 @@ const dashboardStyles = {
 		marginTop: '40%',
 		alignItems: 'center'
 	},
-	buttonStyle: {
-		width: '45%',
-		height: '90%',
+	mainButtonStyle: {
+		height: height * 0.07,
 		marginBottom: '5%'
 	}
 };
@@ -197,8 +196,7 @@ const modalStyles = {
 		marginBottom: '5%'
 	},
 	buttonStyle: {
-		width: '40%',
-		height: '65%'
+		width: width * 0.3
 	},
 	deleteButtonStyle: {
 		backgroundColor: colors.delete

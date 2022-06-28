@@ -86,7 +86,7 @@ export const Device = ({ navigation }) => {
 						(deleteOrThreshhold) ?
 							(
 								<View style = { modalStyles.modalView }>
-									<View style = { modalStyles.propmpTextView }>
+									<View style = { modalStyles.promptTextView }>
 										<Text style = { modalStyles.promptText }>
 											Are you sure you want to delete this device?
 										</Text>
@@ -123,7 +123,7 @@ export const Device = ({ navigation }) => {
 								>
 									{ (props) => (
 										<View style = { modalStyles.modalView }>
-											<View style = { modalStyles.propmpTextView }>
+											<View style = { modalStyles.promptTextView }>
 												<Text style = { modalStyles.promptText }>
 													Please enter a new power threshold
 												</Text>
@@ -344,8 +344,6 @@ const deviceStyles = {
 		marginBottom: '35%'
 	},
 	scrollViewButtonStyle: {
-		width: '50%',
-		height: '38%',
 		marginTop: '5%'
 	},
 	mainButtonView: {
@@ -354,8 +352,7 @@ const deviceStyles = {
 		marginTop: '5%'
 	},
 	mainButtonStyle: {
-		width: '50%',
-		height: '80%',
+		height: height * 0.07,
 		marginTop: '5%'
 	},
 	deleteButton: {
@@ -380,7 +377,7 @@ const modalStyles = {
 		backgroundColor: colors.white,
 		borderRadius: 10
 	},
-	propmpTextView: {
+	promptTextView: {
 		width: '90%',
 		height: '20%',
 		alignItems: 'center',
@@ -403,8 +400,7 @@ const modalStyles = {
 		marginBottom: '4%'
 	},
 	buttonStyle: {
-		width: '40%',
-		height: '65%'
+		width: width * 0.34
 	},
 	deleteButtonStyle: {
 		backgroundColor: colors.delete

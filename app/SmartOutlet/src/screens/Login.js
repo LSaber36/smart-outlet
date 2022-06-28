@@ -27,7 +27,7 @@ const loginSchema = yup.object({
 export const Login = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
 	const {
-		buttonView, buttonStyle, registerTextView,
+		buttonView, mainButtonStyle, registerTextView,
 		loginFormStyle, forgotPasswordText, forgotPasswordView, signupPromptText
 	} = loginStyles;
 
@@ -161,7 +161,7 @@ export const Login = ({ navigation }) => {
 							<View style = { [center, buttonView] }>
 								<Button
 									title = 'Login'
-									containerStyle = { [buttonContainer, buttonStyle] }
+									containerStyle = { [buttonContainer, mainButtonStyle] }
 									buttonStyle = { fullWidthHeight }
 									onPress = { props.handleSubmit }
 								/>
@@ -200,9 +200,9 @@ const loginStyles = {
 		width: '80%',
 		marginTop: '35%'
 	},
-	buttonStyle: {
-		width: '80%',
-		height: '80%'
+	mainButtonStyle: {
+		width: width * 0.5,
+		height: height * 0.07
 	},
 	forgotPasswordText: {
 		color: colors.secondaryDark,
@@ -267,8 +267,7 @@ const modalStyles = {
 		marginTop: '3%'
 	},
 	buttonStyle: {
-		width: '40%',
-		height: '80%'
+		width: width * 0.3
 	},
 	formStyle: {
 		width: '100%'

@@ -1,4 +1,7 @@
+import { Dimensions } from 'react-native';
 import { colors } from './colors';
+
+const { height, width } = Dimensions.get('screen');
 
 export const styles = {
 	container: {
@@ -12,8 +15,8 @@ export const styles = {
 		height: '100%'
 	},
 	buttonContainer: {
-		width: '65%',
-		height: '7%',
+		width: width * 0.35,
+		height: height * 0.06,
 		justifyContent: 'center',
 		alignItems: 'center',
 		elevation: 50,

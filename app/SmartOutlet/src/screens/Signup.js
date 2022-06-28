@@ -28,7 +28,7 @@ const signupSchema = yup.object({
 
 export const Signup = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center } = styles;
-	const { buttonView, buttonStyle, loginTextView, signupFormStyle, loginPromptText } = signupStyles;
+	const { buttonView, mainButtonStyle, loginTextView, signupFormStyle, loginPromptText } = signupStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
 	const [signupError, setSignupError] = useState('');
@@ -132,7 +132,7 @@ export const Signup = ({ navigation }) => {
 							<View style = { [buttonView, center] }>
 								<Button
 									title = 'Sign Up'
-									containerStyle = { [buttonContainer, buttonStyle] }
+									containerStyle = { [buttonContainer, mainButtonStyle] }
 									buttonStyle = { fullWidthHeight }
 									onPress = { props.handleSubmit }
 								/>
@@ -165,9 +165,9 @@ const signupStyles = {
 		width: '80%',
 		marginTop: '7%'
 	},
-	buttonStyle: {
-		width: '80%',
-		height: '80%'
+	mainButtonStyle: {
+		width: width * 0.5,
+		height: height * 0.07
 	},
 	loginTextView: {
 		marginTop: '5%'
@@ -213,8 +213,7 @@ const modalStyles = {
 		alignItems: 'center'
 	},
 	buttonStyle: {
-		width: '40%',
-		height: '60%',
+		width: width * 0.3,
 		marginTop: '-5%'
 	},
 	mainText: {
