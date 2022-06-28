@@ -85,7 +85,7 @@ export const setOutletState = (outletID, targetState) => {
 
 export const setPowerThresh = (outletID, newThresh) => {
 	firestore()
-		.collections('Users')
+		.collection('Outlets')
 		.doc(outletID.toString())
 		.update({
 			powerThreshold: newThresh

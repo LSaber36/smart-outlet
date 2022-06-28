@@ -13,17 +13,12 @@ import { ProgressChart, LineChart } from 'react-native-chart-kit';
 
 const { height, width } = Dimensions.get('screen');
 
-function noWhitespace() {
-	return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
-}
-
-yup.addMethod(yup.number, 'noWhitespace', noWhitespace);
-
 const newThreshSchema = yup.object({
-	thresh: yup.number('The value must be a number')
+	thresh: yup.number()
+		.typeError('The value must be a number')
 		.required('Please enter a threshold value')
-		.min(0, 'The new threshold value must be at least 0')
-		.noWhitespace('No whitespace pls')
+		.positive('The value must be positive')
+		.integer('The value must be an integer')
 });
 
 export const Device = ({ navigation }) => {
@@ -122,6 +117,7 @@ export const Device = ({ navigation }) => {
 									onSubmit = { (values, actions) => {
 										actions.resetForm();
 										console.log('New Thresh: ' + values.thresh);
+										setPowerThresh(selectedOutletID, values.thresh);
 										setModalVisible(false);
 									} }
 								>
@@ -129,17 +125,17 @@ export const Device = ({ navigation }) => {
 										<View style = { modalStyles.modalView }>
 											<View style = { modalStyles.propmpTextView }>
 												<Text style = { modalStyles.promptText }>
-													Please enter a new threshold
+													Please enter a new power threshold
 												</Text>
 											</View>
 											<TextBoxEntry
 												header = 'New Threshold'
 												placeholder = 'ex. 24'
 												onChangeText = { props.handleChange('thresh') }
-												value = { props.values.thresh }
+												value = { props.values.thresh.toString() }
 												style = { modalStyles.textBoxStyle }
 												keyboardType = { 'number-pad' }
-												errorMessage = { 'miguel is short' }
+												errorMesage = { props.touched.thresh && props.errors.thresh }
 											/>
 											<View style = { modalStyles.buttonView }>
 												<Button
@@ -151,7 +147,7 @@ export const Device = ({ navigation }) => {
 												<Button
 													title = 'Set Threshold'
 													containerStyle = { [buttonContainer, modalStyles.buttonStyle] }
-													buttonStyle = { [fullWidthHeight, modalStyles.deleteButtonStyle] }
+													buttonStyle = { fullWidthHeight }
 													onPress = { props.handleSubmit }
 												/>
 											</View>
@@ -389,15 +385,14 @@ const modalStyles = {
 		fontSize: 20
 	},
 	textBoxStyle: {
-		marginTop: '0%'
+		marginTop: '5%'
 	},
 	buttonView: {
 		height: '30%',
 		width: '90%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		alignItems: 'center',
-		marginBottom: '5%'
+		alignItems: 'center'
 	},
 	buttonStyle: {
 		width: '40%',
