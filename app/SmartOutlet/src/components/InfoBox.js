@@ -1,26 +1,41 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { colors } from '../styles';
 
+const { height, width } = Dimensions.get('screen');
+
 export const InfoBox = ({ header, value }) => {
-	const { container, infoHeader, infoText } = infoBoxStyles;
+	const { container, infoContainer, infoHeader, infoView, infoText } = infoBoxStyles;
 
 	return (
 		<View style = { container }>
-			<Text style = { infoHeader }> { header }: </Text>
-			<Text style = { infoText }>{ value }</Text>
+			<View style = { infoContainer }>
+				<Text style = { infoHeader }> { header }: </Text>
+				<View style = { infoView }>
+					<Text style = { infoText }>{ value }</Text>
+				</View>
+			</View>
 		</View>
 	);
 };
 
 const infoBoxStyles = {
 	container: {
-		marginLeft: '15%',
-		marginBottom: '8%'
+		width: width * 0.8,
+		marginBottom: '6%',
+		alignItems: 'center',
+		borderRadius: 10,
+		backgroundColor: colors.primaryDark
+	},
+	infoContainer: {
+		width: '90%'
 	},
 	infoHeader: {
-		color: colors.dark,
-		fontSize: 20
+		fontSize: 20,
+		color: colors.dark
+	},
+	infoView: {
+		width: '100%'
 	},
 	infoText: {
 		color: colors.dark,

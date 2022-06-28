@@ -297,7 +297,7 @@ const deviceStyles = {
 	},
 	scrollViewStyle: {
 		width: '90%',
-		marginTop: '4%'
+		marginTop: '5%'
 	},
 	scrollViewContent: {
 		alignItems: 'center'
@@ -312,7 +312,7 @@ const deviceStyles = {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		marginTop: '5%',
+		marginTop: '6%',
 		padding: '2%',
 		backgroundColor: colors.primaryDark
 	},
@@ -328,7 +328,7 @@ const deviceStyles = {
 		fontSize: 25
 	},
 	infoView: {
-		marginTop: '10%'
+		marginTop: '6%'
 	},
 	infoTextView: {
 		width: '40%',
