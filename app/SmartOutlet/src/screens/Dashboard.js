@@ -116,7 +116,8 @@ export const Dashboard = ({ navigation }) => {
 							onChangeText = { props.handleChange('name') }
 							value = { props.values.name }
 							errorMesage = { props.touched.name && props.errors.name }
-						/>) :
+						/>
+						) :
 						(<View style = { modalStyles.confirmBleButtonView }>
 							<Button
 								title = 'Retry'
