@@ -28,7 +28,7 @@ const newOutletSchema = yup.object({
 const manager = new BleManager();
 
 export const Dashboard = ({ navigation }) => {
-	const {	container, fullWidthHeight, buttonContainer, center, disabledButton } = styles;
+	const {	container, fullWidthHeight, buttonContainer, center, disabledButton, modalContainer } = styles;
 	const {
 		textStyle,
 		noOutletsMessage,
@@ -288,7 +288,7 @@ export const Dashboard = ({ navigation }) => {
 				visible = { modalVisible }
 			>
 				<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
-					<View style = { modalStyles.modalContainer }>
+					<View style = { modalContainer }>
 						<View style = { modalStyles.modalView }>
 							<Text style = { modalStyles.headerText }>
 								Add Device
@@ -440,13 +440,6 @@ const dashboardStyles = {
 };
 
 const modalStyles = {
-	modalContainer: {
-		height: height,
-		width: width,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.4)'
-	},
 	modalView: {
 		height: '75%',
 		width: '90%',

@@ -32,5 +32,12 @@ export const styles = {
 	},
 	disabledButton: {
 		backgroundColor: colors.lightGray
+	},
+	modalContainer: {
+		height: height,
+		width: width,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	}
 };

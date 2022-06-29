@@ -30,7 +30,7 @@ export const Device = ({ navigation }) => {
 	const [deleteOrThreshhold, setDeleteOrThreshhold] = useState(true);
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
-	const {	container, fullWidthHeight, buttonContainer, center } = styles;
+	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
 		textStyle, scrollViewContainer, scrollViewStyle, scrollViewContent, graphStyle,
 		percentUsedView, progressChartView, centerProgressText, descProgressText, infoView, infoTextView,
@@ -82,7 +82,7 @@ export const Device = ({ navigation }) => {
 				visible = { modalVisible }
 			>
 				<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
-					<View style = { modalStyles.modalContainer }>
+					<View style = { modalContainer }>
 						<Formik
 							initialValues = {{ thresh: '' }}
 							validationSchema = { newThreshSchema }
@@ -352,13 +352,6 @@ const deviceStyles = {
 };
 
 const modalStyles = {
-	modalContainer: {
-		height: height,
-		width: width,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.4)'
-	},
 	modalView: {
 		height: '35%',
 		width: '90%',

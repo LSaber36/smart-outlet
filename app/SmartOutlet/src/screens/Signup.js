@@ -27,7 +27,7 @@ const signupSchema = yup.object({
 });
 
 export const Signup = ({ navigation }) => {
-	const {	container, fullWidthHeight, buttonContainer, center } = styles;
+	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const { buttonView, mainButtonStyle, loginTextView, signupFormStyle, loginPromptText } = signupStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
@@ -44,7 +44,7 @@ export const Signup = ({ navigation }) => {
 					behavior = 'height'
 					enabled
 				>
-					<View style = { modalStyles.modalContainer }>
+					<View style = { modalContainer }>
 						<View style = { modalStyles.modalView }>
 							<Text style = { modalStyles.promptText }>
 								Thank you for signing up!
@@ -181,13 +181,6 @@ const signupStyles = {
 };
 
 const modalStyles = {
-	modalContainer: {
-		height: height,
-		width: width,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.4)'
-	},
 	modalView: {
 		height: '30%',
 		width: '90%',

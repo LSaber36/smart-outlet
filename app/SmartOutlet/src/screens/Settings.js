@@ -11,7 +11,7 @@ import { loadUserData } from '../redux';
 const { height, width } = Dimensions.get('screen');
 
 export const Settings = () => {
-	const {	container, fullWidthHeight, buttonContainer } = styles;
+	const {	container, fullWidthHeight, buttonContainer, modalContainer } = styles;
 	const {
 		avatarView, avatarStyle, userDataView, userDataHeader,
 		userData, buttonView, mainButtonStyle
@@ -64,7 +64,7 @@ export const Settings = () => {
 				transparent = { true }
 				visible = { modalVisible }
 			>
-				<View style = { modalStyles.modalContainer }>
+				<View style = { modalContainer }>
 					<View style = { modalStyles.modalView }>
 						<Text style = { modalStyles.promptText }>
 							Are you sure you want to logout?
@@ -165,13 +165,6 @@ const dashboardStyles = {
 };
 
 const modalStyles = {
-	modalContainer: {
-		height: height,
-		width: width,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.4)'
-	},
 	modalView: {
 		height: '35%',
 		width: '90%',

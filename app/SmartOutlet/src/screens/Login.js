@@ -25,7 +25,7 @@ const loginSchema = yup.object({
 });
 
 export const Login = ({ navigation }) => {
-	const {	container, fullWidthHeight, buttonContainer, center } = styles;
+	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
 		buttonView, mainButtonStyle, registerTextView,
 		loginFormStyle, forgotPasswordText, forgotPasswordView, signupPromptText
@@ -46,7 +46,7 @@ export const Login = ({ navigation }) => {
 						behavior = 'height'
 						enabled
 					>
-						<View style = { modalStyles.modalContainer }>
+						<View style = { modalContainer }>
 							<View style = { modalStyles.modalView }>
 								<Text style = { modalStyles.promptText }>
 									Reset Password
@@ -224,13 +224,6 @@ const loginStyles = {
 };
 
 const modalStyles = {
-	modalContainer: {
-		height: height,
-		width: width,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.4)'
-	},
 	modalView: {
 		height: '40%',
 		width: '90%',
