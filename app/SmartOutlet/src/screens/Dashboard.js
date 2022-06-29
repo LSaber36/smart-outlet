@@ -15,8 +15,13 @@ import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { BleManager } from 'react-native-ble-plx';
-import { requestMultiple, PERMISSIONS } from 'react-native-permissions';
-import base64 from 'react-native-base64';
+import {
+	scanForOutlet,
+	connectToOutlet,
+	sendDataToCharacteristic,
+	getDataFromCharacteristic,
+	subscribeToCharacteristic
+} from '../services/bluetoothServices';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
@@ -44,17 +49,12 @@ export const Dashboard = ({ navigation }) => {
 
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
+	const [bluetoothReady, setBluetoothReady] = useState(false);
 	const [bleIsLoading, setBleIsLoading] = useState(true);
 	const [bleConfirmed, setBleConfirmed] = useState(false);
-	const [bluetoothReady, setBluetoothReady] = useState(false);
-	const [bluetoothConnected, setBluetoothConnected] = useState(false);
 	const dispatch = useDispatch();
 
-	const SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
-	const CHARACTERISTIC_UUID_TX = '6E400002-B5A3-F393-E0A9-E50E24DCCA9E';
-	const CHARACTERISTIC_UUID_RX1 = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
-	const CHARACTERISTIC_UUID_RX2 = '40d5c8fc-f32e-11ec-b939-0242ac120002';
-
+	// Keep track of adapter state
 	useEffect(() => {
 		const subscription = manager.onStateChange((state) => {
 			if (state === 'PoweredOn') {
@@ -68,113 +68,6 @@ export const Dashboard = ({ navigation }) => {
 
 		return () => subscription.remove();
 	});
-
-	const scanOutlets = () => {
-		console.log('Getting Permissions...');
-		requestMultiple([
-			PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-			PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-			PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
-		])
-			.then((statuses) => {
-				console.log('Scan Status:           ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
-				console.log('Connect Status:        ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT]);
-				console.log('Fine Loaction Status:  ' + statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
-
-				console.log(' ');
-				console.log('Starting bluetooth scan...');
-				manager.startDeviceScan(null, null, (error, scannedDevice) => {
-					if (error) {
-						console.log('Scan Error: ' + error);
-						console.log(JSON.stringify(error));
-
-						return;
-					}
-
-					if (scannedDevice && scannedDevice.name === 'UART Test') {
-						console.log('Device Name: ' + scannedDevice.name);
-						console.log('HORRAY, WE FOUND IT!');
-						// Prevent future scanning
-						setBluetoothConnected(true);
-						manager.stopDeviceScan();
-						connectToOutlet(scannedDevice);
-					}
-					else {
-						console.log('Device Name: ' + scannedDevice.name);
-					}
-				});
-
-				// Stop scanning after 5 seconds
-				setTimeout(() => {
-					manager.stopDeviceScan();
-				}, 5000);
-			});
-	};
-
-	const connectToOutlet = (device) => {
-		console.log('Connecting to device: ' + device.name);
-
-		device
-			.connect()
-			.then((connectedDevice) => {
-				console.log('Connected to device:  ' + connectedDevice.name);
-
-				connectedDevice
-					.discoverAllServicesAndCharacteristics()
-					.then((discoveredDevice) => {
-						// Do work with services
-						console.log('Discovered Device Info:');
-						console.log('RSSI: ' + discoveredDevice.rssi);
-						console.log('Service UUIDs: ' + JSON.stringify(discoveredDevice.serviceUUIDs));
-
-						manager.onDeviceDisconnected(discoveredDevice.id, () => {
-							console.log('Device Disconnected');
-							setBluetoothConnected(false);
-						});
-
-						discoveredDevice
-							.readCharacteristicForService(
-								SERVICE_UUID,
-								CHARACTERISTIC_UUID_RX1
-							)
-							.then((valEnc) => {
-								console.log('Char 1: ' + base64.decode(valEnc?.value));
-							})
-							.catch((error) => {
-								console.log('Get characteristic error:' + error);
-							});
-
-						discoveredDevice
-							.monitorCharacteristicForService(
-								SERVICE_UUID,
-								CHARACTERISTIC_UUID_RX2,
-								(error, characteristic) => {
-									if (characteristic?.value != null) {
-										discoveredDevice
-											.writeCharacteristicWithResponseForService(
-												SERVICE_UUID,
-												CHARACTERISTIC_UUID_TX,
-												base64.encode('Received value ' + base64.decode(characteristic.value))
-											)
-											.then(() => {
-												console.log('Replied to received characteristic2 value: ' + base64.decode(characteristic.value));
-											})
-											.catch((error) => {
-												console.log('Write Characteristic Error: ' + error);
-											});
-									}
-								}
-							);
-					})
-					.catch((error) => {
-						console.log('Discovery error: ' + error);
-						console.log(JSON.stringify(error));
-					});
-			})
-			.catch((error) => {
-				console.log('Connection error: ' + error);
-			});
-	};
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
@@ -355,17 +248,40 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						// setBleIsLoading(true);
-						// setBleConfirmed(false);
+						setBleIsLoading(true);
+						setBleConfirmed(false);
 						// setModalVisible(true);
 
-						// // TODO:
-						// // Setting addDevice states will be called from bluetooth instead
-						// setTimeout(() => {
-						// 	setBleIsLoading(false);
-						// }, 3000);
-						if (bluetoothReady)
-							scanOutlets();
+						if (bluetoothReady) {
+							scanForOutlet(manager, 'New SmartOutlet Device')
+								.then((scannedDevice) => {
+									console.log('Found device: ' + scannedDevice.name);
+
+									connectToOutlet(scannedDevice)
+										.then((connectedDevice) => {
+											setBleIsLoading(false);
+
+											connectedDevice.onDisconnected(() => {
+												if (bleIsLoading)
+													console.log('Device disconnected');
+											});
+
+											sendDataToCharacteristic(connectedDevice, 'Connection Established from SmartOutlet')
+												.then(() => {
+													getDataFromCharacteristic(connectedDevice)
+														.then((value) => {
+															console.log('Sent: Connection Established from SmartOutlet');
+															console.log('Received: ' + value);
+															console.log('Data exchanged, closing connection');
+															connectedDevice.cancelConnection();
+														});
+												});
+										});
+								})
+								.catch((error) => {
+									console.log(error);
+								});
+						}
 					} }
 				/>
 			</View>
