@@ -16,6 +16,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { BleManager } from 'react-native-ble-plx';
 import { requestMultiple, PERMISSIONS } from 'react-native-permissions';
+import base64 from 'react-native-base64';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
@@ -24,6 +25,7 @@ const newOutletSchema = yup.object({
 	name: yup.string()
 		.required('Please enter an outlet name')
 });
+const manager = new BleManager();
 
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, disabledButton } = styles;
@@ -45,13 +47,13 @@ export const Dashboard = ({ navigation }) => {
 	const [bleIsLoading, setBleIsLoading] = useState(true);
 	const [bleConfirmed, setBleConfirmed] = useState(false);
 	const [bluetoothReady, setBluetoothReady] = useState(false);
+	const [bluetoothConnected, setBluetoothConnected] = useState(false);
 	const dispatch = useDispatch();
-	const manager = new BleManager();
 
 	const SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
-	const CHARACTERISTIC_UUID_RX = '6E400002-B5A3-F393-E0A9-E50E24DCCA9E';
-	const CHARACTERISTIC_UUID_TX1 = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
-	const CHARACTERISTIC_UUID_TX2 = '40d5c8fc-f32e-11ec-b939-0242ac120002';
+	const CHARACTERISTIC_UUID_TX = '6E400002-B5A3-F393-E0A9-E50E24DCCA9E';
+	const CHARACTERISTIC_UUID_RX1 = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
+	const CHARACTERISTIC_UUID_RX2 = '40d5c8fc-f32e-11ec-b939-0242ac120002';
 
 	useEffect(() => {
 		const subscription = manager.onStateChange((state) => {
@@ -75,37 +77,36 @@ export const Dashboard = ({ navigation }) => {
 			PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
 		])
 			.then((statuses) => {
-				console.log('Scan Status:          ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
-				console.log('Connect Status:       ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT]);
-				console.log('Fine Loaction Status: ' + statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
+				console.log('Scan Status:           ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN]);
+				console.log('Connect Status:        ' + statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT]);
+				console.log('Fine Loaction Status:  ' + statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
 
-				console.log('Starting bluetooth scan...');
 				console.log(' ');
+				console.log('Starting bluetooth scan...');
 				manager.startDeviceScan(null, null, (error, scannedDevice) => {
 					if (error) {
-						console.log(error);
+						console.log('Scan Error: ' + error);
 						console.log(JSON.stringify(error));
 
 						return;
 					}
 
-					console.log('Device Name: ' + scannedDevice.name);
-
 					if (scannedDevice && scannedDevice.name === 'UART Test') {
 						console.log('Device Name: ' + scannedDevice.name);
 						console.log('HORRAY, WE FOUND IT!');
 						// Prevent future scanning
-						setBluetoothReady(true);
+						setBluetoothConnected(true);
 						manager.stopDeviceScan();
 						connectToOutlet(scannedDevice);
+					}
+					else {
+						console.log('Device Name: ' + scannedDevice.name);
 					}
 				});
 
 				// Stop scanning after 5 seconds
 				setTimeout(() => {
 					manager.stopDeviceScan();
-					console.log('Scanning timed out');
-					console.log(' ');
 				}, 5000);
 			});
 	};
@@ -116,20 +117,62 @@ export const Dashboard = ({ navigation }) => {
 		device
 			.connect()
 			.then((connectedDevice) => {
-				console.log('Connected to device: ' + connectedDevice.name);
+				console.log('Connected to device:  ' + connectedDevice.name);
 
 				connectedDevice
 					.discoverAllServicesAndCharacteristics()
 					.then((discoveredDevice) => {
-						// Do work with servies
+						// Do work with services
 						console.log('Discovered Device Info:');
 						console.log('RSSI: ' + discoveredDevice.rssi);
 						console.log('Service UUIDs: ' + JSON.stringify(discoveredDevice.serviceUUIDs));
+
+						manager.onDeviceDisconnected(discoveredDevice.id, () => {
+							console.log('Device Disconnected');
+							setBluetoothConnected(false);
+						});
+
+						discoveredDevice
+							.readCharacteristicForService(
+								SERVICE_UUID,
+								CHARACTERISTIC_UUID_RX1
+							)
+							.then((valEnc) => {
+								console.log('Char 1: ' + base64.decode(valEnc?.value));
+							})
+							.catch((error) => {
+								console.log('Get characteristic error:' + error);
+							});
+
+						discoveredDevice
+							.monitorCharacteristicForService(
+								SERVICE_UUID,
+								CHARACTERISTIC_UUID_RX2,
+								(error, characteristic) => {
+									if (characteristic?.value != null) {
+										discoveredDevice
+											.writeCharacteristicWithResponseForService(
+												SERVICE_UUID,
+												CHARACTERISTIC_UUID_TX,
+												base64.encode('Received value ' + base64.decode(characteristic.value))
+											)
+											.then(() => {
+												console.log('Replied to received characteristic2 value: ' + base64.decode(characteristic.value));
+											})
+											.catch((error) => {
+												console.log('Write Characteristic Error: ' + error);
+											});
+									}
+								}
+							);
 					})
 					.catch((error) => {
-						console.log('Connection error: ' + error);
+						console.log('Discovery error: ' + error);
 						console.log(JSON.stringify(error));
 					});
+			})
+			.catch((error) => {
+				console.log('Connection error: ' + error);
 			});
 	};
 
@@ -321,7 +364,8 @@ export const Dashboard = ({ navigation }) => {
 						// setTimeout(() => {
 						// 	setBleIsLoading(false);
 						// }, 3000);
-						scanOutlets();
+						if (bluetoothReady)
+							scanOutlets();
 					} }
 				/>
 			</View>
