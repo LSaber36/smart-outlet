@@ -38,7 +38,6 @@ const App = () => {
 					dispatch(setOutletRefList(documentSnapshot.get('outletRefs')));
 
 				console.log('Dispatched Ref List');
-				console.log(' ');
 			});
 
 		return () => outletRefListUnsubscribe();
