@@ -19,8 +19,8 @@ export const styles = {
 		height: height * 0.06,
 		justifyContent: 'center',
 		alignItems: 'center',
-		elevation: 50,
-		borderRadius: 6
+		borderRadius: 6,
+		elevation: 6
 	},
 	center: {
 		justifyContent: 'center',
