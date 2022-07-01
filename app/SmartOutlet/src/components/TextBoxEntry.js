@@ -32,7 +32,7 @@ export const TextBoxEntry = (
 
 const textBoxStyles = {
 	loginField: {
-		width: '75%',
+		width: '85%',
 		marginTop: '5%',
 		alignItems: 'center'
 	},
