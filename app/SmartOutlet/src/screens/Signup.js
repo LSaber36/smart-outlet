@@ -30,7 +30,8 @@ const signupSchema = yup.object({
 export const Signup = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
-		logoView, logoStyle, signupFormStyle, scrollViewContainerStyle, scrollViewStyle, scrollViewContent,
+		logoView, logoStyle, signupFormStyle, scrollViewContainerStyle,
+		scrollViewStyle, scrollViewContent, scrollViewBottomSpacer,
 		mainButtonView, mainButtonStyle, loginPromptView, loginPromptText
 	} = signupStyles;
 
@@ -75,8 +76,7 @@ export const Signup = ({ navigation }) => {
 	return (
 		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
 			<KeyboardAvoidingView
-				behavior = 'position'
-				keyboardVerticalOffset = { -100 }
+				behavior = 'height'
 				enabled
 			>
 				<View style = { container }>
@@ -146,6 +146,7 @@ export const Signup = ({ navigation }) => {
 											value = { props.values.verifyPassword }
 											errorMessage = { props.touched.verifyPassword && props.errors.verifyPassword }
 										/>
+										<View style = { scrollViewBottomSpacer } />
 									</ScrollView>
 								</View>
 								<View style = { [mainButtonView, center] }>
@@ -201,6 +202,10 @@ const signupStyles = {
 	},
 	scrollViewContent: {
 		alignItems: 'center'
+	},
+	scrollViewBottomSpacer: {
+		width: '100%',
+		height: 25
 	},
 	mainButtonView: {
 		height: '12%',

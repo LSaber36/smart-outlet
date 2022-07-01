@@ -106,8 +106,7 @@ export const Login = ({ navigation }) => {
 	return (
 		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
 			<KeyboardAvoidingView
-				behavior = 'position'
-				keyboardVerticalOffset = { -125 }
+				behavior = 'height'
 				enabled
 			>
 				<View style = { container }>
