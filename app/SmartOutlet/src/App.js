@@ -34,8 +34,11 @@ const App = () => {
 			.collection('Users')
 			.doc((activeUserData != undefined) ? activeUserData.email : null)
 			.onSnapshot(documentSnapshot => {
-				if (documentSnapshot != undefined)
+				if (documentSnapshot != undefined && documentSnapshot.get('outletRefs') != undefined)
+				{
 					dispatch(setOutletRefList(documentSnapshot.get('outletRefs')));
+					console.log(documentSnapshot.get('outletRefs'));
+				}
 
 				console.log('Dispatched Ref List');
 			});
