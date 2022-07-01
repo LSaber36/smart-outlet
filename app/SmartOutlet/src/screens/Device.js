@@ -155,7 +155,7 @@ export const Device = ({ navigation }) => {
 	return (
 		<View style = { container }>
 			{ renderModalBody() }
-			<Text style = { textStyle }> Device Page </Text>
+			<Text style = { textStyle }> Device Info </Text>
 			<View style = { [center, scrollViewContainer] }>
 				<ScrollView
 					style = { scrollViewStyle }
@@ -315,7 +315,7 @@ const deviceStyles = {
 	},
 	centerProgressText: {
 		position: 'absolute',
-		color: colors.dark,
+		color: colors.offWhite,
 		fontSize: 25
 	},
 	infoView: {
@@ -326,7 +326,7 @@ const deviceStyles = {
 		alignItems: 'center'
 	},
 	descProgressText: {
-		color: colors.dark,
+		color: colors.offWhite,
 		fontSize: 15
 	},
 	scrollViewButtonView: {

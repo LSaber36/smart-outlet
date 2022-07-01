@@ -10,7 +10,7 @@ export const InfoBox = ({ header, value }) => {
 	return (
 		<View style = { container }>
 			<View style = { infoContainer }>
-				<Text style = { infoHeader }> { header }: </Text>
+				<Text style = { infoHeader }>{ header }:</Text>
 				<View style = { infoView }>
 					<Text style = { infoText }>{ value }</Text>
 				</View>
@@ -32,13 +32,13 @@ const infoBoxStyles = {
 	},
 	infoHeader: {
 		fontSize: 20,
-		color: colors.dark
+		color: colors.offWhite
 	},
 	infoView: {
 		width: '100%'
 	},
 	infoText: {
-		color: colors.dark,
+		color: colors.offWhite,
 		fontSize: 20,
 		marginTop: '2%'
 	}
