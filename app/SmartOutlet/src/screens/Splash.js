@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Animated } from 'react-native';
+import { View, Animated, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { styles, colors } from '../styles';
+import { styles } from '../styles';
 import { appLoading } from '../redux';
+import { IconWithText } from '../assets/images';
+
+const { width } = Dimensions.get('screen');
 
 export const Splash = () => {
-	const {	container } = styles;
-	const { textStyle } = splashStyles;
+	const {	container, center } = styles;
+	const { logoStyle } = splashStyles;
 	const [logo] = useState(new Animated.Value(0));
 	const animationStyle = { translateY: logo.interpolate({ inputRange: [0, 1], outputRange: [100, 0] }) };
 	const dispatch = useDispatch();
@@ -19,23 +22,22 @@ export const Splash = () => {
 				toValue: 1,
 				duration: 2500,
 				useNativeDriver: true
-			}).start(() => { setTimeout(() => dispatch(appLoading()), 1500) });
+			}).start(() => { setTimeout(() => dispatch(appLoading(false)), 1500) });
 		}
 	});
 
 	return (
-		<View style = { container }>
+		<View style = { [center, container] }>
 			<Animated.View style = { animationStyle }>
-				<Text style = { textStyle }> Splash Page </Text>
+				<IconWithText style = { logoStyle } />
 			</Animated.View>
 		</View>
 	);
 };
 
 const splashStyles = {
-	textStyle: {
-		color: colors.dark,
-		fontSize: 40,
-		marginTop: '65%'
+	logoStyle: {
+		height: width * 0.75,
+		width: width * 0.75
 	}
 };

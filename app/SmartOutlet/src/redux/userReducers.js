@@ -46,8 +46,8 @@ export const loginStatus = (status) => dispatch => {
 	dispatch({ type: ACTIONS.LOGIN_STATUS, payload: status });
 };
 
-export const appLoading = () => dispatch => {
-	dispatch({ type: ACTIONS.APP_LOADING, payload: false });
+export const appLoading = (state) => dispatch => {
+	dispatch({ type: ACTIONS.APP_LOADING, payload: state });
 };
 
 export const loadUserData = (user) => dispatch => {
