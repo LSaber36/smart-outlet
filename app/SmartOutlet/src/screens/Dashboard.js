@@ -35,16 +35,9 @@ const manager = new BleManager();
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, disabledButton, modalContainer } = styles;
 	const {
-		textStyle,
-		noOutletsMessage,
-		mainButtonStyle,
-		addDeviceButtonView,
-		scrollViewContainer,
-		scrollViewStyle,
-		deviceItemContainer,
-		deviceItemStyle,
-		contentStyle,
-		itemTextStyle
+		textStyle, noOutletsMessage, mainButtonStyle, addDeviceButtonView,
+		scrollViewContainer, scrollViewStyle, deviceItemContainer,
+		deviceItemStyle, contentStyle, itemTextStyle
 	} = dashboardStyles;
 
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
