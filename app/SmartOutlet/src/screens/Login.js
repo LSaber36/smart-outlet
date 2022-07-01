@@ -105,92 +105,98 @@ export const Login = ({ navigation }) => {
 
 	return (
 		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
-			<View style = { container }>
-				{ renderForgotPasswordModal() }
-				<View style = { logoView }>
-					<IconInCircle style = { logoStyle } />
-				</View>
-				<Formik
-					initialValues = {{ email: '', password: '' }}
-					validationSchema = { loginSchema }
-					onSubmit = { (values, actions) => {
-						auth()
-							.signInWithEmailAndPassword(values.email, values.password)
-							.then((userCredential) => {
-								if (userCredential.user.emailVerified) {
-									console.log('Signed in successfully');
-									actions.resetForm();
-									setLoginError('');
-								}
-								else {
-									console.log('Not verified');
-									auth().signOut();
-									setLoginError('Please verify your account');
-								}
-							})
-							.catch((error) => {
-								console.warn('Login Error: ' + error.code);
+			<KeyboardAvoidingView
+				behavior = 'position'
+				keyboardVerticalOffset = { -125 }
+				enabled
+			>
+				<View style = { container }>
+					{ renderForgotPasswordModal() }
+					<View style = { logoView }>
+						<IconInCircle style = { logoStyle } />
+					</View>
+					<Formik
+						initialValues = {{ email: '', password: '' }}
+						validationSchema = { loginSchema }
+						onSubmit = { (values, actions) => {
+							auth()
+								.signInWithEmailAndPassword(values.email, values.password)
+								.then((userCredential) => {
+									if (userCredential.user.emailVerified) {
+										console.log('Signed in successfully');
+										actions.resetForm();
+										setLoginError('');
+									}
+									else {
+										console.log('Not verified');
+										auth().signOut();
+										setLoginError('Please verify your account');
+									}
+								})
+								.catch((error) => {
+									console.warn('Login Error: ' + error.code);
 
-								if (error.code === 'auth/user-not-found')
-									setLoginError('User not found');
-								else if (error.code === 'auth/wrong-password')
-									setLoginError('Incorrect Password');
-							});
-					} }
-				>
-					{ (props) => (
-						<View style = { [center, loginFormStyle] }>
-							<View style = { inputContainerStyle }>
-								<TextBoxEntry
-									header = 'Email'
-									placeholder = 'your.name@mail.com'
-									onChangeText = { props.handleChange('email') }
-									value = { props.values.email }
-									errorMessage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
-								/>
-								<TextBoxEntry
-									header = 'Password'
-									placeholder = 'password'
-									onChangeText = { props.handleChange('password') }
-									value = { props.values.password }
-									errorMessage = { props.touched.password && props.errors.password }
-								/>
-								<View style = { [forgotPasswordView, center] }>
+									if (error.code === 'auth/user-not-found')
+										setLoginError('User not found');
+									else if (error.code === 'auth/wrong-password')
+										setLoginError('Incorrect Password');
+								});
+						} }
+					>
+						{ (props) => (
+							<View style = { [center, loginFormStyle] }>
+								<View style = { inputContainerStyle }>
+									<TextBoxEntry
+										header = 'Email'
+										placeholder = 'your.name@mail.com'
+										onChangeText = { props.handleChange('email') }
+										value = { props.values.email }
+										errorMessage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
+									/>
+									<TextBoxEntry
+										header = 'Password'
+										placeholder = 'password'
+										onChangeText = { props.handleChange('password') }
+										value = { props.values.password }
+										errorMessage = { props.touched.password && props.errors.password }
+									/>
+									<View style = { [forgotPasswordView, center] }>
+										<Text
+											style = { forgotPasswordText }
+											onPress = { () => setModalVisible(true) }
+										>
+											{ 'Forgot your password? ' }
+										</Text>
+									</View>
+								</View>
+								<View style = { [center, mainButtonView] }>
+									<Button
+										title = 'Login'
+										containerStyle = { [buttonContainer, mainButtonStyle] }
+										buttonStyle = { fullWidthHeight }
+										onPress = { props.handleSubmit }
+									/>
+								</View>
+								<View style = { [signupPromptView, center] }>
+									<Text style = { signupPromptText }>{ 'Don\'t have an account? ' }</Text>
 									<Text
-										style = { forgotPasswordText }
-										onPress = { () => setModalVisible(true) }
+										style = {{ color: colors.secondaryDark }}
+										onPress = { () => {
+											navigation.navigate('Signup');
+											setTimeout(() => {
+												props.resetForm();
+												setLoginError('');
+											}, 250);
+										} }
 									>
-										{ 'Forgot your password? ' }
+									Register here
 									</Text>
 								</View>
 							</View>
-							<View style = { [center, mainButtonView] }>
-								<Button
-									title = 'Login'
-									containerStyle = { [buttonContainer, mainButtonStyle] }
-									buttonStyle = { fullWidthHeight }
-									onPress = { props.handleSubmit }
-								/>
-							</View>
-							<View style = { [signupPromptView, center] }>
-								<Text style = { signupPromptText }>{ 'Don\'t have an account? ' }</Text>
-								<Text
-									style = {{ color: colors.secondaryDark }}
-									onPress = { () => {
-										navigation.navigate('Signup');
-										setTimeout(() => {
-											props.resetForm();
-											setLoginError('');
-										}, 250);
-									} }
-								>
-									Register here
-								</Text>
-							</View>
-						</View>
-					) }
-				</Formik>
-			</View>
+						) }
+					</Formik>
+				</View>
+			</KeyboardAvoidingView>
 		</TouchableWithoutFeedback>
 	);
 };
