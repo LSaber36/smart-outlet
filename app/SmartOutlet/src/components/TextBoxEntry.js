@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, TextInput, Dimensions } from 'react-native';
 import { styles, colors } from '../styles';
 
-const { height, width } = Dimensions.get('screen');
+const { height } = Dimensions.get('screen');
 
-export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMessage, style, keyboardType }) => {
+export const TextBoxEntry = (
+	{ header, placeholder, onChangeText, value, errorMessage, style, keyboardType, inputStyle }
+) => {
 	const {	center, errorText } = styles;
 	const { loginField, loginInputHeaderView, loginInputHeaderText, typedTextStyle } = textBoxStyles;
 
@@ -14,9 +16,8 @@ export const TextBoxEntry = ({ header, placeholder, onChangeText, value, errorMe
 				<Text style = { loginInputHeaderText }>{ header }</Text>
 			</View>
 			<TextInput
-				style = { typedTextStyle }
+				style = { [typedTextStyle, inputStyle] }
 				placeholder = { placeholder }
-				placeholderTextColor = { colors.lightGray }
 				onChangeText = { onChangeText }
 				value = { value }
 				autoCapitalize = { 'none' }
