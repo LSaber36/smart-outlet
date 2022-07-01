@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { colors } from '../styles';
 
-const { height, width } = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 export const InfoBox = ({ header, value }) => {
 	const { container, infoContainer, infoHeader, infoView, infoText } = infoBoxStyles;
