@@ -141,9 +141,12 @@ const dashboardStyles = {
 		elevation: 3
 	},
 	userDataView: {
-		width: '65%',
-		marginTop: '15%',
-		alignItems: 'center'
+		width: '90%',
+		marginTop: '12%',
+		alignItems: 'center',
+		paddingTop: '5%',
+		borderRadius: 10,
+		backgroundColor: colors.secondaryLight
 	},
 	userDataHeader: {
 		color: colors.dark,
