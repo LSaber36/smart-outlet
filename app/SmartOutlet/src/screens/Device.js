@@ -315,7 +315,7 @@ const deviceStyles = {
 	},
 	centerProgressText: {
 		position: 'absolute',
-		color: colors.offWhite,
+		color: colors.dark,
 		fontSize: 25
 	},
 	infoView: {

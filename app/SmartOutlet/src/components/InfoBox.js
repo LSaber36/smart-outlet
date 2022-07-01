@@ -32,13 +32,13 @@ const infoBoxStyles = {
 	},
 	infoHeader: {
 		fontSize: 20,
-		color: colors.offWhite
+		color: colors.dark
 	},
 	infoView: {
 		width: '100%'
 	},
 	infoText: {
-		color: colors.offWhite,
+		color: colors.dark,
 		fontSize: 20,
 		marginTop: '2%'
 	}

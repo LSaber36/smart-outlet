@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import { loadUserData } from '../redux';
+import { InfoBox } from '../components';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -111,10 +112,14 @@ export const Settings = () => {
 				</Avatar>
 			</View>
 			<View style = { userDataView }>
-				<Text style = { userDataHeader }> Display Name: </Text>
-				<Text style = { userData }> { activeUserData?.displayName } </Text>
-				<Text style = { userDataHeader }> Email: </Text>
-				<Text style = { userData }> { activeUserData?.email } </Text>
+				<InfoBox
+					header = 'Display Name'
+					value = { activeUserData?.displayName }
+				/>
+				<InfoBox
+					header = 'Email'
+					value = { activeUserData?.email }
+				/>
 			</View>
 			<View style = { buttonView }>
 				<Button
@@ -137,7 +142,8 @@ const dashboardStyles = {
 	},
 	userDataView: {
 		width: '65%',
-		marginTop: '5%'
+		marginTop: '15%',
+		alignItems: 'center'
 	},
 	userDataHeader: {
 		color: colors.dark,
@@ -155,7 +161,7 @@ const dashboardStyles = {
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '40%',
+		marginTop: '30%',
 		alignItems: 'center'
 	},
 	mainButtonStyle: {
