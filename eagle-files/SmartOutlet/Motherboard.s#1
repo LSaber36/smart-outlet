@@ -10713,9 +10713,9 @@ current being drawn from the outlet</text>
 <pinref part="U2" gate="G$1" pin="IO33"/>
 </segment>
 <segment>
-<pinref part="R16" gate="G$1" pin="1"/>
-<wire x1="-68.58" y1="-48.26" x2="-66.04" y2="-48.26" width="0.1524" layer="91"/>
-<label x="-66.04" y="-48.26" size="1.778" layer="95" xref="yes"/>
+<pinref part="R17" gate="G$1" pin="1"/>
+<wire x1="-68.58" y1="-40.64" x2="-66.04" y2="-40.64" width="0.1524" layer="91"/>
+<label x="-66.04" y="-40.64" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="BLUE" class="0">
@@ -10725,9 +10725,9 @@ current being drawn from the outlet</text>
 <pinref part="U2" gate="G$1" pin="IO32"/>
 </segment>
 <segment>
-<pinref part="R17" gate="G$1" pin="1"/>
-<wire x1="-68.58" y1="-40.64" x2="-66.04" y2="-40.64" width="0.1524" layer="91"/>
-<label x="-66.04" y="-40.64" size="1.778" layer="95" xref="yes"/>
+<pinref part="R16" gate="G$1" pin="1"/>
+<wire x1="-68.58" y1="-48.26" x2="-66.04" y2="-48.26" width="0.1524" layer="91"/>
+<label x="-66.04" y="-48.26" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="TX_MCU" class="0">

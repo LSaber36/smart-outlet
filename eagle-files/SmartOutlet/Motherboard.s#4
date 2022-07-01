@@ -10199,7 +10199,7 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 </class>
 </classes>
 <parts>
-<part name="U1" library="microbuilder" deviceset="ADC_ADS1015" device="" value="ADS1115IDGST"/>
+<part name="U1" library="microbuilder" deviceset="ADC_ADS1015" device="" value="ADS1115"/>
 <part name="C1" library="microbuilder" deviceset="CAP_CERAMIC" device="0805" value="1µF"/>
 <part name="R1" library="microbuilder" deviceset="RESISTOR" device="0805" value="10K"/>
 <part name="R2" library="microbuilder" deviceset="RESISTOR" device="0805" value="10K"/>

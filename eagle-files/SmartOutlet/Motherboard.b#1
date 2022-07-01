@@ -2435,24 +2435,20 @@ design rules under a new name.</description>
 <wire x1="29.325" y1="25.285" x2="26.67" y2="27.94" width="0.254" layer="1"/>
 <wire x1="26.67" y1="27.94" x2="22.86" y2="27.94" width="0.254" layer="1"/>
 <polygon width="0.254" layer="1">
-<vertex x="-2.54" y="62.23"/>
-<vertex x="-2.54" y="-2.54"/>
-<vertex x="52.07" y="-2.54"/>
-<vertex x="53.34" y="-2.54"/>
-<vertex x="53.34" y="0"/>
-<vertex x="53.34" y="52.07"/>
-<vertex x="27.94" y="52.07"/>
-<vertex x="27.94" y="63.5"/>
-<vertex x="12.7" y="63.5"/>
 <vertex x="-2.54" y="63.5"/>
+<vertex x="-2.54" y="-2.54"/>
+<vertex x="53.34" y="-2.54"/>
+<vertex x="53.34" y="53.34"/>
+<vertex x="29.21" y="53.34"/>
+<vertex x="29.21" y="63.5"/>
 </polygon>
 <polygon width="0.1524" layer="16">
 <vertex x="-5.08" y="66.04"/>
 <vertex x="-5.08" y="-5.08"/>
 <vertex x="55.88" y="-5.08"/>
-<vertex x="55.88" y="52.07"/>
-<vertex x="27.94" y="52.07"/>
-<vertex x="27.94" y="66.04"/>
+<vertex x="55.88" y="53.34"/>
+<vertex x="29.21" y="53.34"/>
+<vertex x="29.21" y="66.04"/>
 </polygon>
 </signal>
 <signal name="SCL">
@@ -2516,7 +2512,6 @@ design rules under a new name.</description>
 </signal>
 <signal name="BUTTON">
 <contactref element="R6" pad="1"/>
-<contactref element="U2" pad="27"/>
 <contactref element="S2" pad="3"/>
 <wire x1="41.49" y1="22.86" x2="41.49" y2="24.13" width="0.254" layer="1"/>
 <wire x1="41.49" y1="24.13" x2="39.9406" y2="25.6794" width="0.254" layer="1"/>
@@ -2526,8 +2521,9 @@ design rules under a new name.</description>
 <wire x1="44.45" y1="27.94" x2="45.974" y2="29.464" width="0.254" layer="16"/>
 <via x="45.974" y="38.735" extent="1-16" drill="0.35"/>
 <wire x1="45.974" y1="38.735" x2="48.605" y2="38.735" width="0.254" layer="1"/>
-<wire x1="48.605" y1="38.735" x2="48.62" y2="38.75" width="0.254" layer="1"/>
 <wire x1="45.974" y1="29.464" x2="45.974" y2="38.735" width="0.254" layer="16"/>
+<contactref element="U2" pad="29"/>
+<wire x1="48.605" y1="38.735" x2="48.62" y2="41.29" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="3.3V">
 <contactref element="IC1" pad="2"/>

@@ -10335,8 +10335,8 @@ current being drawn from the outlet</text>
 <attribute name="NAME" x="17.78" y="-5.08" size="1.778" layer="95"/>
 <attribute name="VALUE" x="43.18" y="-5.08" size="1.778" layer="96" align="bottom-right"/>
 </instance>
-<instance part="SUPPLY17" gate="GND" x="58.42" y="30.48" smashed="yes">
-<attribute name="VALUE" x="56.515" y="27.305" size="1.778" layer="96"/>
+<instance part="SUPPLY17" gate="GND" x="71.12" y="30.48" smashed="yes">
+<attribute name="VALUE" x="69.215" y="27.305" size="1.778" layer="96"/>
 </instance>
 <instance part="R7" gate="G$1" x="73.66" y="-12.7" smashed="yes">
 <attribute name="VALUE" x="69.85" y="-16.002" size="1.778" layer="96"/>
@@ -10478,7 +10478,7 @@ current being drawn from the outlet</text>
 <segment>
 <pinref part="U2" gate="G$1" pin="GND@4"/>
 <pinref part="SUPPLY17" gate="GND" pin="GND"/>
-<wire x1="48.26" y1="33.02" x2="58.42" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="33.02" x2="71.12" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="POWER_LED" gate="G$1" pin="C"/>
@@ -10605,9 +10605,9 @@ current being drawn from the outlet</text>
 <pinref part="S2" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="U2" gate="G$1" pin="IO16"/>
-<wire x1="48.26" y1="20.32" x2="50.8" y2="20.32" width="0.1524" layer="91"/>
-<label x="50.8" y="20.32" size="1.778" layer="95" xref="yes"/>
+<pinref part="U2" gate="G$1" pin="IO5"/>
+<wire x1="48.26" y1="25.4" x2="50.8" y2="25.4" width="0.1524" layer="91"/>
+<label x="50.8" y="25.4" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="3.3V" class="0">

@@ -10901,8 +10901,9 @@ current being drawn from the outlet</text>
 <wire x1="-86.36" y1="27.94" x2="-81.28" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="-81.28" y1="27.94" x2="-81.28" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="FB1" gate="G$1" pin="P$2"/>
-<wire x1="-101.6" y1="60.96" x2="-91.44" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="-101.6" y1="60.96" x2="-99.06" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="P$2"/>
+<wire x1="-99.06" y1="60.96" x2="-91.44" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="-91.44" y1="60.96" x2="-91.44" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="-81.28" y1="60.96" x2="-91.44" y2="60.96" width="0.1524" layer="91"/>
 <junction x="-91.44" y="60.96"/>
@@ -10918,6 +10919,9 @@ current being drawn from the outlet</text>
 <junction x="-66.04" y="60.96"/>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="-58.42" y1="60.96" x2="-58.42" y2="43.18" width="0.1524" layer="91"/>
+<junction x="-99.06" y="60.96"/>
+<label x="-99.06" y="66.04" size="1.778" layer="95" xref="yes"/>
+<wire x1="-99.06" y1="60.96" x2="-99.06" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

@@ -10223,7 +10223,7 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 <part name="LED6" library="adafruit" deviceset="LED" device="CHIP-LED0603"/>
 <part name="SUPPLY19" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="+5V" device=""/>
 <part name="SUPPLY20" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="T1" library="CST-1025" deviceset="CST-1025" device=""/>
+<part name="CURRENT_TRANSFORMER" library="CST-1025" deviceset="CST-1025" device=""/>
 <part name="U3" library="SparkFun-IC-Comms" library_urn="urn:adsk.eagle:library:521" deviceset="FT232RL-BASIC" device="SSOP" package3d_urn="urn:adsk.eagle:package:38718/1" value="FT232RL"/>
 <part name="SUPPLY9" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R9" library="eagle-ltspice" library_urn="urn:adsk.eagle:library:217" deviceset="R" device="R0603" package3d_urn="urn:adsk.eagle:package:13302/1" value="1k"/>
@@ -10350,7 +10350,7 @@ current being drawn from the outlet</text>
 <instance part="SUPPLY20" gate="GND" x="93.98" y="-15.24" smashed="yes">
 <attribute name="VALUE" x="92.075" y="-18.415" size="1.778" layer="96"/>
 </instance>
-<instance part="T1" gate="G$1" x="-139.7" y="17.78" smashed="yes">
+<instance part="CURRENT_TRANSFORMER" gate="G$1" x="-139.7" y="17.78" smashed="yes">
 <attribute name="NAME" x="-144.783940625" y="25.4079" size="1.77938125" layer="95"/>
 <attribute name="VALUE" x="-144.78136875" y="7.6173" size="1.77848125" layer="96"/>
 </instance>
@@ -10888,14 +10888,14 @@ current being drawn from the outlet</text>
 </net>
 <net name="DIFF_INPUT_1" class="0">
 <segment>
-<pinref part="T1" gate="G$1" pin="1"/>
+<pinref part="CURRENT_TRANSFORMER" gate="G$1" pin="1"/>
 <pinref part="U1" gate="G$1" pin="AIN0"/>
 <wire x1="-127" y1="22.86" x2="-116.84" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DIFF_INPUT_2" class="0">
 <segment>
-<pinref part="T1" gate="G$1" pin="2"/>
+<pinref part="CURRENT_TRANSFORMER" gate="G$1" pin="2"/>
 <wire x1="-127" y1="12.7" x2="-124.46" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="-124.46" y1="12.7" x2="-124.46" y2="20.32" width="0.1524" layer="91"/>
 <pinref part="U1" gate="G$1" pin="AIN1"/>

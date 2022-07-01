@@ -10895,7 +10895,7 @@ current being drawn from the outlet</text>
 <wire x1="-48.26" y1="2.54" x2="-48.26" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$21" class="0">
+<net name="ADC_VCC" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="VDD"/>
 <wire x1="-86.36" y1="27.94" x2="-81.28" y2="27.94" width="0.1524" layer="91"/>

@@ -10244,9 +10244,9 @@ current being drawn from the outlet</text>
 <attribute name="NAME" x="-64.008" y="40.64" size="1.27" layer="95" font="vector" rot="R270"/>
 <attribute name="VALUE" x="-69.215" y="40.64" size="1.27" layer="96" font="vector" rot="R270"/>
 </instance>
-<instance part="R3" gate="G$1" x="-48.26" y="12.7" smashed="yes" rot="R270">
-<attribute name="NAME" x="-46.228" y="15.24" size="1.27" layer="95" font="vector" rot="R270"/>
-<attribute name="VALUE" x="-51.435" y="15.24" size="1.27" layer="96" font="vector" rot="R270"/>
+<instance part="R3" gate="G$1" x="-48.26" y="10.16" smashed="yes" rot="R90">
+<attribute name="NAME" x="-50.292" y="7.62" size="1.27" layer="95" font="vector" rot="R90"/>
+<attribute name="VALUE" x="-45.085" y="7.62" size="1.27" layer="96" font="vector" rot="R90"/>
 </instance>
 <instance part="R4" gate="G$1" x="-58.42" y="38.1" smashed="yes" rot="R270">
 <attribute name="NAME" x="-56.388" y="40.64" size="1.27" layer="95" font="vector" rot="R270"/>
@@ -10551,7 +10551,8 @@ current being drawn from the outlet</text>
 <pinref part="U1" gate="G$1" pin="ADDR"/>
 <wire x1="-86.36" y1="17.78" x2="-48.26" y2="17.78" width="0.1524" layer="91"/>
 <label x="-83.82" y="17.78" size="1.778" layer="95"/>
-<pinref part="R3" gate="G$1" pin="1"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+<wire x1="-48.26" y1="17.78" x2="-48.26" y2="15.24" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ALERT" class="0">
@@ -10885,13 +10886,13 @@ current being drawn from the outlet</text>
 <pinref part="U1" gate="G$1" pin="GND"/>
 <wire x1="-86.36" y1="10.16" x2="-83.82" y2="10.16" width="0.1524" layer="91"/>
 <wire x1="-83.82" y1="10.16" x2="-83.82" y2="2.54" width="0.1524" layer="91"/>
-<pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="-48.26" y1="7.62" x2="-48.26" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="-83.82" y1="2.54" x2="-66.04" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="-66.04" y1="2.54" x2="-48.26" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="-66.04" y1="2.54" x2="-66.04" y2="-2.54" width="0.1524" layer="91"/>
 <junction x="-66.04" y="2.54"/>
 <label x="-66.04" y="-2.54" size="1.778" layer="95" xref="yes"/>
+<pinref part="R3" gate="G$1" pin="1"/>
+<wire x1="-48.26" y1="2.54" x2="-48.26" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$21" class="0">
