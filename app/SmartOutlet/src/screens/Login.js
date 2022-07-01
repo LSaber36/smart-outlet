@@ -9,6 +9,7 @@ import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
+import { IconInCircle } from '../assets/images';
 
 const { height, width } = Dimensions.get('screen');
 const forgotPasswordSchema = yup.object({
@@ -27,8 +28,8 @@ const loginSchema = yup.object({
 export const Login = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
-		buttonView, mainButtonStyle, registerTextView,
-		loginFormStyle, forgotPasswordText, forgotPasswordView, signupPromptText
+		logoView, logoStyle, loginFormStyle, inputContainerStyle, forgotPasswordView, forgotPasswordText,
+		mainButtonView, mainButtonStyle, signupPromptView, signupPromptText
 	} = loginStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
@@ -106,6 +107,9 @@ export const Login = ({ navigation }) => {
 		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
 			<View style = { container }>
 				{ renderForgotPasswordModal() }
+				<View style = { logoView }>
+					<IconInCircle style = { logoStyle } />
+				</View>
 				<Formik
 					initialValues = {{ email: '', password: '' }}
 					validationSchema = { loginSchema }
@@ -136,29 +140,31 @@ export const Login = ({ navigation }) => {
 				>
 					{ (props) => (
 						<View style = { [center, loginFormStyle] }>
-							<TextBoxEntry
-								header = 'Email'
-								placeholder = 'your.name@mail.com'
-								onChangeText = { props.handleChange('email') }
-								value = { props.values.email }
-								errorMessage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
-							/>
-							<TextBoxEntry
-								header = 'Password'
-								placeholder = 'password'
-								onChangeText = { props.handleChange('password') }
-								value = { props.values.password }
-								errorMessage = { props.touched.password && props.errors.password }
-							/>
-							<View style = { [forgotPasswordView, center] }>
-								<Text
-									style = { forgotPasswordText }
-									onPress = { () => setModalVisible(true) }
-								>
-									{ 'Forgot your password? ' }
-								</Text>
+							<View style = { inputContainerStyle }>
+								<TextBoxEntry
+									header = 'Email'
+									placeholder = 'your.name@mail.com'
+									onChangeText = { props.handleChange('email') }
+									value = { props.values.email }
+									errorMessage = { (loginError === '') ? (props.touched.email && props.errors.email) : loginError }
+								/>
+								<TextBoxEntry
+									header = 'Password'
+									placeholder = 'password'
+									onChangeText = { props.handleChange('password') }
+									value = { props.values.password }
+									errorMessage = { props.touched.password && props.errors.password }
+								/>
+								<View style = { [forgotPasswordView, center] }>
+									<Text
+										style = { forgotPasswordText }
+										onPress = { () => setModalVisible(true) }
+									>
+										{ 'Forgot your password? ' }
+									</Text>
+								</View>
 							</View>
-							<View style = { [center, buttonView] }>
+							<View style = { [center, mainButtonView] }>
 								<Button
 									title = 'Login'
 									containerStyle = { [buttonContainer, mainButtonStyle] }
@@ -166,7 +172,7 @@ export const Login = ({ navigation }) => {
 									onPress = { props.handleSubmit }
 								/>
 							</View>
-							<View style = { [registerTextView, center] }>
+							<View style = { [signupPromptView, center] }>
 								<Text style = { signupPromptText }>{ 'Don\'t have an account? ' }</Text>
 								<Text
 									style = {{ color: colors.secondaryDark }}
@@ -190,33 +196,44 @@ export const Login = ({ navigation }) => {
 };
 
 const loginStyles = {
-	textStyle: {
-		color: colors.dark,
-		fontSize: 40,
-		paddingTop: '5%'
+	logoView: {
+		marginTop: '8%'
 	},
-	buttonView: {
-		height: '14%',
-		width: '80%',
-		marginTop: '35%'
+	logoStyle: {
+		height: width * 0.3,
+		width: width * 0.3
 	},
-	mainButtonStyle: {
-		width: width * 0.5,
-		height: height * 0.07
+	loginFormStyle: {
+		width: '100%'
+	},
+	inputContainerStyle: {
+		width: '85%',
+		height: '50%',
+		marginTop: '-4%',
+		marginBottom: '4%',
+		alignItems: 'center',
+		borderRadius: 10,
+		backgroundColor: colors.secondaryLight
+	},
+	forgotPasswordView: {
+		marginTop: '2%',
+		marginBottom: '2%'
 	},
 	forgotPasswordText: {
 		color: colors.secondaryDark,
 		marginLeft: '30%'
 	},
-	forgotPasswordView: {
-		marginTop: '2%'
+	mainButtonView: {
+		height: '14%',
+		width: '80%',
+		marginTop: '15%'
 	},
-	loginFormStyle: {
-		width: '100%',
-		marginTop: '25%'
+	mainButtonStyle: {
+		width: width * 0.5,
+		height: height * 0.07
 	},
-	registerTextView: {
-		marginTop: '5%'
+	signupPromptView: {
+		marginTop: '1%'
 	},
 	signupPromptText: {
 		color: colors.dark

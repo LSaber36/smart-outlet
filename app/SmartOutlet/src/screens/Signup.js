@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
 	View, Text, TouchableWithoutFeedback, Keyboard,
-	Modal, KeyboardAvoidingView, Dimensions
+	Modal, KeyboardAvoidingView, Dimensions, ScrollView
 } from 'react-native';
 import { styles, colors } from '../styles';
 import { Button } from 'react-native-elements';
@@ -10,6 +10,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
 import { initNewUser } from '../services/userServices';
+import { IconInCircle } from '../assets/images';
 
 const { height, width } = Dimensions.get('screen');
 const signupSchema = yup.object({
@@ -28,7 +29,10 @@ const signupSchema = yup.object({
 
 export const Signup = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
-	const { buttonView, mainButtonStyle, loginTextView, signupFormStyle, loginPromptText } = signupStyles;
+	const {
+		logoView, logoStyle, signupFormStyle, scrollViewContainerStyle, scrollViewStyle, scrollViewContent,
+		mainButtonView, mainButtonStyle, loginPromptView, loginPromptText
+	} = signupStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
 	const [signupError, setSignupError] = useState('');
@@ -72,6 +76,9 @@ export const Signup = ({ navigation }) => {
 		<TouchableWithoutFeedback onPress = { Keyboard.dismiss }>
 			<View style = { container }>
 				{ renderSignupVerificationModal() }
+				<View style = { logoView }>
+					<IconInCircle style = { logoStyle } />
+				</View>
 				<Formik
 					initialValues = {{ name: '', email: '', password: '', verifyPassword: '' }}
 					validationSchema = { signupSchema }
@@ -101,35 +108,42 @@ export const Signup = ({ navigation }) => {
 				>
 					{ (props) => (
 						<View style = { [center, signupFormStyle] }>
-							<TextBoxEntry
-								header = 'Name'
-								placeholder = 'your name'
-								onChangeText = { props.handleChange('name') }
-								value = { props.values.name }
-								errorMessage = { props.touched.name && props.errors.name }
-							/>
-							<TextBoxEntry
-								header = 'Email'
-								placeholder = 'your.name@mail.com'
-								onChangeText = { props.handleChange('email') }
-								value = { props.values.email }
-								errorMessage = { (signupError === '') ? (props.touched.email && props.errors.email) : signupError }
-							/>
-							<TextBoxEntry
-								header = 'Password'
-								placeholder = 'password'
-								onChangeText = { props.handleChange('password') }
-								value = { props.values.password }
-								errorMessage = { props.touched.password && props.errors.password }
-							/>
-							<TextBoxEntry
-								header = 'Verify Password'
-								placeholder = 'password'
-								onChangeText = { props.handleChange('verifyPassword') }
-								value = { props.values.verifyPassword }
-								errorMessage = { props.touched.verifyPassword && props.errors.verifyPassword }
-							/>
-							<View style = { [buttonView, center] }>
+							<View style = { scrollViewContainerStyle }>
+								<ScrollView
+									style = { scrollViewStyle }
+									contentContainerStyle = { scrollViewContent }
+								>
+									<TextBoxEntry
+										header = 'Name'
+										placeholder = 'your name'
+										onChangeText = { props.handleChange('name') }
+										value = { props.values.name }
+										errorMessage = { props.touched.name && props.errors.name }
+									/>
+									<TextBoxEntry
+										header = 'Email'
+										placeholder = 'your.name@mail.com'
+										onChangeText = { props.handleChange('email') }
+										value = { props.values.email }
+										errorMessage = { (signupError === '') ? (props.touched.email && props.errors.email) : signupError }
+									/>
+									<TextBoxEntry
+										header = 'Password'
+										placeholder = 'password'
+										onChangeText = { props.handleChange('password') }
+										value = { props.values.password }
+										errorMessage = { props.touched.password && props.errors.password }
+									/>
+									<TextBoxEntry
+										header = 'Verify Password'
+										placeholder = 'password'
+										onChangeText = { props.handleChange('verifyPassword') }
+										value = { props.values.verifyPassword }
+										errorMessage = { props.touched.verifyPassword && props.errors.verifyPassword }
+									/>
+								</ScrollView>
+							</View>
+							<View style = { [mainButtonView, center] }>
 								<Button
 									title = 'Sign Up'
 									containerStyle = { [buttonContainer, mainButtonStyle] }
@@ -137,13 +151,13 @@ export const Signup = ({ navigation }) => {
 									onPress = { props.handleSubmit }
 								/>
 							</View>
-							<View style = { [loginTextView, center] }>
+							<View style = { [loginPromptView, center] }>
 								<Text style = { loginPromptText }>{ 'Already have an account? ' } </Text>
 								<Text
 									style = {{ color: colors.secondaryDark }}
 									onPress = { () => navigation.navigate('Login') }
 								>
-									Log in
+										Log in
 								</Text>
 							</View>
 						</View>
@@ -155,25 +169,44 @@ export const Signup = ({ navigation }) => {
 };
 
 const signupStyles = {
-	textStyle: {
-		color: colors.dark,
-		fontSize: 40,
-		marginTop: '5%'
+	logoView: {
+		marginTop: '8%'
 	},
-	buttonView: {
+	logoStyle: {
+		height: width * 0.3,
+		width: width * 0.3
+	},
+	signupFormStyle: {
+		width: '100%'
+	},
+	scrollViewContainerStyle: {
+		width: '85%',
+		height: '55%',
+		marginTop: '-4%',
+		marginBottom: '4%',
+		alignItems: 'center',
+		borderRadius: 10,
+		backgroundColor: colors.secondaryLight
+	},
+	scrollViewStyle: {
+		width: '100%',
+		height: '100%',
+		marginBottom: '5%'
+	},
+	scrollViewContent: {
+		alignItems: 'center'
+	},
+	mainButtonView: {
 		height: '12%',
 		width: '80%',
-		marginTop: '7%'
+		marginTop: '10%'
 	},
 	mainButtonStyle: {
 		width: width * 0.5,
 		height: height * 0.07
 	},
-	loginTextView: {
-		marginTop: '5%'
-	},
-	signupFormStyle: {
-		width: '100%'
+	loginPromptView: {
+		marginTop: '1%'
 	},
 	loginPromptText: {
 		color: colors.dark
