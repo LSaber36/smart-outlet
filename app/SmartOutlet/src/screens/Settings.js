@@ -164,7 +164,7 @@ const dashboardStyles = {
 	buttonView: {
 		height: '10%',
 		width: '80%',
-		marginTop: '30%',
+		marginTop: '25%',
 		alignItems: 'center'
 	},
 	mainButtonStyle: {
