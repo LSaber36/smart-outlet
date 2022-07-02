@@ -104,7 +104,7 @@ export const Signup = ({ navigation }) => {
 									}, 500);
 								})
 								.catch((error) => {
-									console.warn('Signup Error: ' + error.code);
+									console.log('Signup Error: ' + error.code);
 
 									if (error.code === 'auth/email-already-in-use')
 										setSignupError('Email not available');

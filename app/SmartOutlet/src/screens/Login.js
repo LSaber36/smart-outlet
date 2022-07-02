@@ -133,7 +133,7 @@ export const Login = ({ navigation }) => {
 									}
 								})
 								.catch((error) => {
-									console.warn('Login Error: ' + error.code);
+									console.log('Login Error: ' + error.code);
 
 									if (error.code === 'auth/user-not-found')
 										setLoginError('User not found');

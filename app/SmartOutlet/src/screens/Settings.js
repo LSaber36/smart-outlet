@@ -54,7 +54,7 @@ export const Settings = () => {
 			})
 			.catch((error) => {
 				if (error.code !== 'E_PICKER_CANCELLED')
-					console.warn(error);
+					console.log(error);
 			});
 	};
 

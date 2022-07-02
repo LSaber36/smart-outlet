@@ -243,7 +243,7 @@ export const Dashboard = ({ navigation }) => {
 					onPress = { () => {
 						setBleIsLoading(true);
 						setBleConfirmed(false);
-						// setModalVisible(true);
+						setModalVisible(true);
 
 						if (bluetoothReady) {
 							scanForOutlet(manager, 'New SmartOutlet Device')
@@ -259,7 +259,7 @@ export const Dashboard = ({ navigation }) => {
 													console.log('Device disconnected');
 											});
 
-											sendDataToCharacteristic(connectedDevice, 'Connection Established from SmartOutlet')
+											sendDataToCharacteristic(connectedDevice, '24')
 												.then(() => {
 													getDataFromCharacteristic(connectedDevice)
 														.then((value) => {
