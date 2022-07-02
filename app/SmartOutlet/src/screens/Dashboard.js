@@ -241,40 +241,40 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						setBleIsLoading(true);
+						setBleIsLoading(false);
 						setBleConfirmed(false);
 						setModalVisible(true);
 
-						if (bluetoothReady) {
-							scanForOutlet(manager, 'New SmartOutlet Device')
-								.then((scannedDevice) => {
-									console.log('Found device: ' + scannedDevice.name);
+						// if (bluetoothReady) {
+						// 	scanForOutlet(manager, 'New SmartOutlet Device')
+						// 		.then((scannedDevice) => {
+						// 			console.log('Found device: ' + scannedDevice.name);
 
-									connectToOutlet(scannedDevice)
-										.then((connectedDevice) => {
-											setBleIsLoading(false);
+						// 			connectToOutlet(scannedDevice)
+						// 				.then((connectedDevice) => {
+						// 					setBleIsLoading(false);
 
-											connectedDevice.onDisconnected(() => {
-												if (bleIsLoading)
-													console.log('Device disconnected');
-											});
+						// 					connectedDevice.onDisconnected(() => {
+						// 						if (bleIsLoading)
+						// 							console.log('Device disconnected');
+						// 					});
 
-											sendDataToCharacteristic(connectedDevice, '24')
-												.then(() => {
-													getDataFromCharacteristic(connectedDevice)
-														.then((value) => {
-															console.log('Sent: Connection Established from SmartOutlet');
-															console.log('Received: ' + value);
-															console.log('Data exchanged, closing connection');
-															connectedDevice.cancelConnection();
-														});
-												});
-										});
-								})
-								.catch((error) => {
-									console.log(error);
-								});
-						}
+						// 					sendDataToCharacteristic(connectedDevice, '24')
+						// 						.then(() => {
+						// 							getDataFromCharacteristic(connectedDevice)
+						// 								.then((value) => {
+						// 									console.log('Sent: Connection Established from SmartOutlet');
+						// 									console.log('Received: ' + value);
+						// 									console.log('Data exchanged, closing connection');
+						// 									connectedDevice.cancelConnection();
+						// 								});
+						// 						});
+						// 				});
+						// 		})
+						// 		.catch((error) => {
+						// 			console.log(error);
+						// 		});
+						// }
 					} }
 				/>
 			</View>
@@ -360,12 +360,12 @@ const modalStyles = {
 	headerText: {
 		color: colors.dark,
 		fontSize: 28,
-		marginTop: '10%'
+		marginTop: '7%'
 	},
 	indicatorView: {
 		height: '14%',
 		width: '50%',
-		marginTop: '5%',
+		marginTop: '3%',
 		alignItems: 'center'
 	},
 	inputView: {
@@ -379,7 +379,7 @@ const modalStyles = {
 		width: '95%',
 		alignItems: 'center',
 		padding: '2%',
-		marginTop: '2%',
+		marginTop: '-4%',
 		backgroundColor: colors.primaryLight,
 		borderRadius: 10
 	},
