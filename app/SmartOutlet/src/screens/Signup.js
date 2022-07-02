@@ -22,7 +22,7 @@ const signupSchema = yup.object({
 	password: yup.string()
 		.required('Please enter your password')
 		.min(8),
-	verifyPassword: yup.string()
+	verifyPass: yup.string()
 		.required('Please enter your password')
 		.oneOf([yup.ref('password')], 'Passwords do not match')
 });
@@ -85,7 +85,7 @@ export const Signup = ({ navigation }) => {
 						<IconInCircle style = { logoStyle } />
 					</View>
 					<Formik
-						initialValues = {{ name: '', email: '', password: '', verifyPassword: '' }}
+						initialValues = {{ name: '', email: '', password: '', verifyPass: '' }}
 						validationSchema = { signupSchema }
 						onSubmit = { (values, actions) => {
 							auth()
@@ -142,9 +142,9 @@ export const Signup = ({ navigation }) => {
 										<TextBoxEntry
 											header = 'Verify Password'
 											placeholder = 'password'
-											onChangeText = { props.handleChange('verifyPassword') }
-											value = { props.values.verifyPassword }
-											errorMessage = { props.touched.verifyPassword && props.errors.verifyPassword }
+											onChangeText = { props.handleChange('verifyPass') }
+											value = { props.values.verifyPass }
+											errorMessage = { props.touched.verifyPass && props.errors.verifyPass }
 										/>
 										<View style = { scrollViewBottomSpacer } />
 									</ScrollView>
