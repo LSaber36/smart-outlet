@@ -241,40 +241,40 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						setBleIsLoading(false);
+						setBleIsLoading(true);
 						setBleConfirmed(false);
 						setModalVisible(true);
 
-						// if (bluetoothReady) {
-						// 	scanForOutlet(manager, 'New SmartOutlet Device')
-						// 		.then((scannedDevice) => {
-						// 			console.log('Found device: ' + scannedDevice.name);
+						if (bluetoothReady) {
+							scanForOutlet(manager, 'New SmartOutlet Device')
+								.then((scannedDevice) => {
+									console.log('Found device: ' + scannedDevice.name);
 
-						// 			connectToOutlet(scannedDevice)
-						// 				.then((connectedDevice) => {
-						// 					setBleIsLoading(false);
+									connectToOutlet(scannedDevice)
+										.then((connectedDevice) => {
+											setBleIsLoading(false);
 
-						// 					connectedDevice.onDisconnected(() => {
-						// 						if (bleIsLoading)
-						// 							console.log('Device disconnected');
-						// 					});
+											connectedDevice.onDisconnected(() => {
+												if (bleIsLoading)
+													console.log('Device disconnected');
+											});
 
-						// 					sendDataToCharacteristic(connectedDevice, '24')
-						// 						.then(() => {
-						// 							getDataFromCharacteristic(connectedDevice)
-						// 								.then((value) => {
-						// 									console.log('Sent: Connection Established from SmartOutlet');
-						// 									console.log('Received: ' + value);
-						// 									console.log('Data exchanged, closing connection');
-						// 									connectedDevice.cancelConnection();
-						// 								});
-						// 						});
-						// 				});
-						// 		})
-						// 		.catch((error) => {
-						// 			console.log(error);
-						// 		});
-						// }
+											sendDataToCharacteristic(connectedDevice, '24')
+												.then(() => {
+													getDataFromCharacteristic(connectedDevice)
+														.then((value) => {
+															console.log('Sent: Connection Established from SmartOutlet');
+															console.log('Received: ' + value);
+															console.log('Data exchanged, closing connection');
+															connectedDevice.cancelConnection();
+														});
+												});
+										});
+								})
+								.catch((error) => {
+									console.log(error);
+								});
+						}
 					} }
 				/>
 			</View>
