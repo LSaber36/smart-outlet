@@ -109,7 +109,7 @@ export const Dashboard = ({ navigation }) => {
 		// Set the header message based on bluetooth states
 		const modalMessage = (
 			(bleIsLoading) ?
-				'We\'re searching for your device, hang tight.' :
+				'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode' :
 				(bleConfirmed) ?
 					'Please add the name of your new device.' :
 					'We found a device and triggered its indicator led to flash. ' +
