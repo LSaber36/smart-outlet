@@ -1,7 +1,9 @@
 void setupWiFi()
 {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting to Wi-Fi");
+  Serial.print("\nConnecting to Wi-Fi");
+  
+  configTime(-18000, 3600, ntpServer);
 
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -9,10 +11,36 @@ void setupWiFi()
     delay(300);
   }
 
-  Serial.println();
-  Serial.print("Connected with IP: ");
+  Serial.print("\nConnected with IP: ");
   Serial.println(WiFi.localIP());
-  Serial.println();
+  Serial.print("\n");
+}
+
+void streamCallback(FirebaseStream data)
+{
+  // Save the captured data to variables for later processing
+  relayState = data.boolData();
+  dataChanged = true;
+}
+
+void streamTimeoutCallback(bool timeout)
+{
+  if (timeout)
+    Serial.println("Stream timed out, resuming...\n");
+
+  if (!stream.httpConnected())
+    Serial.printf("Error code: %d, reason: %s\n\n", stream.httpCode(), stream.errorReason().c_str());
+}
+
+unsigned long getTime()
+{
+  time_t now;
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo))
+    return(0);
+
+  time(&now);
+  return now;
 }
 
 void setupFirebase()
@@ -20,7 +48,6 @@ void setupFirebase()
   String dataPath = "/" + deviceID + "/state";
 
   Serial.println("Setting up firebase connection");
-  Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
 
   // Assign the api key (required)
   config.api_key = API_KEY;
@@ -32,12 +59,14 @@ void setupFirebase()
 
   // Assign the callback function for the long running token generation task
   config.token_status_callback = tokenStatusCallback;
+  config.max_token_generation_retry = 5;
 
-  fbdo.setResponseSize(2048);
+  fbdo.setResponseSize(4096);
 
-  Firebase.begin(&config, &auth);
+  Firebase.setSystemTime(getTime());
   Firebase.reconnectWiFi(true);
   Firebase.setDoubleDigits(5);
+  Firebase.begin(&config, &auth);
 
   if (!Firebase.RTDB.beginStream(&stream, dataPath))
     Serial.printf("Stream begin error, %s\n\n", stream.errorReason().c_str());
@@ -53,7 +82,7 @@ void syncFirebase()
       (millis() - sendDataPrevMillis > SEND_INTERVAL || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
-    blinkLED(LED);
+    blinkLED(GREEN_LED, 100, 0, 1);
 
     /*
     // This is the code that can update the state of the database, it should do so because of a button
@@ -66,21 +95,4 @@ void syncFirebase()
     Serial.println();
     */
   }
-}
-
-void streamCallback(FirebaseStream data)
-{
-  // Save the captured data to variables for later processing
-  relayState = data.boolData();
-
-  dataChanged = true;
-}
-
-void streamTimeoutCallback(bool timeout)
-{
-  if (timeout)
-    Serial.println("Stream timed out, resuming...\n");
-
-  if (!stream.httpConnected())
-    Serial.printf("Error code: %d, reason: %s\n\n", stream.httpCode(), stream.errorReason().c_str());
 }

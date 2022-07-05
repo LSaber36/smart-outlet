@@ -1,12 +1,12 @@
-void blinkLED(uint8_t led)
+void blinkLED(uint8_t led, uint16_t blinkSpeed, uint16_t pauseDelay, uint8_t numTimes)
 {
-  digitalWrite(led, HIGH);
-  delay(100);
-  digitalWrite(led, LOW);
-  delay(200);
-  digitalWrite(led, HIGH);
-  delay(100);
-  digitalWrite(led, LOW);
+  for (int i = 0; i < numTimes; i++)
+  {
+    digitalWrite(led, HIGH);
+    delay(blinkSpeed);
+    digitalWrite(led, LOW);
+    delay(pauseDelay);
+  }
 }
 
 void getButtons()
