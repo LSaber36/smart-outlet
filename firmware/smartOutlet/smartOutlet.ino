@@ -5,6 +5,11 @@
 #include "firebaseInfo.h"
 #include "time.h"
 
+#include <BLEDevice.h>
+#include <BLEServer.h>
+#include <BLEUtils.h>
+#include <BLE2902.h>
+
 #define GREEN_LED 33
 #define BLUE_LED 32
 #define BUTTON_PIN 5
@@ -14,6 +19,10 @@
 
 #define SHORT_PRESS_TIME 1000
 #define LONG_PRESS_TIME 3000
+
+#define SERVICE_UUID            "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define CHARACTERISTIC_UUID_RX  "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define CHARACTERISTIC_UUID_TX  "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 // Define ADC object
 Adafruit_ADS1115 ads;
@@ -42,7 +51,16 @@ bool ADCInitialized = false;
 // Button data
 uint8_t currButtonState;
 uint8_t prevButtonState;
+unsigned long prevMillis = 0, releasedPressTime = 0, depressedPressTime = 0;
 bool prevRelayState, relayState = false;
+
+// Bluetooth data
+BLEServer *pServer = NULL;
+BLECharacteristic * TxChar;
+BLECharacteristic * RxChar;
+bool deviceConnected = false;
+bool oldDeviceConnected = false;
+uint8_t txValue = 'A';
 
 const char* ntpServer = "pool.ntp.org";
 
@@ -77,8 +95,29 @@ void loop()
   {
     // Process new data received away from callback for efficiency
     Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
-    blinkLED(BLUE_LED, 100, 500, 1);
+    blinkLED(BLUE_LED, 100, 200, 2);
     dataChanged = false;
+  }
+
+  if (deviceConnected)
+  {        
+		delay(1000); // bluetooth stack will go into congestion, if too many packets are sent
+	}
+
+  if (!deviceConnected && oldDeviceConnected)
+  {
+    // Do stuff here after disconnected
+    // give the bluetooth stack the chance to get things ready
+    delay(500);
+
+    // After device disconnects, turn off bluetooth
+    BLEDevice::deinit(true);
+    oldDeviceConnected = deviceConnected;
+  }
+  if (deviceConnected && !oldDeviceConnected)
+  {
+    // Do stuff here after connection is established
+    oldDeviceConnected = deviceConnected;
   }
 
   // Only call digitalWrite if the state has changed (reduces unnecessary calls)

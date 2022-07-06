@@ -11,7 +11,6 @@ void blinkLED(uint8_t led, uint16_t blinkSpeed, uint16_t pauseDelay, uint8_t num
 
 void getButtons()
 {
-  unsigned long prevMillis, pressTime;
   currButtonState = digitalRead(BUTTON_PIN);
 
   // Check for a button state edge
@@ -26,20 +25,29 @@ void getButtons()
     else if (currButtonState == 1)
     {
       // This is where we want to evalulate how long the button has been previously pressed
-      pressTime = millis() - prevMillis;
+      releasedPressTime = millis() - prevMillis;
 
-      if (pressTime <= SHORT_PRESS_TIME)
+      if (releasedPressTime <= SHORT_PRESS_TIME)
       {
         Serial.println("Short press");
 
         relayState = !relayState;
-        Serial.print("Button status: " + currButtonState);
-        Serial.println("  Relay status: " + relayState);
       }
-      else if (pressTime <= LONG_PRESS_TIME)
+      else if (releasedPressTime <= LONG_PRESS_TIME)
       {
         Serial.println("Long Press");
       }
+    }
+  }
+  else if (currButtonState == 0)
+  {
+    depressedPressTime = millis();
+
+    if (depressedPressTime - prevMillis > LONG_PRESS_TIME)
+    {
+      // Trigger bluetooth to start
+      Serial.println("Really long press while holding");
+      pairingMode();
     }
   }
   
