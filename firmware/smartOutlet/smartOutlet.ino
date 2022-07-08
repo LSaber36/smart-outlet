@@ -12,7 +12,7 @@
 
 #define GREEN_LED 32
 #define BLUE_LED 33
-#define BUTTON_PIN 27
+#define BUTTON_PIN 26
 #define RELAY_PIN 17
 #define NUM_SAMPLES 50
 #define SEND_INTERVAL 5000
