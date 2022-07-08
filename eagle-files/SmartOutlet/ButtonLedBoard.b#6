@@ -3,7 +3,7 @@
 <eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -163,7 +163,7 @@
 <layer number="255" name="routoute" color="7" fill="1" visible="yes" active="yes"/>
 </layers>
 <board>
-<fusionsync huburn="a.YnVzaW5lc3M6a25pZ2h0czc4MQ" projecturn="a.YnVzaW5lc3M6a25pZ2h0czc4MSNEMjAyMDA3MDUzMTMxOTg1NzY" f3durn="urn:adsk.wipprod:dm.lineage:B1J0ixzcRVGUDW2DU4VvgQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="16e1dd78-174b-4b8b-992d-f5f7bcd45136" lastsyncedrevisionid="16e1dd78-174b-4b8b-992d-f5f7bcd45136" lastboardhashguid="568c3f8d-5c11-4318-14c0-3dd78ae52807" lastpushedtime="2022-07-06T21:37:36Z" linktopcb3d="true"/>
+<fusionsync huburn="a.YnVzaW5lc3M6a25pZ2h0czc4MQ" projecturn="a.YnVzaW5lc3M6a25pZ2h0czc4MSNEMjAyMDA3MDUzMTMxOTg1NzY" f3durn="urn:adsk.wipprod:dm.lineage:B1J0ixzcRVGUDW2DU4VvgQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="1479cc52-9830-4520-9e3b-dcc00838052c" lastsyncedrevisionid="1479cc52-9830-4520-9e3b-dcc00838052c" lastboardhashguid="816fb817-98fe-2943-e3d9-702ee7782228" lastpushedtime="2022-07-07T05:27:59Z" linktopcb3d="true"/>
 <plain>
 <wire x1="16.008" y1="7.493" x2="20.008" y2="7.493" width="0.001" layer="20"/>
 <wire x1="20.008" y1="7.493" x2="20.008" y2="1.493" width="0.001" layer="20"/>
@@ -1560,11 +1560,11 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="LED1" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="1.905" y="4.445" smashed="yes" rot="R180">
-<attribute name="VALUE" x="0" y="5.08" size="1.27" layer="27" rot="R270"/>
+<element name="LED1" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="1.905" y="4.4958" smashed="yes" rot="R180">
+<attribute name="VALUE" x="0" y="5.1308" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="LED2" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="18.034" y="4.445" smashed="yes" rot="R180">
-<attribute name="VALUE" x="16.129" y="5.08" size="1.27" layer="27" rot="R270"/>
+<element name="LED2" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="18.0975" y="4.4958" smashed="yes" rot="R180">
+<attribute name="VALUE" x="16.1925" y="5.1308" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="1k" x="3.302" y="4.445" smashed="yes" rot="R270">
 <attribute name="POPULARITY" value="70" x="3.302" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
@@ -1595,10 +1595,11 @@ design rules under a new name.</description>
 <signals>
 <signal name="BUTTON">
 <contactref element="S1" pad="2"/>
+<wire x1="13.183" y1="3.937" x2="13.843" y2="4.597" width="0.254" layer="1"/>
 <contactref element="J1" pad="2"/>
-<wire x1="13.183" y1="3.937" x2="10.033" y2="3.937" width="0.254" layer="1"/>
-<wire x1="8.763" y1="5.207" x2="8.763" y2="7.493" width="0.254" layer="1"/>
-<wire x1="10.033" y1="3.937" x2="8.763" y2="5.207" width="0.254" layer="1"/>
+<wire x1="13.183" y1="3.937" x2="11.303" y2="3.937" width="0.254" layer="1"/>
+<wire x1="8.763" y1="6.477" x2="8.763" y2="7.493" width="0.254" layer="1"/>
+<wire x1="11.303" y1="3.937" x2="8.763" y2="6.477" width="0.254" layer="1"/>
 </signal>
 <signal name="GND">
 <contactref element="LED2" pad="C"/>
@@ -1611,41 +1612,44 @@ design rules under a new name.</description>
 <wire x1="5.5825" y1="2.6365" x2="2.5825" y2="2.6365" width="0.254" layer="1"/>
 <wire x1="6.883" y1="3.937" x2="8.1835" y2="2.6365" width="0.254" layer="1"/>
 <wire x1="8.1835" y1="2.6365" x2="17.4835" y2="2.6365" width="0.254" layer="1"/>
-<wire x1="17.4835" y1="2.6365" x2="18.034" y2="3.187" width="0.254" layer="1"/>
-<wire x1="18.034" y1="3.187" x2="18.034" y2="3.695" width="0.254" layer="1"/>
+<wire x1="17.4835" y1="2.6365" x2="18.161" y2="3.314" width="0.254" layer="1"/>
+<wire x1="18.161" y1="3.314" x2="18.0975" y2="3.7458" width="0.254" layer="1"/>
 <wire x1="2.5825" y1="2.6365" x2="1.905" y2="3.314" width="0.254" layer="1"/>
-<wire x1="1.905" y1="3.314" x2="1.905" y2="3.695" width="0.254" layer="1"/>
+<wire x1="1.905" y1="3.314" x2="1.905" y2="3.7458" width="0.254" layer="1"/>
 </signal>
 <signal name="GREEN">
 <contactref element="R14" pad="2"/>
-<contactref element="J1" pad="3"/>
 <wire x1="3.302" y1="3.595" x2="3.722" y2="3.595" width="0.254" layer="1"/>
 <wire x1="3.722" y1="3.595" x2="4.572" y2="4.445" width="0.254" layer="1"/>
 <via x="4.572" y="4.445" extent="1-16" drill="0.35"/>
-<wire x1="4.572" y1="4.445" x2="9.652" y2="4.445" width="0.254" layer="16"/>
-<wire x1="11.303" y1="6.096" x2="11.303" y2="7.493" width="0.254" layer="16"/>
-<wire x1="9.652" y1="4.445" x2="11.303" y2="6.096" width="0.254" layer="16"/>
+<contactref element="J1" pad="4"/>
+<wire x1="10.795" y1="4.445" x2="13.843" y2="7.493" width="0.254" layer="16"/>
+<wire x1="4.572" y1="4.445" x2="10.795" y2="4.445" width="0.254" layer="16"/>
 </signal>
 <signal name="BLUE">
 <contactref element="R15" pad="2"/>
-<contactref element="J1" pad="4"/>
-<wire x1="16.637" y1="3.595" x2="16.217" y2="3.595" width="0.254" layer="1"/>
-<wire x1="16.217" y1="3.595" x2="15.367" y2="4.445" width="0.254" layer="1"/>
-<via x="15.367" y="4.445" extent="1-16" drill="0.35"/>
-<wire x1="15.367" y1="4.445" x2="13.843" y2="5.969" width="0.254" layer="16"/>
-<wire x1="13.843" y1="5.969" x2="13.843" y2="7.493" width="0.254" layer="16"/>
+<wire x1="16.637" y1="3.595" x2="16.471" y2="3.595" width="0.254" layer="1"/>
+<contactref element="J1" pad="3"/>
+<wire x1="14.605" y1="5.461" x2="12.319" y2="5.461" width="0.254" layer="1"/>
+<wire x1="12.319" y1="5.461" x2="11.303" y2="6.477" width="0.254" layer="1"/>
+<wire x1="11.303" y1="6.477" x2="11.303" y2="7.493" width="0.254" layer="1"/>
+<wire x1="16.471" y1="3.595" x2="14.605" y2="5.461" width="0.254" layer="1"/>
 </signal>
 <signal name="N$5">
 <contactref element="LED1" pad="A"/>
 <contactref element="R14" pad="1"/>
 <wire x1="3.302" y1="5.295" x2="3.202" y2="5.195" width="0.254" layer="1"/>
-<wire x1="3.202" y1="5.195" x2="1.905" y2="5.195" width="0.254" layer="1"/>
+<wire x1="3.302" y1="5.295" x2="3.2782" y2="5.2712" width="0.254" layer="1"/>
+<wire x1="3.302" y1="5.295" x2="3.2528" y2="5.2458" width="0.254" layer="1"/>
+<wire x1="3.2528" y1="5.2458" x2="1.905" y2="5.2458" width="0.254" layer="1"/>
 </signal>
 <signal name="N$6">
 <contactref element="LED2" pad="A"/>
 <contactref element="R15" pad="1"/>
 <wire x1="16.637" y1="5.295" x2="16.737" y2="5.195" width="0.254" layer="1"/>
-<wire x1="16.737" y1="5.195" x2="18.034" y2="5.195" width="0.254" layer="1"/>
+<wire x1="16.637" y1="5.295" x2="16.6608" y2="5.2712" width="0.254" layer="1"/>
+<wire x1="16.637" y1="5.295" x2="16.6862" y2="5.2458" width="0.254" layer="1"/>
+<wire x1="16.6862" y1="5.2458" x2="18.0975" y2="5.2458" width="0.254" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
@@ -1655,6 +1659,72 @@ design rules under a new name.</description>
 <mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
 <mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
 </mfgpreviewcolors>
+<errors>
+<approved hash="4,1,ecdbed95861c2cef"/>
+<approved hash="4,1,eebc4be294006263"/>
+<approved hash="4,1,a7a83cf395128b77"/>
+<approved hash="4,1,18a575fe3e619404"/>
+<approved hash="4,2,8d83eae2733dd95e"/>
+<approved hash="4,2,eebc4be294006263"/>
+<approved hash="4,2,a7a83cf395128b77"/>
+<approved hash="4,2,18a575fe3e619404"/>
+<approved hash="4,3,eebc4be294006263"/>
+<approved hash="4,3,8d83eae2733dd95e"/>
+<approved hash="4,3,a7a83cf395128b77"/>
+<approved hash="4,3,18a575fe3e619404"/>
+<approved hash="4,4,eebc4be294006263"/>
+<approved hash="4,4,8d83eae2733dd95e"/>
+<approved hash="4,4,a7a83cf395128b77"/>
+<approved hash="4,4,18a575fe3e619404"/>
+<approved hash="4,5,eebc4be294006263"/>
+<approved hash="4,5,a7a83cf395128b77"/>
+<approved hash="4,5,8d83eae2733dd95e"/>
+<approved hash="4,5,18a575fe3e619404"/>
+<approved hash="4,6,eebc4be294006263"/>
+<approved hash="4,6,a7a83cf395128b77"/>
+<approved hash="4,6,8d83eae2733dd95e"/>
+<approved hash="4,6,18a575fe3e619404"/>
+<approved hash="4,7,eebc4be294006263"/>
+<approved hash="4,7,a7a83cf395128b77"/>
+<approved hash="4,7,18a575fe3e619404"/>
+<approved hash="4,7,8d83eae2733dd95e"/>
+<approved hash="4,8,eebc4be294006263"/>
+<approved hash="4,8,a7a83cf395128b77"/>
+<approved hash="4,8,18a575fe3e619404"/>
+<approved hash="4,8,8d83eae2733dd95e"/>
+<approved hash="4,9,eebc4be294006263"/>
+<approved hash="4,9,a7a83cf395128b77"/>
+<approved hash="4,9,18a575fe3e619404"/>
+<approved hash="4,9,8d83eae2733dd95e"/>
+<approved hash="4,10,eebc4be294006263"/>
+<approved hash="4,10,a7a83cf395128b77"/>
+<approved hash="4,10,18a575fe3e619404"/>
+<approved hash="4,10,8d83eae2733dd95e"/>
+<approved hash="4,11,8d83eae2733dd95e"/>
+<approved hash="4,11,eebc4be294006263"/>
+<approved hash="4,11,a7a83cf395128b77"/>
+<approved hash="4,11,18a575fe3e619404"/>
+<approved hash="4,12,8d83eae2733dd95e"/>
+<approved hash="4,12,eebc4be294006263"/>
+<approved hash="4,12,a7a83cf395128b77"/>
+<approved hash="4,12,18a575fe3e619404"/>
+<approved hash="4,13,8d83eae2733dd95e"/>
+<approved hash="4,13,eebc4be294006263"/>
+<approved hash="4,13,a7a83cf395128b77"/>
+<approved hash="4,13,18a575fe3e619404"/>
+<approved hash="4,14,8d83eae2733dd95e"/>
+<approved hash="4,14,eebc4be294006263"/>
+<approved hash="4,14,a7a83cf395128b77"/>
+<approved hash="4,14,18a575fe3e619404"/>
+<approved hash="4,15,8d83eae2733dd95e"/>
+<approved hash="4,15,eebc4be294006263"/>
+<approved hash="4,15,a7a83cf395128b77"/>
+<approved hash="4,15,18a575fe3e619404"/>
+<approved hash="4,16,ecdbed95861c2cef"/>
+<approved hash="4,16,eebc4be294006263"/>
+<approved hash="4,16,a7a83cf395128b77"/>
+<approved hash="4,16,18a575fe3e619404"/>
+</errors>
 </board>
 </drawing>
 <compatibility>

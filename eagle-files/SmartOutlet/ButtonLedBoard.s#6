@@ -4367,6 +4367,22 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 </library>
 <library name="adafruit_custom">
 <packages>
+<package name="CHIP-LED0603" urn="urn:adsk.eagle:footprint:6239910/1">
+<description>&lt;b&gt;Hyper CHIPLED Hyper-Bright LED&lt;/b&gt;&lt;p&gt;
+LB Q993&lt;br&gt;
+Source: http://www.osram.convergy.de/ ... Lb_q993.pdf</description>
+<wire x1="-0.4" y1="0.45" x2="-0.4" y2="-0.45" width="0.1016" layer="51"/>
+<wire x1="0.4" y1="0.45" x2="0.4" y2="-0.45" width="0.1016" layer="51"/>
+<smd name="C" x="0" y="0.75" dx="0.8" dy="0.8" layer="1"/>
+<smd name="A" x="0" y="-0.75" dx="0.8" dy="0.8" layer="1"/>
+<text x="-0.635" y="-0.635" size="1.27" layer="25" rot="R90">&gt;NAME</text>
+<text x="1.905" y="-0.635" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
+<rectangle x1="-0.45" y1="0.45" x2="0.45" y2="0.85" layer="51"/>
+<rectangle x1="-0.45" y1="-0.85" x2="0.45" y2="-0.45" layer="51"/>
+<rectangle x1="-0.45" y1="0" x2="-0.3" y2="0.3" layer="21"/>
+<rectangle x1="0.3" y1="0" x2="0.45" y2="0.3" layer="21"/>
+<rectangle x1="-0.15" y1="0" x2="0.15" y2="0.3" layer="21"/>
+</package>
 <package name="1206" urn="urn:adsk.eagle:footprint:6239674/1">
 <description>&lt;b&gt;CHICAGO MINIATURE LAMP, INC.&lt;/b&gt;&lt;p&gt;
 7022X Series SMT LEDs 1206 Package Size</description>
@@ -5000,22 +5016,6 @@ Source: http://www.osram.convergy.de/ ... LA_LO_LA_LY E67B.pdf</description>
 <rectangle x1="-1.1" y1="0.8" x2="-0.4" y2="1.8" layer="31"/>
 <rectangle x1="-0.2" y1="-0.2" x2="0.2" y2="0.2" layer="21"/>
 </package>
-<package name="CHIP-LED0603" urn="urn:adsk.eagle:footprint:6239910/1">
-<description>&lt;b&gt;Hyper CHIPLED Hyper-Bright LED&lt;/b&gt;&lt;p&gt;
-LB Q993&lt;br&gt;
-Source: http://www.osram.convergy.de/ ... Lb_q993.pdf</description>
-<wire x1="-0.4" y1="0.45" x2="-0.4" y2="-0.45" width="0.1016" layer="51"/>
-<wire x1="0.4" y1="0.45" x2="0.4" y2="-0.45" width="0.1016" layer="51"/>
-<smd name="C" x="0" y="0.75" dx="0.8" dy="0.8" layer="1"/>
-<smd name="A" x="0" y="-0.75" dx="0.8" dy="0.8" layer="1"/>
-<text x="-0.635" y="-0.635" size="1.27" layer="25" rot="R90">&gt;NAME</text>
-<text x="1.905" y="-0.635" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
-<rectangle x1="-0.45" y1="0.45" x2="0.45" y2="0.85" layer="51"/>
-<rectangle x1="-0.45" y1="-0.85" x2="0.45" y2="-0.45" layer="51"/>
-<rectangle x1="-0.45" y1="0" x2="-0.3" y2="0.3" layer="21"/>
-<rectangle x1="0.3" y1="0" x2="0.45" y2="0.3" layer="21"/>
-<rectangle x1="-0.15" y1="0" x2="0.15" y2="0.3" layer="21"/>
-</package>
 <package name="CHIP-LED0805" urn="urn:adsk.eagle:footprint:6239911/1">
 <description>&lt;b&gt;Hyper CHIPLED Hyper-Bright LED&lt;/b&gt;&lt;p&gt;
 LB R99A&lt;br&gt;
@@ -5214,6 +5214,14 @@ Source: http://www.osram.convergy.de/ ... LO_LS_LY L89K.pdf</description>
 </package>
 </packages>
 <packages3d>
+<package3d name="CHIP-LED0603" urn="urn:adsk.eagle:package:36446572/2" type="model">
+<description>&lt;b&gt;Hyper CHIPLED Hyper-Bright LED&lt;/b&gt;&lt;p&gt;
+LB Q993&lt;br&gt;
+Source: http://www.osram.convergy.de/ ... Lb_q993.pdf</description>
+<packageinstances>
+<packageinstance name="CHIP-LED0603"/>
+</packageinstances>
+</package3d>
 <package3d name="1206" urn="urn:adsk.eagle:package:6240349/1" type="box">
 <description>&lt;b&gt;CHICAGO MINIATURE LAMP, INC.&lt;/b&gt;&lt;p&gt;
 7022X Series SMT LEDs 1206 Package Size</description>
@@ -5371,14 +5379,6 @@ Source: http://www.osram.convergy.de/ ... LA_LO_LS_LY Y876.pdf</description>
 Source: http://www.osram.convergy.de/ ... LA_LO_LA_LY E67B.pdf</description>
 <packageinstances>
 <packageinstance name="P-LCC-4"/>
-</packageinstances>
-</package3d>
-<package3d name="CHIP-LED0603" urn="urn:adsk.eagle:package:36446572/2" type="model">
-<description>&lt;b&gt;Hyper CHIPLED Hyper-Bright LED&lt;/b&gt;&lt;p&gt;
-LB Q993&lt;br&gt;
-Source: http://www.osram.convergy.de/ ... Lb_q993.pdf</description>
-<packageinstances>
-<packageinstance name="CHIP-LED0603"/>
 </packageinstances>
 </package3d>
 <package3d name="CHIP-LED0805" urn="urn:adsk.eagle:package:6240557/1" type="box">
@@ -5923,6 +5923,8 @@ Source: http://www.osram.convergy.de/</description>
 </class>
 </classes>
 <parts>
+<part name="LED1" library="adafruit_custom" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2"/>
+<part name="LED2" library="adafruit_custom" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2"/>
 <part name="SUPPLY16" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="R14" library="rcl" deviceset="R-EU_" device="R0603" value="1k"/>
 <part name="R15" library="rcl" deviceset="R-EU_" device="R0603" value="1k"/>
@@ -5930,14 +5932,18 @@ Source: http://www.osram.convergy.de/</description>
 <part name="S1" library="SparkFun-Switches" library_urn="urn:adsk.eagle:library:23465006" deviceset="MOMENTARY-SWITCH-SPST" device="-SMD-6.0X3.5MM" package3d_urn="urn:adsk.eagle:package:40165/1"/>
 <part name="SUPPLY2" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="J1" library="4_pin_header_small_holes" deviceset="826629-4" device=""/>
-<part name="LED1" library="adafruit_custom" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2"/>
-<part name="LED2" library="adafruit_custom" deviceset="LED" device="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2"/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 </plain>
 <instances>
+<instance part="LED1" gate="G$1" x="114.3" y="63.5" smashed="yes" rot="R90">
+<attribute name="VALUE" x="118.872" y="69.215" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="LED2" gate="G$1" x="114.3" y="71.12" smashed="yes" rot="R90">
+<attribute name="VALUE" x="118.872" y="76.835" size="1.778" layer="96" rot="R180"/>
+</instance>
 <instance part="SUPPLY16" gate="GND" x="127" y="73.66" smashed="yes" rot="R180">
 <attribute name="VALUE" x="128.905" y="76.835" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -5959,14 +5965,6 @@ Source: http://www.osram.convergy.de/</description>
 <attribute name="VALUE" x="86.995" y="47.625" size="1.778" layer="96"/>
 </instance>
 <instance part="J1" gate="G$1" x="45.72" y="58.42" smashed="yes" rot="R180"/>
-<instance part="LED1" gate="G$1" x="114.3" y="71.12" smashed="yes" rot="R90">
-<attribute name="NAME" x="118.872" y="74.676" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="118.872" y="76.835" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="LED2" gate="G$1" x="114.3" y="63.5" smashed="yes" rot="R90">
-<attribute name="NAME" x="118.872" y="67.056" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="118.872" y="69.215" size="1.778" layer="96" rot="R180"/>
-</instance>
 </instances>
 <busses>
 </busses>
@@ -5986,13 +5984,13 @@ Source: http://www.osram.convergy.de/</description>
 <net name="GND" class="0">
 <segment>
 <pinref part="SUPPLY16" gate="GND" pin="GND"/>
+<pinref part="LED2" gate="G$1" pin="C"/>
 <wire x1="127" y1="71.12" x2="121.92" y2="71.12" width="0.1524" layer="91"/>
+<pinref part="LED1" gate="G$1" pin="C"/>
 <wire x1="121.92" y1="71.12" x2="119.38" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="119.38" y1="63.5" x2="121.92" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="121.92" y1="63.5" x2="121.92" y2="71.12" width="0.1524" layer="91"/>
 <junction x="121.92" y="71.12"/>
-<pinref part="LED1" gate="G$1" pin="C"/>
-<pinref part="LED2" gate="G$1" pin="C"/>
 </segment>
 <segment>
 <wire x1="55.88" y1="53.34" x2="58.42" y2="53.34" width="0.1524" layer="91"/>
@@ -6034,16 +6032,16 @@ Source: http://www.osram.convergy.de/</description>
 </net>
 <net name="N$5" class="0">
 <segment>
+<pinref part="LED1" gate="G$1" pin="A"/>
 <wire x1="111.76" y1="63.5" x2="109.22" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="R14" gate="G$1" pin="1"/>
-<pinref part="LED2" gate="G$1" pin="A"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
+<pinref part="LED2" gate="G$1" pin="A"/>
 <wire x1="109.22" y1="71.12" x2="111.76" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="R15" gate="G$1" pin="1"/>
-<pinref part="LED1" gate="G$1" pin="A"/>
 </segment>
 </net>
 </nets>

@@ -163,7 +163,7 @@
 <layer number="255" name="routoute" color="7" fill="1" visible="yes" active="yes"/>
 </layers>
 <board>
-<fusionsync huburn="a.YnVzaW5lc3M6a25pZ2h0czc4MQ" projecturn="a.YnVzaW5lc3M6a25pZ2h0czc4MSNEMjAyMDA3MDUzMTMxOTg1NzY" f3durn="urn:adsk.wipprod:dm.lineage:B1J0ixzcRVGUDW2DU4VvgQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="b7404a86-2faa-4195-b290-ff21f7b907fa" lastsyncedrevisionid="b7404a86-2faa-4195-b290-ff21f7b907fa" lastboardhashguid="5e2826b4-104f-a063-72b9-f9f766ed6dfb" lastpushedtime="2022-07-06T21:05:52Z" linktopcb3d="true"/>
+<fusionsync huburn="a.YnVzaW5lc3M6a25pZ2h0czc4MQ" projecturn="a.YnVzaW5lc3M6a25pZ2h0czc4MSNEMjAyMDA3MDUzMTMxOTg1NzY" f3durn="urn:adsk.wipprod:dm.lineage:B1J0ixzcRVGUDW2DU4VvgQ" pcbguid="" lastpulledtime="" lastsyncedchangeguid="" latestrevisionid="1479cc52-9830-4520-9e3b-dcc00838052c" lastsyncedrevisionid="1479cc52-9830-4520-9e3b-dcc00838052c" lastboardhashguid="816fb817-98fe-2943-e3d9-702ee7782228" lastpushedtime="2022-07-07T05:27:59Z" linktopcb3d="true"/>
 <plain>
 <wire x1="16.008" y1="7.493" x2="20.008" y2="7.493" width="0.001" layer="20"/>
 <wire x1="20.008" y1="7.493" x2="20.008" y2="1.493" width="0.001" layer="20"/>
@@ -1560,21 +1560,21 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="LED1" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="1.524" y="4.445" smashed="yes" rot="R180">
-<attribute name="VALUE" x="-0.381" y="5.08" size="1.27" layer="27" rot="R270"/>
+<element name="LED1" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="1.905" y="4.4958" smashed="yes" rot="R180">
+<attribute name="VALUE" x="0" y="5.1308" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="LED2" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="18.542" y="4.445" smashed="yes" rot="R180">
-<attribute name="VALUE" x="16.637" y="5.08" size="1.27" layer="27" rot="R270"/>
+<element name="LED2" library="adafruit_custom" package="CHIP-LED0603" package3d_urn="urn:adsk.eagle:package:36446572/2" value="" x="18.0975" y="4.4958" smashed="yes" rot="R180">
+<attribute name="VALUE" x="16.1925" y="5.1308" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="1k" x="3.302" y="4.445" smashed="yes" rot="R270">
 <attribute name="POPULARITY" value="70" x="3.302" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="SPICEPREFIX" value="R" x="3.302" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="3.556" y="2.667" size="0.635" layer="21" rot="R180"/>
 </element>
-<element name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="1k" x="16.764" y="4.445" smashed="yes" rot="R270">
-<attribute name="POPULARITY" value="70" x="16.764" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="16.764" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="17.145" y="2.667" size="0.635" layer="27" rot="R180"/>
+<element name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" package="R0603" package3d_urn="urn:adsk.eagle:package:23555/3" value="1k" x="16.637" y="4.445" smashed="yes" rot="R270">
+<attribute name="POPULARITY" value="70" x="16.637" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="16.637" y="4.445" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="17.018" y="2.667" size="0.635" layer="27" rot="R180"/>
 </element>
 <element name="S1" library="SparkFun-Switches" library_urn="urn:adsk.eagle:library:23465006" package="TACTILE_SWITCH_SMD_6.0X3.5MM" package3d_urn="urn:adsk.eagle:package:36446722/3" value="MOMENTARY-SWITCH-SPST-SMD-6.0X3.5MM" x="10.033" y="3.937" smashed="yes">
 <attribute name="PROD_ID" value="SWCH-00815" x="10.033" y="3.937" size="1.778" layer="27" font="vector" display="off"/>
@@ -1595,10 +1595,9 @@ design rules under a new name.</description>
 <signals>
 <signal name="BUTTON">
 <contactref element="S1" pad="2"/>
-<contactref element="J1" pad="2"/>
-<wire x1="13.183" y1="3.937" x2="10.033" y2="3.937" width="0.254" layer="1"/>
-<wire x1="8.763" y1="5.207" x2="8.763" y2="7.493" width="0.254" layer="1"/>
-<wire x1="10.033" y1="3.937" x2="8.763" y2="5.207" width="0.254" layer="1"/>
+<contactref element="J1" pad="4"/>
+<wire x1="13.183" y1="3.937" x2="13.843" y2="4.597" width="0.254" layer="1"/>
+<wire x1="13.843" y1="4.597" x2="13.843" y2="7.493" width="0.254" layer="1"/>
 </signal>
 <signal name="GND">
 <contactref element="LED2" pad="C"/>
@@ -1607,13 +1606,14 @@ design rules under a new name.</description>
 <contactref element="J1" pad="1"/>
 <wire x1="6.883" y1="3.937" x2="6.223" y2="4.597" width="0.254" layer="1"/>
 <wire x1="6.223" y1="4.597" x2="6.223" y2="7.493" width="0.254" layer="1"/>
-<wire x1="18.542" y1="3.695" x2="18.542" y2="3.3985" width="0.254" layer="1"/>
-<wire x1="1.524" y1="3.695" x2="2.5825" y2="2.6365" width="0.254" layer="1"/>
 <wire x1="5.5825" y1="2.6365" x2="6.883" y2="3.937" width="0.254" layer="1"/>
-<wire x1="2.5825" y1="2.6365" x2="5.5825" y2="2.6365" width="0.254" layer="1"/>
+<wire x1="5.5825" y1="2.6365" x2="2.5825" y2="2.6365" width="0.254" layer="1"/>
 <wire x1="6.883" y1="3.937" x2="8.1835" y2="2.6365" width="0.254" layer="1"/>
-<wire x1="17.4835" y1="2.6365" x2="18.542" y2="3.695" width="0.254" layer="1"/>
 <wire x1="8.1835" y1="2.6365" x2="17.4835" y2="2.6365" width="0.254" layer="1"/>
+<wire x1="17.4835" y1="2.6365" x2="18.161" y2="3.314" width="0.254" layer="1"/>
+<wire x1="18.161" y1="3.314" x2="18.0975" y2="3.7458" width="0.254" layer="1"/>
+<wire x1="2.5825" y1="2.6365" x2="1.905" y2="3.314" width="0.254" layer="1"/>
+<wire x1="1.905" y1="3.314" x2="1.905" y2="3.7458" width="0.254" layer="1"/>
 </signal>
 <signal name="GREEN">
 <contactref element="R14" pad="2"/>
@@ -1621,30 +1621,37 @@ design rules under a new name.</description>
 <wire x1="3.302" y1="3.595" x2="3.722" y2="3.595" width="0.254" layer="1"/>
 <wire x1="3.722" y1="3.595" x2="4.572" y2="4.445" width="0.254" layer="1"/>
 <via x="4.572" y="4.445" extent="1-16" drill="0.35"/>
-<wire x1="4.572" y1="4.445" x2="9.652" y2="4.445" width="0.254" layer="16"/>
-<wire x1="11.303" y1="6.096" x2="11.303" y2="7.493" width="0.254" layer="16"/>
-<wire x1="9.652" y1="4.445" x2="11.303" y2="6.096" width="0.254" layer="16"/>
+<wire x1="4.572" y1="4.445" x2="9.144" y2="4.445" width="0.254" layer="16"/>
+<wire x1="11.303" y1="6.604" x2="11.303" y2="7.493" width="0.254" layer="16"/>
+<wire x1="9.144" y1="4.445" x2="11.303" y2="6.604" width="0.254" layer="16"/>
 </signal>
 <signal name="BLUE">
 <contactref element="R15" pad="2"/>
-<contactref element="J1" pad="4"/>
-<wire x1="16.764" y1="3.595" x2="16.344" y2="3.595" width="0.254" layer="1"/>
-<wire x1="16.344" y1="3.595" x2="15.494" y2="4.445" width="0.254" layer="1"/>
-<via x="15.494" y="4.445" extent="1-16" drill="0.35"/>
-<wire x1="15.494" y1="4.445" x2="13.843" y2="6.096" width="0.254" layer="16"/>
-<wire x1="13.843" y1="6.096" x2="13.843" y2="7.493" width="0.254" layer="16"/>
+<wire x1="16.637" y1="3.595" x2="16.217" y2="3.595" width="0.254" layer="1"/>
+<wire x1="16.217" y1="3.595" x2="15.367" y2="4.445" width="0.254" layer="1"/>
+<via x="15.367" y="4.445" extent="1-16" drill="0.35"/>
+<contactref element="J1" pad="2"/>
+<wire x1="15.367" y1="4.445" x2="10.5819875" y2="4.445" width="0.254" layer="16"/>
+<wire x1="10.5819875" y1="4.445" x2="10.05349375" y2="3.91650625" width="0.254" layer="16"/>
+<via x="10.05349375" y="3.91650625" extent="1-16" drill="0.35"/>
+<wire x1="10.05349375" y1="3.91650625" x2="8.763" y2="5.207" width="0.254" layer="1"/>
+<wire x1="8.763" y1="5.207" x2="8.763" y2="7.493" width="0.254" layer="1"/>
 </signal>
 <signal name="N$5">
 <contactref element="LED1" pad="A"/>
 <contactref element="R14" pad="1"/>
 <wire x1="3.302" y1="5.295" x2="3.202" y2="5.195" width="0.254" layer="1"/>
-<wire x1="3.202" y1="5.195" x2="1.524" y2="5.195" width="0.254" layer="1"/>
+<wire x1="3.302" y1="5.295" x2="3.2782" y2="5.2712" width="0.254" layer="1"/>
+<wire x1="3.302" y1="5.295" x2="3.2528" y2="5.2458" width="0.254" layer="1"/>
+<wire x1="3.2528" y1="5.2458" x2="1.905" y2="5.2458" width="0.254" layer="1"/>
 </signal>
 <signal name="N$6">
 <contactref element="LED2" pad="A"/>
 <contactref element="R15" pad="1"/>
-<wire x1="16.764" y1="5.295" x2="16.864" y2="5.195" width="0.254" layer="1"/>
-<wire x1="16.864" y1="5.195" x2="18.542" y2="5.195" width="0.254" layer="1"/>
+<wire x1="16.637" y1="5.295" x2="16.737" y2="5.195" width="0.254" layer="1"/>
+<wire x1="16.637" y1="5.295" x2="16.6608" y2="5.2712" width="0.254" layer="1"/>
+<wire x1="16.637" y1="5.295" x2="16.6862" y2="5.2458" width="0.254" layer="1"/>
+<wire x1="16.6862" y1="5.2458" x2="18.0975" y2="5.2458" width="0.254" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
