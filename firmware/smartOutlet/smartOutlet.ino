@@ -10,8 +10,8 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
-#define GREEN_LED 33
-#define BLUE_LED 32
+#define GREEN_LED 32
+#define BLUE_LED 33
 #define BUTTON_PIN 27
 #define RELAY_PIN 17
 #define NUM_SAMPLES 50
