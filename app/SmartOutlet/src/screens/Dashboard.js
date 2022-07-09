@@ -63,6 +63,7 @@ export const Dashboard = ({ navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [bluetoothReady, setBluetoothReady] = useState(false);
 	const [networkName, setNetworkName] = useState('');
+	const [passwordVerified, setPasswordVerified] = useState(true);
 	const [modalPage, setModalPage] = useState(0);
 	const dispatch = useDispatch();
 
@@ -241,7 +242,9 @@ export const Dashboard = ({ navigation }) => {
 					placeholder = 'myWifiPassword'
 					onChangeText = { props.handleChange('password') }
 					value = { props.values.password }
-					errorMessage = { props.touched.password && props.errors.password }
+					errorMessage = { (passwordVerified) ?
+						(props.touched.password && props.errors.password) :
+						'Incorrect network password' }
 				/>
 			);
 		}
