@@ -56,8 +56,9 @@ bool prevRelayState, relayState = false;
 
 // Bluetooth data
 BLEServer *pServer = NULL;
-BLECharacteristic * TxChar;
-BLECharacteristic * RxChar;
+BLEService *pService;
+BLECharacteristic *TxChar;
+BLECharacteristic *RxChar;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 uint8_t txValue = 'A';
@@ -83,6 +84,7 @@ void setup()
   setupADC();
   setupWiFi();
   setupFirebase();
+  setupBLE();
 }
 
 void loop()
@@ -111,7 +113,7 @@ void loop()
     delay(500);
 
     // After device disconnects, turn off bluetooth
-    BLEDevice::deinit(true);
+    
     oldDeviceConnected = deviceConnected;
   }
   if (deviceConnected && !oldDeviceConnected)

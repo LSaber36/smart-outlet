@@ -27,16 +27,14 @@ class MyCallbacks: public BLECharacteristicCallbacks
         Serial.println("Received expected value, blinking LED");
         blinkLED(GREEN_LED, 100, 500, 2);
         Serial.println("Shutting off bluetooth");
-        BLEDevice::deinit(true);
+        pServer->getAdvertising()->stop();
       }
     }
   }
 };
 
-void pairingMode()
+void setupBLE()
 {
-  Serial.println("Starting bluetooth");
-
   // Create the BLE Device
   BLEDevice::init("New SmartOutlet Device");
 
@@ -45,7 +43,7 @@ void pairingMode()
   pServer->setCallbacks(new MyServerCallbacks());
 
   // Create the BLE Service
-  BLEService *pService = pServer->createService(SERVICE_UUID);
+  pService = pServer->createService(SERVICE_UUID);
 
   // Create first BLE Characteristic
   TxChar = pService->createCharacteristic(
@@ -64,11 +62,16 @@ void pairingMode()
     BLECharacteristic::PROPERTY_NOTIFY |
     BLECharacteristic::PROPERTY_INDICATE
   );
-
-  RxChar->setCallbacks(new MyCallbacks());
-
+  
   // Start the service
   pService->start();
+
+  RxChar->setCallbacks(new MyCallbacks());
+}
+
+void pairingMode()
+{
+  Serial.println("Starting bluetooth");
 
   blinkLED(GREEN_LED, 100, 400, 1);
 
