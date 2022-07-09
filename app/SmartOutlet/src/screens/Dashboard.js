@@ -26,6 +26,20 @@ import {
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 const { height, width } = Dimensions.get('screen');
+
+const PAGE = {
+	LOADING: 0,
+	DEVICE_FOUND: 1,
+	CONFIRMED: 2
+};
+
+const CODES = {
+	ACCEPTED: '2',
+	DENIED: '4',
+	BLUETOOTH_FINISHED: '64',
+	REPLY: '24'
+};
+
 const newOutletSchema = yup.object({
 	name: yup.string()
 		.required('Please enter an outlet name')
@@ -42,9 +56,8 @@ export const Dashboard = ({ navigation }) => {
 
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
+	const [modalPage, setModalPage] = useState(0);
 	const [bluetoothReady, setBluetoothReady] = useState(false);
-	const [bleIsLoading, setBleIsLoading] = useState(true);
-	const [bleConfirmed, setBleConfirmed] = useState(false);
 	const dispatch = useDispatch();
 
 	// Keep track of adapter state
@@ -90,8 +103,8 @@ export const Dashboard = ({ navigation }) => {
 			);
 	};
 
-	const renderCheckOrLoadingIndicator = (isLoadingBle) => {
-		return (isLoadingBle) ?
+	const renderCheckOrLoadingIndicator = (page) => {
+		return (page == PAGE.LOADING) ?
 			(<PacmanIndicator
 				color = { colors.primaryDark }
 				size = { 115 }
@@ -108,9 +121,9 @@ export const Dashboard = ({ navigation }) => {
 	const renderModalBody = (props) => {
 		// Set the header message based on bluetooth states
 		const modalMessage = (
-			(bleIsLoading) ?
+			(modalPage == PAGE.LOADING) ?
 				'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode' :
-				(bleConfirmed) ?
+				(modalPage == PAGE.DEVICE_FOUND) ?
 					'Please add the name of your new device.' :
 					'We found a device and triggered its indicator led to flash. ' +
 					'Please confirm that this is the correct device.'
@@ -123,10 +136,10 @@ export const Dashboard = ({ navigation }) => {
 						{ modalMessage }
 					</Text>
 				</View>
-				{ (bleIsLoading) ?
+				{ (modalPage == PAGE.LOADING) ?
 					(<View />
 					) :
-					(bleConfirmed) ?
+					(modalPage == PAGE.CONFIRMED) ?
 						(<TextBoxEntry
 							style = { modalStyles.textInput }
 							header = 'New Device Name'
@@ -143,21 +156,14 @@ export const Dashboard = ({ navigation }) => {
 								buttonStyle = { fullWidthHeight }
 								onPress = { () => {
 									// This may need to have a different behavior, maybe retry?
-									setBleIsLoading(true);
-									setBleConfirmed(false);
-
-									// TODO:
-									// Setting addDevice states will be called from bluetooth instead
-									setTimeout(() => {
-										setBleIsLoading(false);
-									}, 3000);
+									setModalPage(PAGE.LOADING);
 								} }
 							/>
 							<Button
 								title = 'Confirm'
 								containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
 								buttonStyle = { fullWidthHeight }
-								onPress = { () => setBleConfirmed(true) }
+								onPress = { () => setModalPage(PAGE.CONFIRMED) }
 							/>
 						</View>
 						)
@@ -180,7 +186,7 @@ export const Dashboard = ({ navigation }) => {
 								Add Device
 							</Text>
 							<View style = { modalStyles.indicatorView }>
-								{ renderCheckOrLoadingIndicator(bleIsLoading) }
+								{ renderCheckOrLoadingIndicator(modalPage) }
 							</View>
 							<Formik
 								initialValues = {{ name: '' }}
@@ -211,7 +217,7 @@ export const Dashboard = ({ navigation }) => {
 												title = 'Add Device'
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
-												disabled = { !bleConfirmed }
+												disabled = { (modalPage != PAGE.CONFIRMED) }
 												disabledStyle = { disabledButton }
 												onPress = { props.handleSubmit }
 											/>
@@ -241,8 +247,7 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						setBleIsLoading(true);
-						setBleConfirmed(false);
+						setModalPage(PAGE.LOADING);
 						setModalVisible(true);
 
 						if (bluetoothReady) {
@@ -252,14 +257,14 @@ export const Dashboard = ({ navigation }) => {
 
 									connectToOutlet(scannedDevice)
 										.then((connectedDevice) => {
-											setBleIsLoading(false);
+											setModalPage(PAGE.DEVICE_FOUND);
 
 											connectedDevice.onDisconnected(() => {
-												if (bleIsLoading)
+												if (modalPage == PAGE.LOADING)
 													console.log('Device disconnected');
 											});
 
-											sendDataToCharacteristic(connectedDevice, '24')
+											sendDataToCharacteristic(connectedDevice, CODES.REPLY)
 												.then(() => {
 													getDataFromCharacteristic(connectedDevice)
 														.then((value) => {
