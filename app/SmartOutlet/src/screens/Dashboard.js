@@ -268,7 +268,13 @@ export const Dashboard = ({ navigation }) => {
 															console.log('Data exchanged, closing connection');
 															connectedDevice.cancelConnection();
 														});
+												})
+												.catch((error) => {
+													console.log(error);
 												});
+										})
+										.catch((error) => {
+											console.log(error);
 										});
 								})
 								.catch((error) => {
