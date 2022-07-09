@@ -1,36 +1,36 @@
 class MyServerCallbacks: public BLEServerCallbacks
 {
-    void onConnect(BLEServer* pServer) {
-      deviceConnected = true;
-      txValue = 'A';
-      Serial.println("Device Connected");
-    };
+  void onConnect(BLEServer* pServer) {
+    deviceConnected = true;
+    txValue = 'A';
+    Serial.println("Device Connected");
+  };
 
-    void onDisconnect(BLEServer* pServer) {
-      deviceConnected = false;
-      Serial.println("Device Disconnected");
-    }
+  void onDisconnect(BLEServer* pServer) {
+    deviceConnected = false;
+    Serial.println("Device Disconnected");
+  }
 };
 
 class MyCallbacks: public BLECharacteristicCallbacks
 {
-    void onWrite(BLECharacteristic *pCharacteristic) {
-      std::string rxValue = pCharacteristic->getValue();
+  void onWrite(BLECharacteristic *pCharacteristic) {
+    std::string rxValue = pCharacteristic->getValue();
 
-      if (rxValue.length() > 0) {
-        Serial.printf("\n*********\n");
-        Serial.printf("Received: %s", rxValue.data());
-        Serial.printf("\n*********\n\n");
+    if (rxValue.length() > 0) {
+      Serial.printf("\n*********\n");
+      Serial.printf("Received: %s", rxValue.data());
+      Serial.printf("\n*********\n\n");
 
-        if (atoi(rxValue.data()) == 24)
-        {
-          Serial.println("Received expected value, blinking LED");
-          blinkLED(GREEN_LED, 100, 500, 2);
-          Serial.println("Shutting off bluetooth");
-          BLEDevice::deinit(true);
-        }
+      if (atoi(rxValue.data()) == 24)
+      {
+        Serial.println("Received expected value, blinking LED");
+        blinkLED(GREEN_LED, 100, 500, 2);
+        Serial.println("Shutting off bluetooth");
+        BLEDevice::deinit(true);
       }
     }
+  }
 };
 
 void pairingMode()
