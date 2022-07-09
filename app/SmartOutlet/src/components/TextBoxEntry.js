@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Dimensions } from 'react-native';
+import { useSelector } from 'react-redux';
 import { styles, colors } from '../styles';
 
 const { height } = Dimensions.get('screen');
@@ -9,6 +10,7 @@ export const TextBoxEntry = (
 ) => {
 	const {	center, errorText } = styles;
 	const { loginField, loginInputHeaderView, loginInputHeaderText, typedTextStyle } = textBoxStyles;
+	const { isLoggedIn } = useSelector(state => state.user);
 
 	return (
 		<View style = { [loginField, style] }>
@@ -18,6 +20,7 @@ export const TextBoxEntry = (
 			<TextInput
 				style = { [typedTextStyle, inputStyle] }
 				placeholder = { placeholder }
+				placeholderTextColor = { (isLoggedIn) ? colors.lightGray : colors.offwhite }
 				onChangeText = { onChangeText }
 				value = { value }
 				autoCapitalize = { 'none' }
@@ -54,6 +57,6 @@ const textBoxStyles = {
 		padding: 10,
 		fontSize: 16,
 		borderRadius: 6,
-		color: colors.dark
+		color: colors.darkGray
 	}
 };
