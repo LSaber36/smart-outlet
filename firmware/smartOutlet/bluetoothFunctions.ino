@@ -1,3 +1,9 @@
+enum CODES = {
+  ACCEPTED = 2,
+  Denied = 4,
+  BLUETOOTH_FINISHED = 64
+};
+
 class MyServerCallbacks: public BLEServerCallbacks
 {
   void onConnect(BLEServer* pServer) {
@@ -22,7 +28,7 @@ class MyCallbacks: public BLECharacteristicCallbacks
       Serial.printf("Received: %s", rxValue.data());
       Serial.printf("\n*********\n\n");
 
-      if (atoi(rxValue.data()) == 24)
+      if (atoi(rxValue.data()) == BLUETOOTH_FINISHED)
       {
         Serial.println("Received expected value, blinking LED");
         blinkLED(GREEN_LED, 100, 500, 2);
