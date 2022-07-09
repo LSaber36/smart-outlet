@@ -30,7 +30,10 @@ const { height, width } = Dimensions.get('screen');
 const PAGE = {
 	LOADING: 0,
 	DEVICE_FOUND: 1,
-	CONFIRMED: 2
+	SCAN_TIMEOUT: 2,
+	CONFIRMED: 3,
+	ENTER_WIFI: 4,
+	ENTER_NAME: 5
 };
 
 const CODES = {
@@ -56,8 +59,8 @@ export const Dashboard = ({ navigation }) => {
 
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
-	const [modalPage, setModalPage] = useState(0);
 	const [bluetoothReady, setBluetoothReady] = useState(false);
+	const [modalPage, setModalPage] = useState(0);
 	const dispatch = useDispatch();
 
 	// Keep track of adapter state
@@ -74,6 +77,48 @@ export const Dashboard = ({ navigation }) => {
 
 		return () => subscription.remove();
 	});
+
+	useEffect(() => {
+		// Only call this AFTER the modalPage changes to the loading page
+		if (modalPage == PAGE.LOADING) {
+			scanForOutlet(manager, 'New SmartOutlet Device')
+				.then((scannedDevice) => {
+					console.log('Found device: ' + scannedDevice.name);
+
+					connectToOutlet(scannedDevice)
+						.then((connectedDevice) => {
+							setModalPage(PAGE.DEVICE_FOUND);
+
+							connectedDevice.onDisconnected(() => {
+								if (modalPage == PAGE.LOADING)
+									console.log('Device disconnected');
+							});
+
+							sendDataToCharacteristic(connectedDevice, CODES.REPLY)
+								.then(() => {
+									getDataFromCharacteristic(connectedDevice)
+										.then((value) => {
+											console.log('Sent: Connection Established from SmartOutlet');
+											console.log('Received: ' + value);
+											console.log('Data exchanged, closing connection');
+											connectedDevice.cancelConnection();
+										});
+								})
+								.catch((error) => {
+									console.log(error);
+								});
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+				})
+				.catch((error) => {
+					console.log(error);
+					if (error === 'Scan timed out')
+						setModalPage(PAGE.SCAN_TIMEOUT);
+				});
+		}
+	}, [modalPage]);
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
@@ -103,31 +148,111 @@ export const Dashboard = ({ navigation }) => {
 			);
 	};
 
-	const renderCheckOrLoadingIndicator = (page) => {
-		return (page == PAGE.LOADING) ?
-			(<PacmanIndicator
+	const renderIndicator = (page) => {
+		if (page == PAGE.LOADING) {
+			return (<PacmanIndicator
 				color = { colors.primaryDark }
 				size = { 115 }
 				hidesWhenStopped = { true }
 				animating = { true }
-			/>) :
-			(<Icon
+			/>);
+		}
+		else if (page == PAGE.DEVICE_FOUND) {
+			return (<Icon
 				name = 'check-circle'
 				color = { colors.primaryDark }
 				size = { 80 }
 			/>);
+		}
+		else if (page == PAGE.SCAN_TIMEOUT) {
+			return (<Icon
+				name = 'times-circle'
+				color = { colors.primaryDark }
+				size = { 80 }
+			/>);
+		}
+		else {
+			return (<View />);
+		}
+	};
+
+	const renderInput = (props, page) => {
+		if (page == PAGE.LOADING) {
+			return (
+				<View />
+			);
+		}
+		else if (page == PAGE.CONFIRMED) {
+			return (
+				<TextBoxEntry
+					style = { modalStyles.textInput }
+					header = 'New Device Name'
+					placeholder = 'New outlet name'
+					onChangeText = { props.handleChange('name') }
+					value = { props.values.name }
+					errorMessage = { props.touched.name && props.errors.name }
+				/>
+			);
+		}
+		else if (page == PAGE.SCAN_TIMEOUT) {
+			return (
+				<View style = { modalStyles.confirmBleButtonView }>
+					<Button
+						title = 'Retry'
+						containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+						buttonStyle = { fullWidthHeight }
+						onPress = { () => {
+							// This may need to have a different behavior, maybe retry?
+							setModalPage(PAGE.LOADING);
+						} }
+					/>
+				</View>
+			);
+		}
+		else if (page == PAGE.DEVICE_FOUND) {
+			return (
+				<View style = { modalStyles.confirmBleButtonView }>
+					<Button
+						title = 'Retry'
+						containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+						buttonStyle = { fullWidthHeight }
+						onPress = { () => {
+							// This may need to have a different behavior, maybe retry?
+							setModalPage(PAGE.LOADING);
+						} }
+					/>
+					<Button
+						title = 'Confirm'
+						containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+						buttonStyle = { fullWidthHeight }
+						onPress = { () => setModalPage(PAGE.CONFIRMED) }
+					/>
+				</View>
+			);
+		}
 	};
 
 	const renderModalBody = (props) => {
 		// Set the header message based on bluetooth states
-		const modalMessage = (
-			(modalPage == PAGE.LOADING) ?
-				'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode' :
-				(modalPage == PAGE.DEVICE_FOUND) ?
-					'Please add the name of your new device.' :
-					'We found a device and triggered its indicator led to flash. ' +
-					'Please confirm that this is the correct device.'
-		);
+		let modalMessage = '';
+
+		if (modalPage == PAGE.LOADING) {
+			modalMessage =
+			'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode';
+		}
+		else if (modalPage == PAGE.DEVICE_FOUND) {
+			modalMessage =
+			'We found a device and triggered its indicator led to flash. ' +
+			'Please confirm that this is the correct device.';
+		}
+		else if (modalPage == PAGE.CONFIRMED) {
+			modalMessage =
+			'Please add the name of your new device.';
+		}
+		else if (modalPage == PAGE.SCAN_TIMEOUT) {
+			modalMessage =
+			'The device was not found.\n\nPlease retry the scan and make sure the device is in pairing mode';
+		}
 
 		return (
 			<View style = { modalStyles.confirmBleContainer }>
@@ -136,38 +261,7 @@ export const Dashboard = ({ navigation }) => {
 						{ modalMessage }
 					</Text>
 				</View>
-				{ (modalPage == PAGE.LOADING) ?
-					(<View />
-					) :
-					(modalPage == PAGE.CONFIRMED) ?
-						(<TextBoxEntry
-							style = { modalStyles.textInput }
-							header = 'New Device Name'
-							placeholder = 'New outlet name'
-							onChangeText = { props.handleChange('name') }
-							value = { props.values.name }
-							errorMessage = { props.touched.name && props.errors.name }
-						/>
-						) :
-						(<View style = { modalStyles.confirmBleButtonView }>
-							<Button
-								title = 'Retry'
-								containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
-								buttonStyle = { fullWidthHeight }
-								onPress = { () => {
-									// This may need to have a different behavior, maybe retry?
-									setModalPage(PAGE.LOADING);
-								} }
-							/>
-							<Button
-								title = 'Confirm'
-								containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
-								buttonStyle = { fullWidthHeight }
-								onPress = { () => setModalPage(PAGE.CONFIRMED) }
-							/>
-						</View>
-						)
-				}
+				{ renderInput(props, modalPage) }
 			</View>
 		);
 	};
@@ -186,7 +280,7 @@ export const Dashboard = ({ navigation }) => {
 								Add Device
 							</Text>
 							<View style = { modalStyles.indicatorView }>
-								{ renderCheckOrLoadingIndicator(modalPage) }
+								{ renderIndicator(modalPage) }
 							</View>
 							<Formik
 								initialValues = {{ name: '' }}
@@ -247,44 +341,9 @@ export const Dashboard = ({ navigation }) => {
 					containerStyle = { [buttonContainer, mainButtonStyle] }
 					buttonStyle = { [fullWidthHeight] }
 					onPress = { () => {
-						setModalPage(PAGE.LOADING);
-						setModalVisible(true);
-
 						if (bluetoothReady) {
-							scanForOutlet(manager, 'New SmartOutlet Device')
-								.then((scannedDevice) => {
-									console.log('Found device: ' + scannedDevice.name);
-
-									connectToOutlet(scannedDevice)
-										.then((connectedDevice) => {
-											setModalPage(PAGE.DEVICE_FOUND);
-
-											connectedDevice.onDisconnected(() => {
-												if (modalPage == PAGE.LOADING)
-													console.log('Device disconnected');
-											});
-
-											sendDataToCharacteristic(connectedDevice, CODES.REPLY)
-												.then(() => {
-													getDataFromCharacteristic(connectedDevice)
-														.then((value) => {
-															console.log('Sent: Connection Established from SmartOutlet');
-															console.log('Received: ' + value);
-															console.log('Data exchanged, closing connection');
-															connectedDevice.cancelConnection();
-														});
-												})
-												.catch((error) => {
-													console.log(error);
-												});
-										})
-										.catch((error) => {
-											console.log(error);
-										});
-								})
-								.catch((error) => {
-									console.log(error);
-								});
+							setModalPage(PAGE.LOADING);
+							setModalVisible(true);
 						}
 					} }
 				/>
@@ -386,7 +445,7 @@ const modalStyles = {
 		marginTop: '-6%'
 	},
 	confirmBleContainer: {
-		height: '90%',
+		height: '100%',
 		width: '95%',
 		alignItems: 'center',
 		padding: '2%',

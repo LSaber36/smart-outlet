@@ -36,7 +36,7 @@ export const scanForOutlet = (manager, outletName) => new Promise((resolve, reje
 			// Doesn't get executed if device is found and promise is resolved
 			setTimeout(() => {
 				manager.stopDeviceScan();
-				reject('Scan for outlet error: Scan timed out');
+				reject('Scan timed out');
 			}, 5000);
 		})
 		.catch((error) => {
