@@ -8,6 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 const App = () => {
 	const dispatch = useDispatch();
 	const { isLoggedIn, isLoading, activeUserData } = useSelector(state => state.user);
+	let printUserAuthData = true;
 
 	const onAuthStateChanged = (userData) => {
 		dispatch(loadUserData(userData));
@@ -15,10 +16,13 @@ const App = () => {
 			dispatch(loginStatus(userData != null && userData.emailVerified));
 		}, 250);
 
-		console.log('User: ' + (userData != null ? JSON.stringify(userData.email) : 'None logged in'));
+		if (printUserAuthData) {
+			printUserAuthData = false;
+			console.log('User: ' + (userData != null ? JSON.stringify(userData.email) : 'None logged in'));
 
-		if (userData != null)
-			console.log('Email verified: ' + JSON.stringify(userData.emailVerified));
+			if (userData != null)
+				console.log('Email verified: ' + JSON.stringify(userData.emailVerified));
+		}
 	};
 
 	useEffect(() => {
