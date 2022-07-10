@@ -42,6 +42,7 @@ const App = () => {
 					let tempOutletRefs = documentSnapshot.get('outletRefs');
 
 					if (tempOutletRefs != undefined) {
+						console.log('Dispatched Ref List');
 						dispatch(setOutletRefList(tempOutletRefs));
 						console.log();
 						console.log('Device Names:');
@@ -58,8 +59,6 @@ const App = () => {
 						console.log();
 					}
 				}
-
-				console.log('Dispatched Ref List');
 			});
 
 		return () => outletRefListUnsubscribe();
