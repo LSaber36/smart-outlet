@@ -38,16 +38,25 @@ const App = () => {
 			.collection('Users')
 			.doc((activeUserData != undefined) ? activeUserData.email : null)
 			.onSnapshot(documentSnapshot => {
-				if (documentSnapshot != undefined && documentSnapshot.get('outletRefs') != undefined) {
-					dispatch(setOutletRefList(documentSnapshot.get('outletRefs')));
-					console.log();
-					console.log('Devices:');
-					documentSnapshot
-						.get('outletRefs')
-						.map((device) => {
-							console.log('Name: ' + device.name);
-						});
-					console.log();
+				if (documentSnapshot != undefined) {
+					let tempOutletRefs = documentSnapshot.get('outletRefs');
+
+					if (tempOutletRefs != undefined) {
+						dispatch(setOutletRefList(tempOutletRefs));
+						console.log();
+						console.log('Device Names:');
+						console.log('====================');
+
+						if (tempOutletRefs.length > 0) {
+							tempOutletRefs
+								.map((device) => {
+									console.log(device.name);
+								});
+						}
+						else { console.log('No outlets added') }
+
+						console.log();
+					}
 				}
 
 				console.log('Dispatched Ref List');
