@@ -28,11 +28,12 @@ LogBox.ignoreLogs(['new NativeEventEmitter']);
 const { height, width } = Dimensions.get('screen');
 
 const PAGE = {
-	LOADING: 0,
-	DEVICE_FOUND: 1,
-	SCAN_TIMEOUT: 2,
-	ENTER_WIFI: 3,
-	ENTER_NAME: 4
+	MODAL_CLOSED: 0,
+	LOADING: 1,
+	DEVICE_FOUND: 2,
+	SCAN_TIMEOUT: 3,
+	ENTER_WIFI: 4,
+	ENTER_NAME: 5
 };
 
 const CODES = {
@@ -49,6 +50,7 @@ const wifiSchema = yup.object({
 	password: yup.string()
 		.required('Please enter a password')
 });
+
 const manager = new BleManager();
 
 export const Dashboard = ({ navigation }) => {
@@ -64,7 +66,7 @@ export const Dashboard = ({ navigation }) => {
 	const [bluetoothReady, setBluetoothReady] = useState(false);
 	const [networkName, setNetworkName] = useState('');
 	const [passwordVerified, setPasswordVerified] = useState(true);
-	const [modalPage, setModalPage] = useState(0);
+	const [modalPage, setModalPage] = useState(PAGE.MODAL_CLOSED);
 	const dispatch = useDispatch();
 
 	// Keep track of adapter state
@@ -80,7 +82,7 @@ export const Dashboard = ({ navigation }) => {
 		}, true);
 
 		return () => subscription.remove();
-	});
+	}, []);
 
 	useEffect(() => {
 		// Only call this AFTER the modalPage changes to the loading page
@@ -156,37 +158,37 @@ export const Dashboard = ({ navigation }) => {
 		if (page == PAGE.LOADING) {
 			return (<PacmanIndicator
 				color = { colors.primaryDark }
-				size = { 115 }
 				hidesWhenStopped = { true }
 				animating = { true }
+				size = { 100 }
 			/>);
 		}
 		else if (page == PAGE.DEVICE_FOUND) {
 			return (<Icon
 				name = 'check-circle'
 				color = { colors.primaryDark }
-				size = { 80 }
+				size = { 70 }
 			/>);
 		}
 		else if (page == PAGE.SCAN_TIMEOUT) {
 			return (<Icon
 				name = 'times-circle'
 				color = { colors.primaryDark }
-				size = { 80 }
+				size = { 70 }
 			/>);
 		}
 		else if (page == PAGE.ENTER_NAME) {
 			return (<Icon
 				name = 'edit'
 				color = { colors.primaryDark }
-				size = { 80 }
+				size = { 70 }
 			/>);
 		}
 		else if (page == PAGE.ENTER_WIFI) {
 			return (<Icon
 				name = 'wifi'
 				color = { colors.primaryDark }
-				size = { 80 }
+				size = { 70 }
 			/>);
 		}
 		else {
@@ -285,15 +287,23 @@ export const Dashboard = ({ navigation }) => {
 		}
 		else if (modalPage == PAGE.ENTER_WIFI) {
 			modalMessage =
-			'Please enter the wifi password to the following network:\n' + networkName;
+			'Please enter the wifi password to the following network:';
 		}
 
 		return (
-			<View style = { modalStyles.confirmBleContainer }>
-				<View style = { modalStyles.confirmBleTextView }>
-					<Text style = { modalStyles.confirmBleText }>
+			<View style = { modalStyles.inputContainer }>
+				<View style = { modalStyles.inputHeaderView }>
+					<Text style = { modalStyles.inputHeader }>
 						{ modalMessage }
 					</Text>
+					{
+						(modalPage == PAGE.ENTER_WIFI) ?
+							(<Text style = { [modalStyles.inputHeader, modalStyles.inputHeaderWifiNetwork] }>
+								{ networkName }
+							</Text>
+							) :
+							(<View />)
+					}
 				</View>
 				{ renderInput(props, modalPage) }
 			</View>
@@ -328,12 +338,13 @@ export const Dashboard = ({ navigation }) => {
 										actions.resetForm();
 										addOutlet(activeUserData, outletRefList, values.name);
 										setModalVisible(false);
+										setModalPage(PAGE.MODAL_CLOSED);
 									}
 								} }
 							>
 								{ (props) => (
 									<View style = { [center, modalStyles.formStyle] }>
-										<View style = { modalStyles.inputView }>
+										<View style = { modalStyles.mainInputView }>
 											{ renderModalBody(props) }
 										</View>
 										<View style = { modalStyles.modalButtonView }>
@@ -345,6 +356,7 @@ export const Dashboard = ({ navigation }) => {
 													// TODO:
 													// This should properly handle cleaning up bluetooth depending on current states
 													setModalVisible(false);
+													setModalPage(PAGE.MODAL_CLOSED);
 												} }
 											/>
 											<Button
@@ -476,30 +488,34 @@ const modalStyles = {
 	indicatorView: {
 		height: '14%',
 		width: '50%',
-		marginTop: '3%',
-		alignItems: 'center'
+		marginTop: '1%',
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
-	inputView: {
+	mainInputView: {
 		height: '44%',
 		width: '95%',
 		alignItems: 'center',
 		marginTop: '-6%'
 	},
-	confirmBleContainer: {
+	inputContainer: {
 		height: '100%',
 		width: '95%',
 		alignItems: 'center',
 		padding: '2%',
-		marginTop: '-4%',
+		marginTop: '-8%',
 		backgroundColor: colors.primaryLight,
 		borderRadius: 10
 	},
-	confirmBleTextView: {
-		marginTop: '2%'
+	inputHeaderView: {
+		marginTop: '1%'
 	},
-	confirmBleText: {
+	inputHeader: {
 		color: colors.dark,
 		fontSize: 16
+	},
+	inputHeaderWifiNetwork: {
+		marginTop: '1%'
 	},
 	confirmBleButtonView: {
 		height: '45%',
@@ -516,7 +532,8 @@ const modalStyles = {
 		width: '100%'
 	},
 	textInput: {
-		width: width * 0.65
+		width: width * 0.65,
+		marginTop: '2%'
 	},
 	modalButtonView: {
 		height: '18%',

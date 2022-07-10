@@ -1,4 +1,13 @@
 {
   "name": "SmartOutlet",
-  "displayName": "SmartOutlet"
+  "displayName": "SmartOutlet",
+
+  "plugins": [
+    [
+      "react-native-wifi-reborn",
+      {
+        "fineLocationPermission": false
+      }
+    ]
+  ]
 }
