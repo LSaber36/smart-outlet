@@ -135,14 +135,14 @@ export const Signup = ({ navigation }) => {
 										/>
 										<TextBoxEntry
 											header = 'Password'
-											placeholder = 'password'
+											placeholder = 'your password'
 											onChangeText = { props.handleChange('password') }
 											value = { props.values.password }
 											errorMessage = { props.touched.password && props.errors.password }
 										/>
 										<TextBoxEntry
 											header = 'Verify Password'
-											placeholder = 'password'
+											placeholder = 'your password'
 											onChangeText = { props.handleChange('verifyPass') }
 											value = { props.values.verifyPass }
 											errorMessage = { props.touched.verifyPass && props.errors.verifyPass }

@@ -155,7 +155,7 @@ export const Login = ({ navigation }) => {
 									/>
 									<TextBoxEntry
 										header = 'Password'
-										placeholder = 'password'
+										placeholder = 'your password'
 										onChangeText = { props.handleChange('password') }
 										value = { props.values.password }
 										errorMessage = { props.touched.password && props.errors.password }
