@@ -28,8 +28,8 @@ const loginSchema = yup.object({
 export const Login = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
-		logoView, logoStyle, loginFormStyle, inputContainerStyle, forgotPasswordView, forgotPasswordText,
-		mainButtonView, mainButtonStyle, signupPromptView, signupPromptText
+		logoView, logoStyle, loginFormStyle, inputContainerStyle, topTextBoxStyle,
+		forgotPasswordView, forgotPasswordText, mainButtonView, mainButtonStyle, signupPromptView, signupPromptText
 	} = loginStyles;
 
 	const [modalVisible, setModalVisible] = useState(false);
@@ -146,6 +146,7 @@ export const Login = ({ navigation }) => {
 							<View style = { [center, loginFormStyle] }>
 								<View style = { inputContainerStyle }>
 									<TextBoxEntry
+										style = { topTextBoxStyle }
 										header = 'Email'
 										placeholder = 'your.name@mail.com'
 										onChangeText = { props.handleChange('email') }
@@ -213,12 +214,16 @@ const loginStyles = {
 	},
 	inputContainerStyle: {
 		width: '85%',
-		height: '50%',
-		marginTop: '-4%',
+		height: height * 0.33,
+		marginTop: '4%',
 		marginBottom: '4%',
 		alignItems: 'center',
 		borderRadius: 10,
 		backgroundColor: colors.secondaryLight
+	},
+	topTextBoxStyle: {
+		marginTop: '2%',
+		marginBottom: '-2%'
 	},
 	forgotPasswordView: {
 		marginTop: '2%',

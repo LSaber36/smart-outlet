@@ -31,7 +31,7 @@ export const Signup = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
 		logoView, logoStyle, signupFormStyle, scrollViewContainerStyle,
-		scrollViewStyle, scrollViewContent, scrollViewBottomSpacer,
+		scrollViewStyle, scrollViewContent, topTextBoxStyle, scrollViewBottomSpacer,
 		mainButtonView, mainButtonStyle, loginPromptView, loginPromptText
 	} = signupStyles;
 
@@ -119,6 +119,7 @@ export const Signup = ({ navigation }) => {
 										contentContainerStyle = { scrollViewContent }
 									>
 										<TextBoxEntry
+											style = { topTextBoxStyle }
 											header = 'Name'
 											placeholder = 'your name'
 											onChangeText = { props.handleChange('name') }
@@ -188,9 +189,9 @@ const signupStyles = {
 	},
 	scrollViewContainerStyle: {
 		width: '85%',
-		height: '55%',
-		marginTop: '-4%',
-		marginBottom: '4%',
+		height: height * 0.35,
+		marginTop: '5%',
+		marginBottom: '6%',
 		alignItems: 'center',
 		borderRadius: 10,
 		backgroundColor: colors.secondaryLight
@@ -203,9 +204,13 @@ const signupStyles = {
 	scrollViewContent: {
 		alignItems: 'center'
 	},
+	topTextBoxStyle: {
+		marginTop: '2%',
+		marginBottom: '-2%'
+	},
 	scrollViewBottomSpacer: {
 		width: '100%',
-		height: 25
+		height: 80
 	},
 	mainButtonView: {
 		height: '12%',
