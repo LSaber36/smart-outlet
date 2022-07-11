@@ -47,7 +47,7 @@ export const scanForOutlet = (manager, outletName) => new Promise((resolve, reje
 			setTimeout(() => {
 				manager.stopDeviceScan();
 				reject('Scan timed out');
-			}, 5000);
+			}, 10000);
 		})
 		.catch((error) => {
 			reject('Scan for outlet permission error: ' + error);
