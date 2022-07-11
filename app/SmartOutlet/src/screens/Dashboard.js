@@ -57,7 +57,7 @@ const wifiSchema = yup.object({
 		// Need to have a min requirement so we can verify the credentials properly
 });
 
-const manager = new BleManager();
+const BLEManager = new BleManager();
 
 export const Dashboard = ({ navigation }) => {
 	const {	container, fullWidthHeight, buttonContainer, center, disabledButton, modalContainer } = styles;
@@ -77,7 +77,7 @@ export const Dashboard = ({ navigation }) => {
 
 	// Keep track of adapter state
 	useEffect(() => {
-		const subscription = manager.onStateChange((state) => {
+		const subscription = BLEManager.onStateChange((state) => {
 			if (state === 'PoweredOn') {
 				setBluetoothReady(true);
 				subscription.remove();
@@ -93,7 +93,7 @@ export const Dashboard = ({ navigation }) => {
 	useEffect(() => {
 		// Only call this AFTER the modalPage changes to the loading page
 		if (modalPage == PAGE.LOADING) {
-			scanForOutlet(manager, 'New SmartOutlet Device')
+			scanForOutlet(BLEManager, 'New SmartOutlet Device')
 				.then((scannedDevice) => {
 					console.log('Found device: ' + scannedDevice.name);
 
