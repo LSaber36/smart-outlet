@@ -20,6 +20,16 @@ export const scanForOutlet = (manager, outletName) => new Promise((resolve, reje
 			console.log('Fine Loaction Status:  ' + statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]);
 			console.log(' ');
 
+			if (statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === 'denied' ||
+					statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === 'denied' ||
+					statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === 'denied')
+				reject('Permissions denied');
+
+			if (statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === 'blocked' ||
+					statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === 'blocked' ||
+					statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === 'blocked')
+				reject('Permissions blocked');
+
 			console.log('Searching for device...');
 			manager.startDeviceScan(null, null, (error, scannedDevice) => {
 				if (error)
@@ -40,7 +50,7 @@ export const scanForOutlet = (manager, outletName) => new Promise((resolve, reje
 			}, 5000);
 		})
 		.catch((error) => {
-			reject('Scan for outlet error: ' + error);
+			reject('Scan for outlet permission error: ' + error);
 		});
 });
 
