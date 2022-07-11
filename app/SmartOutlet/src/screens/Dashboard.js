@@ -70,6 +70,7 @@ export const Dashboard = ({ navigation }) => {
 	const { activeUserData, outletRefList } = useSelector(state => state.user);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [bluetoothReady, setBluetoothReady] = useState(false);
+	const [connectedBleDevice, setConnectedBleDevice] = useState(null);
 	const [networkName, setNetworkName] = useState('');
 	const [passwordVerified, setPasswordVerified] = useState(true);
 	const [modalPage, setModalPage] = useState(PAGE.MODAL_CLOSED);
@@ -100,28 +101,12 @@ export const Dashboard = ({ navigation }) => {
 					connectToOutlet(scannedDevice)
 						.then((connectedDevice) => {
 							setModalPage(PAGE.DEVICE_FOUND);
+							setConnectedBleDevice(connectedDevice);
 
 							connectedDevice.onDisconnected(() => {
 								if (modalPage === PAGE.LOADING)
 									console.log('Device disconnected');
 							});
-
-							sendDataToCharacteristic(connectedDevice, CODES.BLUETOOTH_FINISHED)
-								.then(() => {
-									getDataFromCharacteristic(connectedDevice)
-										.then((value) => {
-											console.log('Sent: Connection Established from SmartOutlet');
-											console.log('Received: ' + value);
-											console.log('Data exchanged, closing connection');
-											connectedDevice.cancelConnection();
-										})
-										.catch((error) => {
-											console.log(error);
-										});
-								})
-								.catch((error) => {
-									console.log(error);
-								});
 						})
 						.catch((error) => {
 							console.log(error);
@@ -438,8 +423,20 @@ export const Dashboard = ({ navigation }) => {
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
 												onPress = { () => {
-													// TODO:
-													// This should properly handle cleaning up bluetooth depending on current states
+													if (connectedBleDevice !== null) {
+														// Tell ESP32 to cancel bluetooth connection
+														sendDataToCharacteristic(
+															connectedBleDevice,
+															CODES.BLUETOOTH_FINISHED
+														)
+															.then(() => {
+																console.log('Sent close connection message');
+															})
+															.catch((error) => {
+																console.log(error);
+															});
+													}
+
 													setModalVisible(false);
 													setModalPage(PAGE.MODAL_CLOSED);
 												} }
