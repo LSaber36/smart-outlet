@@ -118,3 +118,23 @@ export const subscribeToCharacteristic = (device, servUUID, charUUID) => new Pro
 			}
 		);
 });
+
+export const sendMultipleDataToCharacteristic = (device, values) => new Promise((resolve, reject) => {
+	// Iterate through each value in values and send it one by one
+	if (values.length != 0) {
+		console.log('Writing multiple values...');
+
+		values.map((value) => {
+			sendDataToCharacteristic(device, value)
+				.then(() => {
+					console.log('Send data: ' + value);
+				})
+				.catch((error) => {
+					reject('Send multiple error: ' + error);
+				});
+		});
+
+		// Only resolve if all data sends don't fail
+		resolve();
+	}
+});
