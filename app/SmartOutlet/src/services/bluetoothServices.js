@@ -5,6 +5,14 @@ const SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
 const CHARACTERISTIC_UUID_TX = '6E400002-B5A3-F393-E0A9-E50E24DCCA9E';
 const CHARACTERISTIC_UUID_RX = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
 
+export const getServId = () => {
+	return SERVICE_UUID;
+};
+
+export const getRxId = () => {
+	return CHARACTERISTIC_UUID_RX;
+};
+
 export const scanForOutlet = (manager, outletName) => new Promise((resolve, reject) => {
 	console.log(' ');
 	console.log('Getting Permissions...');
@@ -100,24 +108,24 @@ export const getDataFromCharacteristic = (device) => new Promise((resolve, rejec
 				resolve(base64.decode(characteristic?.value));
 		})
 		.catch((error) => {
-			reject('Get characteristic error:' + error);
+			reject('Get characteristic error: ' + error);
 		});
 });
 
-export const subscribeToCharacteristic = (device, servUUID, charUUID) => new Promise((resolve, reject) => {
-	device
-		.monitorCharacteristicForService(
-			servUUID,
-			charUUID,
-			(error, characteristic) => {
-				if (error)
-					reject('Subscribe error:' + error);
+// export const subscribeToCharacteristic = (device, servUUID, charUUID) => new Promise((resolve, reject) => {
+// 	device
+// 		.monitorCharacteristicForService(
+// 			servUUID,
+// 			charUUID,
+// 			(error, characteristic) => {
+// 				if (error)
+// 					reject('Subscribe error:' + error);
 
-				if (characteristic?.value != null)
-					resolve(base64.decode(characteristic.value));
-			}
-		);
-});
+// 				if (characteristic?.value != null)
+// 					resolve(base64.decode(characteristic.value));
+// 			}
+// 		);
+// });
 
 export const sendMultipleDataToCharacteristic = (device, values) => new Promise((resolve, reject) => {
 	// Iterate through each value in values and send it one by one
@@ -127,7 +135,7 @@ export const sendMultipleDataToCharacteristic = (device, values) => new Promise(
 		values.map((value) => {
 			sendDataToCharacteristic(device, value)
 				.then(() => {
-					console.log('Send data: ' + value);
+					console.log('Sent data:     ' + value);
 				})
 				.catch((error) => {
 					reject('Send multiple error: ' + error);
