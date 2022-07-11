@@ -92,7 +92,7 @@ export const Dashboard = ({ navigation }) => {
 
 	useEffect(() => {
 		// Only call this AFTER the modalPage changes to the loading page
-		if (modalPage == PAGE.LOADING) {
+		if (modalPage === PAGE.LOADING) {
 			scanForOutlet(BLEManager, 'New SmartOutlet Device')
 				.then((scannedDevice) => {
 					console.log('Found device: ' + scannedDevice.name);
@@ -102,7 +102,7 @@ export const Dashboard = ({ navigation }) => {
 							setModalPage(PAGE.DEVICE_FOUND);
 
 							connectedDevice.onDisconnected(() => {
-								if (modalPage == PAGE.LOADING)
+								if (modalPage === PAGE.LOADING)
 									console.log('Device disconnected');
 							});
 
@@ -141,7 +141,7 @@ export const Dashboard = ({ navigation }) => {
 					}
 				});
 		}
-		else if (modalPage == PAGE.ENTER_WIFI) {
+		else if (modalPage === PAGE.ENTER_WIFI) {
 			setPasswordVerified(true);
 			console.log('Getting Wi-Fi network...');
 
@@ -224,7 +224,7 @@ export const Dashboard = ({ navigation }) => {
 	};
 
 	const renderIndicator = (page) => {
-		if (page == PAGE.LOADING) {
+		if (page === PAGE.LOADING) {
 			return (<PacmanIndicator
 				color = { colors.primaryDark }
 				hidesWhenStopped = { true }
@@ -232,30 +232,30 @@ export const Dashboard = ({ navigation }) => {
 				size = { 100 }
 			/>);
 		}
-		else if (page == PAGE.DEVICE_FOUND) {
+		else if (page === PAGE.DEVICE_FOUND) {
 			return (<Icon
 				name = 'check-circle'
 				color = { colors.primaryDark }
 				size = { 70 }
 			/>);
 		}
-		else if (page == PAGE.SCAN_TIMEOUT ||
-							page == PAGE.WIFI_PERMISSIONS_ERROR ||
-							page == PAGE.BLE_PERMISSIONS_ERROR) {
+		else if (page === PAGE.SCAN_TIMEOUT ||
+							page === PAGE.WIFI_PERMISSIONS_ERROR ||
+							page === PAGE.BLE_PERMISSIONS_ERROR) {
 			return (<Icon
 				name = 'times-circle'
 				color = { colors.primaryDark }
 				size = { 70 }
 			/>);
 		}
-		else if (page == PAGE.ENTER_NAME) {
+		else if (page === PAGE.ENTER_NAME) {
 			return (<Icon
 				name = 'edit'
 				color = { colors.primaryDark }
 				size = { 70 }
 			/>);
 		}
-		else if (page == PAGE.ENTER_WIFI || page == PAGE.WIFI_PERMISSIONS_ERROR) {
+		else if (page === PAGE.ENTER_WIFI || page === PAGE.WIFI_PERMISSIONS_ERROR) {
 			return (<Icon
 				name = 'wifi'
 				color = { colors.primaryDark }
@@ -268,12 +268,12 @@ export const Dashboard = ({ navigation }) => {
 	};
 
 	const renderInput = (props, page) => {
-		if (page == PAGE.LOADING) {
+		if (page === PAGE.LOADING) {
 			return (
 				<View />
 			);
 		}
-		else if (page == PAGE.SCAN_TIMEOUT) {
+		else if (page === PAGE.SCAN_TIMEOUT) {
 			return (
 				<View style = { modalStyles.confirmBleButtonView }>
 					<Button
@@ -287,7 +287,7 @@ export const Dashboard = ({ navigation }) => {
 				</View>
 			);
 		}
-		else if (page == PAGE.DEVICE_FOUND) {
+		else if (page === PAGE.DEVICE_FOUND) {
 			return (
 				<View style = { modalStyles.confirmBleButtonView }>
 					<Button
@@ -307,7 +307,7 @@ export const Dashboard = ({ navigation }) => {
 				</View>
 			);
 		}
-		else if (page == PAGE.ENTER_WIFI) {
+		else if (page === PAGE.ENTER_WIFI) {
 			return (
 				<TextBoxEntry
 					style = { modalStyles.textInput }
@@ -321,7 +321,7 @@ export const Dashboard = ({ navigation }) => {
 				/>
 			);
 		}
-		else if (page == PAGE.ENTER_NAME) {
+		else if (page === PAGE.ENTER_NAME) {
 			return (
 				<TextBoxEntry
 					style = { modalStyles.textInput }
@@ -339,32 +339,32 @@ export const Dashboard = ({ navigation }) => {
 		// Set the header message based on bluetooth states
 		let modalMessage = '';
 
-		if (modalPage == PAGE.LOADING) {
+		if (modalPage === PAGE.LOADING) {
 			modalMessage =
 			'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode.';
 		}
-		else if (modalPage == PAGE.SCAN_TIMEOUT) {
+		else if (modalPage === PAGE.SCAN_TIMEOUT) {
 			modalMessage =
 			'The device was not found.\n\nPlease retry the scan and make sure the device is in pairing mode.';
 		}
-		else if (modalPage == PAGE.DEVICE_FOUND) {
+		else if (modalPage === PAGE.DEVICE_FOUND) {
 			modalMessage =
 			'We found a device and triggered its indicator led to flash. ' +
 			'Please confirm that this is the correct device.';
 		}
-		else if (modalPage == PAGE.ENTER_NAME) {
+		else if (modalPage === PAGE.ENTER_NAME) {
 			modalMessage =
 			'Your Wi-Fi credentials have been verified. Please add the name of your new device.';
 		}
-		else if (modalPage == PAGE.ENTER_WIFI) {
+		else if (modalPage === PAGE.ENTER_WIFI) {
 			modalMessage =
 			'Please enter the wifi password to your current network:';
 		}
-		else if (modalPage == PAGE.WIFI_PERMISSIONS_ERROR) {
+		else if (modalPage === PAGE.WIFI_PERMISSIONS_ERROR) {
 			modalMessage =
 			'Please grant wifi permissions to this application.';
 		}
-		else if (modalPage == PAGE.BLE_PERMISSIONS_ERROR) {
+		else if (modalPage === PAGE.BLE_PERMISSIONS_ERROR) {
 			modalMessage =
 			'Please grant both bluetooth and location permissions to this application.';
 		}
@@ -376,7 +376,7 @@ export const Dashboard = ({ navigation }) => {
 						{ modalMessage }
 					</Text>
 					{
-						(modalPage == PAGE.ENTER_WIFI) ?
+						(modalPage === PAGE.ENTER_WIFI) ?
 							(<Text style = { [modalStyles.inputHeader, modalStyles.inputHeaderWifiNetwork] }>
 								{ networkName }
 							</Text>
@@ -407,9 +407,9 @@ export const Dashboard = ({ navigation }) => {
 							</View>
 							<Formik
 								initialValues = {{ name: '', password: '' }}
-								validationSchema = { (modalPage == PAGE.ENTER_WIFI) ? wifiSchema : nameSchema }
+								validationSchema = { (modalPage === PAGE.ENTER_WIFI) ? wifiSchema : nameSchema }
 								onSubmit = { (values, actions) => {
-									if (modalPage == PAGE.ENTER_WIFI) {
+									if (modalPage === PAGE.ENTER_WIFI) {
 										console.log('Entered password: ' + values.password);
 										validateWifiCreds(values.password)
 											.then(() => {
@@ -419,7 +419,7 @@ export const Dashboard = ({ navigation }) => {
 												console.log(error);
 											});
 									}
-									else if (modalPage == PAGE.ENTER_NAME) {
+									else if (modalPage === PAGE.ENTER_NAME) {
 										actions.resetForm();
 										addOutlet(activeUserData, outletRefList, values.name);
 										setModalVisible(false);
@@ -445,11 +445,11 @@ export const Dashboard = ({ navigation }) => {
 												} }
 											/>
 											<Button
-												title = { (modalPage == PAGE.ENTER_NAME) ? 'Add Device' : 'Check Wifi' }
+												title = { (modalPage === PAGE.ENTER_NAME) ? 'Add Device' : 'Check Wifi' }
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
-												disabled = { !(modalPage == PAGE.ENTER_WIFI ||
-																				modalPage == PAGE.ENTER_NAME) }
+												disabled = { !(modalPage === PAGE.ENTER_WIFI ||
+																				modalPage === PAGE.ENTER_NAME) }
 												disabledStyle = { disabledButton }
 												onPress = { props.handleSubmit }
 											/>
