@@ -119,6 +119,7 @@ void loop()
   if (deviceConnected && !oldDeviceConnected)
   {
     // Do stuff here after connection is established
+    blinkLED(BLUE_LED, 100, 300, 2);
     oldDeviceConnected = deviceConnected;
   }
 

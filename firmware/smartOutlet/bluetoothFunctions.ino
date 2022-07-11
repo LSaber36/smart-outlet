@@ -1,6 +1,7 @@
-enum CODES = {
+enum CODES
+{
   ACCEPTED = 2,
-  Denied = 4,
+  DENIED = 4,
   BLUETOOTH_FINISHED = 64
 };
 
@@ -24,14 +25,13 @@ class MyCallbacks: public BLECharacteristicCallbacks
     std::string rxValue = pCharacteristic->getValue();
 
     if (rxValue.length() > 0) {
-      Serial.printf("\n*********\n");
+      Serial.printf("\n******************\n");
       Serial.printf("Received: %s", rxValue.data());
-      Serial.printf("\n*********\n\n");
+      Serial.printf("\n******************\n\n");
 
       if (atoi(rxValue.data()) == BLUETOOTH_FINISHED)
       {
-        Serial.println("Received expected value, blinking LED");
-        blinkLED(GREEN_LED, 100, 500, 2);
+        blinkLED(BLUE_LED, 100, 300, 2);
         Serial.println("Shutting off bluetooth");
         pServer->getAdvertising()->stop();
       }
@@ -79,7 +79,7 @@ void pairingMode()
 {
   Serial.println("Starting bluetooth");
 
-  blinkLED(GREEN_LED, 100, 400, 1);
+  blinkLED(BLUE_LED, 100, 300, 4);
 
   // Start advertising
   pServer->getAdvertising()->start();
