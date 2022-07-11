@@ -9,5 +9,8 @@ export const initNewUser = (user) => {
 		})
 		.then(() => {
 			console.log('Added new user to Users collection: ' + user.email);
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 };

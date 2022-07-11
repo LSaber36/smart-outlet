@@ -48,8 +48,14 @@ export const Settings = () => {
 								.then(() => {
 									auth().currentUser.reload();
 									dispatch(loadUserData(auth().currentUser));
+								})
+								.catch((error) => {
+									console.log(error);
 								});
 						});
+					})
+					.catch((error) => {
+						console.log(error);
 					});
 			})
 			.catch((error) => {
@@ -84,7 +90,12 @@ export const Settings = () => {
 								onPress = { () => {
 									auth()
 										.signOut()
-										.then(() => { console.log('User signed out!') });
+										.then(() => {
+											console.log('User signed out!');
+										})
+										.catch((error) => {
+											console.log(error);
+										});
 								} }
 							/>
 						</View>

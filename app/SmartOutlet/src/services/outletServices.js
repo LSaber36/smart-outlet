@@ -14,6 +14,9 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 		})
 		.then(() => {
 			console.log('Added outlet to RTDB           (ID: ' + newOutletId + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 
 	// Add the outlet to the outlet document
@@ -27,6 +30,9 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 		})
 		.then(() => {
 			console.log('Added new outlet to firestore  (ID: ' + newOutletId + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 
 	// Add the outlet to the user's outlet list
@@ -38,6 +44,9 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
 		})
 		.then(() => {
 			console.log('Added new outlet to account    (ID: ' + newOutletId + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 };
 
@@ -51,6 +60,9 @@ export const deleteOutlet = (activeUserData, outletRefList, outletID) => {
 		})
 		.then(() => {
 			console.log('Removed outlet from account    (ID: ' + outletID + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 
 	// Delete the outlet from the outlet collection
@@ -60,6 +72,9 @@ export const deleteOutlet = (activeUserData, outletRefList, outletID) => {
 		.delete()
 		.then(() => {
 			console.log('Deleted outlet from firestore  (ID: ' + outletID + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 
 	// Delete the outlet from the outlet RTDB
@@ -68,6 +83,9 @@ export const deleteOutlet = (activeUserData, outletRefList, outletID) => {
 		.remove()
 		.then(() => {
 			console.log('Deleted outlet from database   (ID: ' + outletID + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 };
 
@@ -79,6 +97,9 @@ export const setOutletState = (outletID, targetState) => {
 		})
 		.then(() => {
 			console.log('Set outlet state (State: ' + targetState + '  ID: ' + outletID + ')');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 };
 
@@ -91,5 +112,8 @@ export const setPowerThresh = (outletID, newThresh) => {
 		})
 		.then(() => {
 			console.log('Set power threshold to ' + newThresh + ' KWH');
+		})
+		.catch((error) => {
+			console.log(error);
 		});
 };
