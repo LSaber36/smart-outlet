@@ -15,6 +15,8 @@ import { TextBoxEntry } from '../components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { BleManager } from 'react-native-ble-plx';
+import WifiManager from 'react-native-wifi-reborn';
+import { request, PERMISSIONS } from 'react-native-permissions';
 import {
 	scanForOutlet,
 	connectToOutlet,
@@ -33,7 +35,9 @@ const PAGE = {
 	DEVICE_FOUND: 2,
 	SCAN_TIMEOUT: 3,
 	ENTER_WIFI: 4,
-	ENTER_NAME: 5
+	WIFI_PERMISSIONS_ERROR: 5,
+	BLE_PERMISSIONS_ERROR: 6,
+	ENTER_NAME: 7
 };
 
 const CODES = {
@@ -49,6 +53,8 @@ const nameSchema = yup.object({
 const wifiSchema = yup.object({
 	password: yup.string()
 		.required('Please enter a password')
+		.min(8, 'Password must be at least 8 characters')
+		// Need to have a min requirement so we can verify the credentials properly
 });
 
 const manager = new BleManager();
@@ -108,6 +114,9 @@ export const Dashboard = ({ navigation }) => {
 											console.log('Received: ' + value);
 											console.log('Data exchanged, closing connection');
 											connectedDevice.cancelConnection();
+										})
+										.catch((error) => {
+											console.log(error);
 										});
 								})
 								.catch((error) => {
@@ -120,11 +129,71 @@ export const Dashboard = ({ navigation }) => {
 				})
 				.catch((error) => {
 					console.log(error);
-					if (error === 'Scan timed out')
+					if (error === 'Scan timed out') {
 						setModalPage(PAGE.SCAN_TIMEOUT);
+					}
+					else if (error === 'Permissions denied') {
+						setModalVisible(false);
+						setModalPage(PAGE.MODAL_CLOSED);
+					}
+					else if (error === 'Permissions blocked') {
+						setModalPage(PAGE.BLE_PERMISSIONS_ERROR);
+					}
+				});
+		}
+		else if (modalPage == PAGE.ENTER_WIFI) {
+			setPasswordVerified(true);
+			console.log('Getting Wi-Fi network...');
+
+			request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+				.then((status) => {
+					console.log('Fine Loaction Status: ' + status);
+
+					if (status === 'granted') {
+						WifiManager.getCurrentWifiSSID()
+							.then((networkName) => {
+								console.log('Network name: ' + networkName);
+								setNetworkName(networkName);
+							})
+							.catch((error) => {
+								console.log('Get wifi error: ' + error);
+							});
+					}
+					else if (status === 'denied') {
+						setModalVisible(false);
+						setModalPage(PAGE.MODAL_CLOSED);
+					}
+					else if (status === 'blocked') {
+						setModalPage(PAGE.WIFI_PERMISSIONS_ERROR);
+					}
+				})
+				.catch((error) => {
+					console.log('Wifi Permissions Error: ' + error);
 				});
 		}
 	}, [modalPage]);
+
+	const validateWifiCreds = (password) => new Promise((resolve, reject) => {
+		// This can is only ever called after the credentials have been verified
+		// when the page initially loads, so we don't need to check them here
+		console.log('Validating Wi-Fi creds...');
+		WifiManager.connectToProtectedSSID(networkName, password, false)
+			.then((result) => {
+				console.log('Connect to wifi result: ' + result);
+				setPasswordVerified(true);
+				console.log('Disconnecting from temp network...');
+				WifiManager.disconnect();
+				resolve();
+			})
+			.catch((error) => {
+				console.log('Connect to wifi error: ' + error.code);
+				if (error.code === 'userDenied') {
+					console.log('Connection canceled, please check your password');
+					setPasswordVerified(false);
+				}
+				reject();
+			});
+	});
 
 	const renderListOrMessage = (list) => {
 		return (list != undefined && list.length > 0) ?
@@ -170,7 +239,9 @@ export const Dashboard = ({ navigation }) => {
 				size = { 70 }
 			/>);
 		}
-		else if (page == PAGE.SCAN_TIMEOUT) {
+		else if (page == PAGE.SCAN_TIMEOUT ||
+							page == PAGE.WIFI_PERMISSIONS_ERROR ||
+							page == PAGE.BLE_PERMISSIONS_ERROR) {
 			return (<Icon
 				name = 'times-circle'
 				color = { colors.primaryDark }
@@ -184,7 +255,7 @@ export const Dashboard = ({ navigation }) => {
 				size = { 70 }
 			/>);
 		}
-		else if (page == PAGE.ENTER_WIFI) {
+		else if (page == PAGE.ENTER_WIFI || page == PAGE.WIFI_PERMISSIONS_ERROR) {
 			return (<Icon
 				name = 'wifi'
 				color = { colors.primaryDark }
@@ -244,9 +315,9 @@ export const Dashboard = ({ navigation }) => {
 					placeholder = 'myWifiPassword'
 					onChangeText = { props.handleChange('password') }
 					value = { props.values.password }
-					errorMessage = { (passwordVerified) ?
+					errorMessage = { (passwordVerified || props.errors.password) ?
 						(props.touched.password && props.errors.password) :
-						'Incorrect network password' }
+						'Connection canceled, please check your password' }
 				/>
 			);
 		}
@@ -255,7 +326,7 @@ export const Dashboard = ({ navigation }) => {
 				<TextBoxEntry
 					style = { modalStyles.textInput }
 					header = 'New Device Name'
-					placeholder = 'New outlet name'
+					placeholder = 'new outlet name'
 					onChangeText = { props.handleChange('name') }
 					value = { props.values.name }
 					errorMessage = { props.touched.name && props.errors.name }
@@ -270,11 +341,11 @@ export const Dashboard = ({ navigation }) => {
 
 		if (modalPage == PAGE.LOADING) {
 			modalMessage =
-			'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode';
+			'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode.';
 		}
 		else if (modalPage == PAGE.SCAN_TIMEOUT) {
 			modalMessage =
-			'The device was not found.\n\nPlease retry the scan and make sure the device is in pairing mode';
+			'The device was not found.\n\nPlease retry the scan and make sure the device is in pairing mode.';
 		}
 		else if (modalPage == PAGE.DEVICE_FOUND) {
 			modalMessage =
@@ -283,11 +354,19 @@ export const Dashboard = ({ navigation }) => {
 		}
 		else if (modalPage == PAGE.ENTER_NAME) {
 			modalMessage =
-			'Please add the name of your new device.';
+			'Your Wi-Fi credentials have been verified. Please add the name of your new device.';
 		}
 		else if (modalPage == PAGE.ENTER_WIFI) {
 			modalMessage =
-			'Please enter the wifi password to the following network:';
+			'Please enter the wifi password to your current network:';
+		}
+		else if (modalPage == PAGE.WIFI_PERMISSIONS_ERROR) {
+			modalMessage =
+			'Please grant wifi permissions to this application.';
+		}
+		else if (modalPage == PAGE.BLE_PERMISSIONS_ERROR) {
+			modalMessage =
+			'Please grant both bluetooth and location permissions to this application.';
 		}
 
 		return (
@@ -332,7 +411,13 @@ export const Dashboard = ({ navigation }) => {
 								onSubmit = { (values, actions) => {
 									if (modalPage == PAGE.ENTER_WIFI) {
 										console.log('Entered password: ' + values.password);
-										setModalPage(PAGE.ENTER_WIFI);
+										validateWifiCreds(values.password)
+											.then(() => {
+												setModalPage(PAGE.ENTER_NAME);
+											})
+											.catch((error) => {
+												console.log(error);
+											});
 									}
 									else if (modalPage == PAGE.ENTER_NAME) {
 										actions.resetForm();
@@ -364,7 +449,7 @@ export const Dashboard = ({ navigation }) => {
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
 												disabled = { !(modalPage == PAGE.ENTER_WIFI ||
-																			modalPage == PAGE.ENTER_NAME) }
+																				modalPage == PAGE.ENTER_NAME) }
 												disabledStyle = { disabledButton }
 												onPress = { props.handleSubmit }
 											/>
@@ -515,7 +600,8 @@ const modalStyles = {
 		fontSize: 16
 	},
 	inputHeaderWifiNetwork: {
-		marginTop: '1%'
+		marginTop: '1%',
+		color: colors.primaryDark
 	},
 	confirmBleButtonView: {
 		height: '45%',
