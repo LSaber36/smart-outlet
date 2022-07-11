@@ -112,21 +112,6 @@ export const getDataFromCharacteristic = (device) => new Promise((resolve, rejec
 		});
 });
 
-// export const subscribeToCharacteristic = (device, servUUID, charUUID) => new Promise((resolve, reject) => {
-// 	device
-// 		.monitorCharacteristicForService(
-// 			servUUID,
-// 			charUUID,
-// 			(error, characteristic) => {
-// 				if (error)
-// 					reject('Subscribe error:' + error);
-
-// 				if (characteristic?.value != null)
-// 					resolve(base64.decode(characteristic.value));
-// 			}
-// 		);
-// });
-
 export const sendMultipleDataToCharacteristic = (device, values) => new Promise((resolve, reject) => {
 	// Iterate through each value in values and send it one by one
 	if (values.length != 0) {
