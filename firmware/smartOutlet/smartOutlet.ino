@@ -97,7 +97,7 @@ void loop()
   {
     // Process new data received away from callback for efficiency
     Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
-    blinkLED(BLUE_LED, 100, 200, 2);
+    blinkLED(GREEN_LED, 100, 200, 2);
     dataChanged = false;
   }
 
