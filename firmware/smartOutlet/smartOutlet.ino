@@ -39,7 +39,7 @@ unsigned long sendDataPrevMillis = 0;
 unsigned long count = 0;
 
 // Realtime Data
-volatile bool dataChanged = false;
+volatile bool dataChanged = false, firstStreamUpdate = true, firebaseEstablished = false;
 String deviceID = "6281f1d0-59e2-4682-9662-a85fad04ebf7"; 
 int devicePower = 0;
 
@@ -77,10 +77,6 @@ void setup()
 
   digitalWrite(RELAY_PIN, LOW);
 
-  // Indicate that the code is running
-  blinkLED(GREEN_LED, 100, 150, 2);
-  blinkLED(BLUE_LED, 100, 150, 2);
-
   setupADC();
   setupWiFi();
   setupFirebase();
@@ -95,6 +91,16 @@ void loop()
 
   if (dataChanged)
   {
+    if (firstStreamUpdate)
+    {
+      firstStreamUpdate = false;
+      firebaseEstablished = true;
+      Serial.println("\nFirebase Connection Established");
+      // Indicate that the code is running
+      blinkLED(GREEN_LED, 100, 150, 2);
+      blinkLED(BLUE_LED, 100, 150, 2);
+    }
+
     // Process new data received away from callback for efficiency
     Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
     blinkLED(GREEN_LED, 100, 200, 2);

@@ -1,13 +1,16 @@
 enum CODES
 {
-  ACCEPTED = 2,
-  DENIED = 4,
-  TEST_CONNECTION = 8,
-  WIFI_CONNECTION_SUCCESSFUL = 16,
-  WIFI_CONNECTION_FAILED = 32,
-  NEW_UUID = 64,
+  ACCEPTED = 1,
+  DENIED = 2,
+  TEST_WIFI = 3,
+  WIFI_CONNECTION_SUCCESSFUL = 4,
+  WIFI_CONNECTION_FAILED = 5,
+  NEW_UUID = 6,
+  TEST_FIREBASE = 7,
+  FIREBASE_CONNECTION_SUCCESSFUL = 8,
+  FIREBASE_CONNECTION_FAILED = 9,
 
-  BLUETOOTH_FINISHED = 128
+  BLUETOOTH_FINISHED = 64
 };
 
 class MyServerCallbacks: public BLEServerCallbacks
@@ -44,10 +47,18 @@ class MyCallbacks: public BLECharacteristicCallbacks
       {
         Serial.println("Ready for wifi creds");
       }
-      else if (atoi(rxValue.data()) == TEST_CONNECTION)
+      else if (atoi(rxValue.data()) == TEST_WIFI)
       {
         Serial.println("Checking wifi connection");
+        // TODO: Actually check if WiFi connection establishes or not
         TxChar->setValue(std::to_string(WIFI_CONNECTION_SUCCESSFUL));
+        TxChar->notify();
+      }
+      else if (atoi(rxValue.data()) == TEST_FIREBASE)
+      {
+        // TODO: Actually check if Firebase connection establishes or not
+        Serial.println("Checking firebase connection");
+        TxChar->setValue(std::to_string(FIREBASE_CONNECTION_SUCCESSFUL));
         TxChar->notify();
       }
     }

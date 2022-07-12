@@ -44,14 +44,17 @@ const PAGE = {
 };
 
 const CODES = {
-	ACCEPTED: '2',
-	DENIED: '4',
-	TEST_CONNECTION: '8',
-	WIFI_CONNECTION_SUCCESSFUL: '16',
-	WIFI_CONNECTION_FAILED: '32',
-	NEW_UUID: '64',
+	ACCEPTED: '1',
+	DENIED: '2',
+	TEST_WIFI: '3',
+	WIFI_CONNECTION_SUCCESSFUL: '4',
+	WIFI_CONNECTION_FAILED: '5',
+	NEW_UUID: '6',
+	TEST_FIREBASE: '7',
+	FIREBASE_CONNECTION_SUCCESSFUL: '8',
+	FIREBASE_CONNECTION_FAILED: '9',
 
-	BLUETOOTH_FINISHED: '128'
+	BLUETOOTH_FINISHED: '64'
 };
 
 const nameSchema = yup.object({
@@ -131,6 +134,7 @@ export const Dashboard = ({ navigation }) => {
 										if (characteristic?.value != null) {
 											let receivedValue = base64.decode(characteristic.value);
 
+											console.log('');
 											console.log('Received data: ' + receivedValue);
 
 											if (receivedValue === CODES.WIFI_CONNECTION_SUCCESSFUL) {
@@ -138,14 +142,15 @@ export const Dashboard = ({ navigation }) => {
 												let newId = uuid.v4();
 
 												setNewOutletId(newId);
-												console.log('Created new outlet ID: ' + newId);
-												// Trigger the bluetooth to send new UUID
+												console.log('New outlet ID: ' + newId);
+												// Send new UUID over bluetooth with connection request
 
 												sendMultipleDataToCharacteristic(
 													connectedDevice,
 													[
 														CODES.NEW_UUID,
-														newId
+														newId,
+														CODES.TEST_FIREBASE
 													]
 												)
 													.then(() => {
@@ -155,9 +160,29 @@ export const Dashboard = ({ navigation }) => {
 														console.log(error);
 													});
 											}
-
-											if (receivedValue === CODES.WIFI_CONNECTION_FAILED)
+											else if (receivedValue === CODES.WIFI_CONNECTION_FAILED) {
 												console.log('Wifi connection failed');
+											}
+											else if (receivedValue === CODES.FIREBASE_CONNECTION_SUCCESSFUL) {
+												console.log('Firebase connection successful');
+
+												// Tell ESP32 to cancel bluetooth connection
+												sendDataToCharacteristic(
+													connectedDevice,
+													CODES.BLUETOOTH_FINISHED
+												)
+													.then(() => {
+														console.log('Sent close connection message');
+													})
+													.catch((error) => {
+														console.log(error);
+													});
+
+												setModalPage(PAGE.ENTER_NAME);
+											}
+											else if (receivedValue === CODES.FIREBASE_CONNECTION_FAILED) {
+												console.log('Firebase connection failed');
+											}
 										}
 									}
 								);
@@ -463,7 +488,7 @@ export const Dashboard = ({ navigation }) => {
 															CODES.ACCEPTED,
 															networkName,
 															values.password,
-															CODES.TEST_CONNECTION
+															CODES.TEST_WIFI
 														]
 													)
 														.then(() => {
@@ -473,8 +498,6 @@ export const Dashboard = ({ navigation }) => {
 															console.log(error);
 														});
 												}
-												// Only do this after receiving a message from the bluetooth characteristic
-												// setModalPage(PAGE.ENTER_NAME);
 											})
 											.catch((error) => {
 												console.log(error);
@@ -666,7 +689,8 @@ const modalStyles = {
 		borderRadius: 10
 	},
 	inputHeaderView: {
-		marginTop: '1%'
+		marginTop: '1%',
+		width: '94%'
 	},
 	inputHeader: {
 		color: colors.dark,
