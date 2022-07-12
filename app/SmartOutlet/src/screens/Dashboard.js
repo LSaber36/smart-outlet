@@ -84,7 +84,7 @@ export const Dashboard = ({ navigation }) => {
 	const [connectedBleDevice, setConnectedBleDevice] = useState(null);
 	const [networkName, setNetworkName] = useState('');
 	const [newOutletId, setNewOutletId] = useState('');
-	const [passwordVerified, setPasswordVerified] = useState(true);
+	const [wifiPageError, setWifiPageError] = useState('');
 	const [modalPage, setModalPage] = useState(PAGE.MODAL_CLOSED);
 	const dispatch = useDispatch();
 
@@ -173,6 +173,7 @@ export const Dashboard = ({ navigation }) => {
 												)
 													.then(() => {
 														console.log('Sent close connection message');
+														connectedDevice.cancelConnection();
 													})
 													.catch((error) => {
 														console.log(error);
@@ -206,7 +207,7 @@ export const Dashboard = ({ navigation }) => {
 				});
 		}
 		else if (modalPage === PAGE.ENTER_WIFI) {
-			setPasswordVerified(true);
+			setWifiPageError('');
 			console.log('Getting Wi-Fi network...');
 
 			request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
@@ -244,7 +245,7 @@ export const Dashboard = ({ navigation }) => {
 		WifiManager.connectToProtectedSSID(networkName, password, false)
 			.then((result) => {
 				console.log('Connect to wifi result: ' + result);
-				setPasswordVerified(true);
+				setWifiPageError('');
 				console.log('Disconnecting from temp network...');
 				WifiManager.disconnect();
 				resolve();
@@ -253,7 +254,7 @@ export const Dashboard = ({ navigation }) => {
 				console.log('Connect to wifi error: ' + error.code);
 				if (error.code === 'userDenied') {
 					console.log('Connection canceled, please check your password');
-					setPasswordVerified(false);
+					setWifiPageError('Connection canceled, please check your password');
 				}
 				reject('Wifi validation error: ' + error);
 			});
@@ -381,9 +382,7 @@ export const Dashboard = ({ navigation }) => {
 					placeholder = 'myWifiPassword'
 					onChangeText = { props.handleChange('password') }
 					value = { props.values.password }
-					errorMessage = { (passwordVerified || props.errors.password) ?
-						(props.touched.password && props.errors.password) :
-						'Connection canceled, please check your password' }
+					errorMessage = { (wifiPageError === '' || props.errors.password) ? (props.touched.password && props.errors.password) : wifiPageError }
 				/>
 			);
 		}
@@ -530,6 +529,8 @@ export const Dashboard = ({ navigation }) => {
 														)
 															.then(() => {
 																console.log('Sent close connection message');
+																connectedBleDevice.cancelConnection();
+																setConnectedBleDevice(null);
 															})
 															.catch((error) => {
 																console.log(error);
