@@ -162,6 +162,7 @@ export const Dashboard = ({ navigation }) => {
 											}
 											else if (receivedValue === CODES.WIFI_CONNECTION_FAILED) {
 												console.log('Wifi connection failed');
+												setWifiPageError('Outlet wifi connection failed, please re-enter your wifi password');
 											}
 											else if (receivedValue === CODES.FIREBASE_CONNECTION_SUCCESSFUL) {
 												console.log('Firebase connection successful');
@@ -183,7 +184,11 @@ export const Dashboard = ({ navigation }) => {
 											}
 											else if (receivedValue === CODES.FIREBASE_CONNECTION_FAILED) {
 												console.log('Firebase connection failed');
+												setWifiPageError('Outlet firebase connection failed, please re-enter your wifi password');
 											}
+
+											// Prevent any commands from being run twice
+											receivedValue = '';
 										}
 									}
 								);
