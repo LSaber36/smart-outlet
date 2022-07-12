@@ -16,13 +16,16 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { BleManager } from 'react-native-ble-plx';
 import WifiManager from 'react-native-wifi-reborn';
+import base64 from 'react-native-base64';
+import uuid from 'react-native-uuid';
 import { request, PERMISSIONS } from 'react-native-permissions';
 import {
+	getServId,
+	getRxId,
 	scanForOutlet,
 	connectToOutlet,
 	sendDataToCharacteristic,
-	getDataFromCharacteristic,
-	subscribeToCharacteristic
+	sendMultipleDataToCharacteristic
 } from '../services/bluetoothServices';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
@@ -43,7 +46,12 @@ const PAGE = {
 const CODES = {
 	ACCEPTED: '2',
 	DENIED: '4',
-	BLUETOOTH_FINISHED: '64'
+	TEST_CONNECTION: '8',
+	WIFI_CONNECTION_SUCCESSFUL: '16',
+	WIFI_CONNECTION_FAILED: '32',
+	NEW_UUID: '64',
+
+	BLUETOOTH_FINISHED: '128'
 };
 
 const nameSchema = yup.object({
@@ -72,6 +80,7 @@ export const Dashboard = ({ navigation }) => {
 	const [bluetoothReady, setBluetoothReady] = useState(false);
 	const [connectedBleDevice, setConnectedBleDevice] = useState(null);
 	const [networkName, setNetworkName] = useState('');
+	const [newOutletId, setNewOutletId] = useState('');
 	const [passwordVerified, setPasswordVerified] = useState(true);
 	const [modalPage, setModalPage] = useState(PAGE.MODAL_CLOSED);
 	const dispatch = useDispatch();
@@ -92,6 +101,9 @@ export const Dashboard = ({ navigation }) => {
 	}, []);
 
 	useEffect(() => {
+		let serviceID = getServId();
+		let rxId = getRxId();
+
 		// Only call this AFTER the modalPage changes to the loading page
 		if (modalPage === PAGE.LOADING) {
 			scanForOutlet(BLEManager, 'New SmartOutlet Device')
@@ -104,9 +116,51 @@ export const Dashboard = ({ navigation }) => {
 							setConnectedBleDevice(connectedDevice);
 
 							connectedDevice.onDisconnected(() => {
+								setConnectedBleDevice(null);
 								if (modalPage === PAGE.LOADING)
 									console.log('Device disconnected');
 							});
+
+							connectedDevice
+								.monitorCharacteristicForService(
+									serviceID, rxId,
+									(error, characteristic) => {
+										if (error)
+											console.log('Subscribe error: ' + error);
+
+										if (characteristic?.value != null) {
+											let receivedValue = base64.decode(characteristic.value);
+
+											console.log('Received data: ' + receivedValue);
+
+											if (receivedValue === CODES.WIFI_CONNECTION_SUCCESSFUL) {
+												console.log('Wifi connection successful');
+												let newId = uuid.v4();
+
+												setNewOutletId(newId);
+												console.log('Created new outlet ID: ' + newId);
+												// Trigger the bluetooth to send new UUID
+
+												sendMultipleDataToCharacteristic(
+													connectedDevice,
+													[
+														CODES.NEW_UUID,
+														newId
+													]
+												)
+													.then(() => {
+														console.log('New UUID write successful');
+													})
+													.catch((error) => {
+														console.log(error);
+													});
+											}
+
+											if (receivedValue === CODES.WIFI_CONNECTION_FAILED)
+												console.log('Wifi connection failed');
+										}
+									}
+								);
 						})
 						.catch((error) => {
 							console.log(error);
@@ -176,7 +230,7 @@ export const Dashboard = ({ navigation }) => {
 					console.log('Connection canceled, please check your password');
 					setPasswordVerified(false);
 				}
-				reject();
+				reject('Wifi validation error: ' + error);
 			});
 	});
 
@@ -287,7 +341,9 @@ export const Dashboard = ({ navigation }) => {
 						title = 'Confirm'
 						containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
 						buttonStyle = { fullWidthHeight }
-						onPress = { () => setModalPage(PAGE.ENTER_WIFI) }
+						onPress = { () => {
+							setModalPage(PAGE.ENTER_WIFI);
+						} }
 					/>
 				</View>
 			);
@@ -326,7 +382,8 @@ export const Dashboard = ({ navigation }) => {
 
 		if (modalPage === PAGE.LOADING) {
 			modalMessage =
-			'We\'re searching for your device, hang tight.\n\nMake sure you\'ve put your device in pairing mode.';
+			'We\'re searching for your device, hang tight.\n\n' +
+			'Make sure you\'ve put your device in pairing mode by pressing the faceplate button until the blue LED blinks.';
 		}
 		else if (modalPage === PAGE.SCAN_TIMEOUT) {
 			modalMessage =
@@ -398,7 +455,26 @@ export const Dashboard = ({ navigation }) => {
 										console.log('Entered password: ' + values.password);
 										validateWifiCreds(values.password)
 											.then(() => {
-												setModalPage(PAGE.ENTER_NAME);
+												// Network password was validated
+												if (connectedBleDevice !== null && networkName != '' && values.password != '') {
+													sendMultipleDataToCharacteristic(
+														connectedBleDevice,
+														[
+															CODES.ACCEPTED,
+															networkName,
+															values.password,
+															CODES.TEST_CONNECTION
+														]
+													)
+														.then(() => {
+															console.log('New wifi creds write successful');
+														})
+														.catch((error) => {
+															console.log(error);
+														});
+												}
+												// Only do this after receiving a message from the bluetooth characteristic
+												// setModalPage(PAGE.ENTER_NAME);
 											})
 											.catch((error) => {
 												console.log(error);
@@ -406,7 +482,7 @@ export const Dashboard = ({ navigation }) => {
 									}
 									else if (modalPage === PAGE.ENTER_NAME) {
 										actions.resetForm();
-										addOutlet(activeUserData, outletRefList, values.name);
+										addOutlet(activeUserData, outletRefList, values.name, newOutletId);
 										setModalVisible(false);
 										setModalPage(PAGE.MODAL_CLOSED);
 									}
