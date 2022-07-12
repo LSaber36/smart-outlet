@@ -115,6 +115,7 @@ export const getDataFromCharacteristic = (device) => new Promise((resolve, rejec
 export const sendMultipleDataToCharacteristic = (device, values) => new Promise((resolve, reject) => {
 	// Iterate through each value in values and send it one by one
 	if (values.length != 0) {
+		console.log('');
 		console.log('Writing multiple values...');
 
 		values.map((value) => {
