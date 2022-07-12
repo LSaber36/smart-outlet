@@ -2,7 +2,12 @@ enum CODES
 {
   ACCEPTED = 2,
   DENIED = 4,
-  BLUETOOTH_FINISHED = 64
+  TEST_CONNECTION = 8,
+  WIFI_CONNECTION_SUCCESSFUL = 16,
+  WIFI_CONNECTION_FAILED = 32,
+  NEW_UUID = 64,
+
+  BLUETOOTH_FINISHED = 128
 };
 
 class MyServerCallbacks: public BLEServerCallbacks
@@ -34,6 +39,16 @@ class MyCallbacks: public BLECharacteristicCallbacks
         blinkLED(BLUE_LED, 100, 300, 2);
         Serial.println("Shutting off bluetooth");
         pServer->getAdvertising()->stop();
+      }
+      else if (atoi(rxValue.data()) == ACCEPTED)
+      {
+        Serial.println("Ready for wifi creds");
+      }
+      else if (atoi(rxValue.data()) == TEST_CONNECTION)
+      {
+        Serial.println("Checking wifi connection");
+        TxChar->setValue(std::to_string(WIFI_CONNECTION_SUCCESSFUL));
+        TxChar->notify();
       }
     }
   }
