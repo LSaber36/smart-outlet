@@ -1,10 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
-import uuid from 'react-native-uuid';
 
-export const addOutlet = (activeUserData, outletRefList, newOutletName) => {
-	const newOutletId = uuid.v4();
-
+export const addOutlet = (activeUserData, outletRefList, newOutletName, newOutletId) => {
 	// Add a new outlet to the outlet RTDB
 	database()
 		.ref('/' + newOutletId.toString())
