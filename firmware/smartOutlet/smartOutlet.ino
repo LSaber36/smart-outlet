@@ -150,8 +150,6 @@ void loop()
     // Do stuff here after disconnected
     // give the bluetooth stack the chance to get things ready
     delay(500);
-
-    // After device disconnects, turn off bluetooth
     
     oldDeviceConnected = deviceConnected;
   }
