@@ -38,10 +38,11 @@ const PAGE = {
 	DEVICE_FOUND: 2,
 	SCAN_TIMEOUT: 3,
 	ENTER_WIFI: 4,
-	WIFI_PERMISSIONS_ERROR: 5,
-	BLE_PERMISSIONS_ERROR: 6,
-	ENTER_NAME: 7,
-	REGISTRATION_COMPLETE: 8
+	REBOOT_MESSAGE: 5,
+	ENTER_NAME: 6,
+	REGISTRATION_COMPLETE: 7,
+	WIFI_PERMISSIONS_ERROR: 8,
+	BLE_PERMISSIONS_ERROR: 9
 };
 
 const CODES = {
@@ -242,12 +243,17 @@ export const Dashboard = ({ navigation }) => {
 					console.log('Wifi Permissions Error: ' + error);
 				});
 		}
+		else if (modalPage === PAGE.REBOOT_MESSAGE) {
+			setTimeout(() => {
+				setModalPage(PAGE.ENTER_NAME);
+			}, 6000);
+		}
 		else if (modalPage === PAGE.REGISTRATION_COMPLETE) {
 			// Show the page for 5 seconds
 			setTimeout(() => {
 				setModalVisible(false);
 				setModalPage(PAGE.MODAL_CLOSED);
-			}, 5000);
+			}, 10000);
 		}
 	}, [modalPage]);
 
@@ -310,7 +316,9 @@ export const Dashboard = ({ navigation }) => {
 				size = { 100 }
 			/>);
 		}
-		else if (page === PAGE.DEVICE_FOUND) {
+		else if (page === PAGE.DEVICE_FOUND ||
+							page === PAGE.REBOOT_MESSAGE ||
+							page === PAGE.REGISTRATION_COMPLETE) {
 			return (<Icon
 				name = 'check-circle'
 				color = { colors.primaryDark }
@@ -411,6 +419,20 @@ export const Dashboard = ({ navigation }) => {
 				/>
 			);
 		}
+		else if (page === PAGE.REBOOT_MESSAGE) {
+			return (
+				<View style = { modalStyles.confirmBleButtonView }>
+					<Button
+						title = 'Next'
+						containerStyle = { [buttonContainer, modalStyles.confirmButtonStyle] }
+						buttonStyle = { fullWidthHeight }
+						onPress = { () => {
+							setModalPage(PAGE.ENTER_NAME);
+						} }
+					/>
+				</View>
+			);
+		}
 	};
 
 	const renderModalBody = (props) => {
@@ -446,6 +468,11 @@ export const Dashboard = ({ navigation }) => {
 		else if (modalPage === PAGE.BLE_PERMISSIONS_ERROR) {
 			modalMessage =
 			'Please grant both bluetooth and location permissions to this application.';
+		}
+		else if (modalPage === PAGE.REBOOT_MESSAGE) {
+			modalMessage =
+			'We\'re rebooting your device for it to properly sync with your account.\n\n' +
+			'In the meantime, please give your new device a name.';
 		}
 		else if (modalPage === PAGE.REGISTRATION_COMPLETE) {
 			modalMessage =
@@ -559,13 +586,25 @@ export const Dashboard = ({ navigation }) => {
 												} }
 											/>
 											<Button
-												title = { (modalPage === PAGE.ENTER_NAME) ? 'Add Device' : 'Check Wifi' }
+												title = { (modalPage === PAGE.ENTER_NAME ||
+																	modalPage === PAGE.REBOOT_MESSAGE) ?
+													'Add Device' :
+													(modalPage === PAGE.REGISTRATION_COMPLETE) ?
+														'Finish' :
+														'Check Wifi' }
 												containerStyle = { [buttonContainer, modalStyles.modalButtonStyle] }
 												buttonStyle = { fullWidthHeight }
-												disabled = { !(modalPage === PAGE.ENTER_WIFI ||
-																				modalPage === PAGE.ENTER_NAME) }
+												disabled = { !(
+													modalPage === PAGE.ENTER_WIFI ||
+													modalPage === PAGE.ENTER_NAME ||
+													modalPage === PAGE.REGISTRATION_COMPLETE) }
 												disabledStyle = { disabledButton }
-												onPress = { props.handleSubmit }
+												onPress = { (modalPage === PAGE.REGISTRATION_COMPLETE) ?
+													(() => {
+														setModalVisible(false);
+														setModalPage(PAGE.MODAL_CLOSED);
+													}) :
+													props.handleSubmit }
 											/>
 										</View>
 									</View>
@@ -692,7 +731,7 @@ const modalStyles = {
 		justifyContent: 'center'
 	},
 	mainInputView: {
-		height: '44%',
+		height: '46%',
 		width: '95%',
 		alignItems: 'center',
 		marginTop: '-6%'
