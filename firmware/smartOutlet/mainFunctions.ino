@@ -31,7 +31,13 @@ void getButtons()
       {
         Serial.println("Short press");
 
-        relayState = !relayState;
+        if (buttonPressCount == 0)
+        {
+          prevButtonCountTime = millis();
+        }
+
+        buttonPressCount ++;
+        // relayState = !relayState;
       }
       else if (releasedPressTime <= LONG_PRESS_TIME)
       {
@@ -48,6 +54,30 @@ void getButtons()
       // Trigger bluetooth to start
       Serial.println("Really long press while holding");
       pairingMode();
+    }
+  }
+
+  // Check for multi button press timeout
+  buttonCountTime = millis();
+  if (buttonCountTime - prevButtonCountTime < MULTI_BUTTON_PRESS_TIME)
+  {
+    // Multi button press time valid
+    if (buttonPressCount == NUM_MULTI_PRESS)
+    {
+      Serial.println("Short multi press");
+
+      
+
+      buttonPressCount = 0;
+    }
+  }
+  else
+  {
+    if (buttonPressCount > 0)
+    {
+      // Multi button press time exceeded
+      Serial.println("Short multi press timed out");
+      buttonPressCount = 0;
     }
   }
   

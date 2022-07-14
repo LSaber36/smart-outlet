@@ -21,6 +21,8 @@
 
 #define SHORT_PRESS_TIME 1000
 #define LONG_PRESS_TIME 3000
+#define MULTI_BUTTON_PRESS_TIME 750
+#define NUM_MULTI_PRESS 3
 
 #define SERVICE_UUID            "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_RX  "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
@@ -60,6 +62,8 @@ bool ADCInitialized = false;
 uint8_t currButtonState = 1;
 uint8_t prevButtonState = 1;
 unsigned long prevMillis = 0, releasedPressTime = 0, depressedPressTime = 0;
+unsigned long prevButtonCountTime = 0, buttonCountTime = 0;
+uint8_t buttonPressCount = 0;
 bool prevRelayState, relayState = false;
 
 // Bluetooth data
