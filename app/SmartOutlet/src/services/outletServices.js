@@ -93,7 +93,7 @@ export const setOutletState = (outletID, targetState) => {
 			state: targetState
 		})
 		.then(() => {
-			console.log('Set outlet state (State: ' + targetState + '  ID: ' + outletID + ')');
+			console.log('Set outlet state (State: ' + targetState + '   ID: ' + outletID + ')');
 		})
 		.catch((error) => {
 			console.log(error);
