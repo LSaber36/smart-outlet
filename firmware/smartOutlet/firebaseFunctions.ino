@@ -1,10 +1,11 @@
-void setupWiFi()
+void setupWiFi(String ssid, String pass)
 {
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.begin(ssid.c_str(), pass.c_str());
   Serial.print("\nConnecting to Wi-Fi");
   
   configTime(-18000, 3600, ntpServer);
 
+  // TO-DO: Add a timeout to this
   while (WiFi.status() != WL_CONNECTED)
   {
     Serial.print(".");
@@ -59,7 +60,7 @@ void setupFirebase()
 
   // Assign the callback function for the long running token generation task
   config.token_status_callback = tokenStatusCallback;
-  config.max_token_generation_retry = 5;
+  config.max_token_generation_retry = 10;
 
   fbdo.setResponseSize(4096);
 
