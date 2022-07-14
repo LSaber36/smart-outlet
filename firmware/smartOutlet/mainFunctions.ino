@@ -30,34 +30,12 @@ void getButtons()
       if (releasedPressTime <= SHORT_PRESS_TIME)
       {
         Serial.println("Short press");
-        Serial.println("Writing blanks to saved info");
-        resetSavedInfo();
-        Serial.println();
 
         relayState = !relayState;
       }
       else if (releasedPressTime <= LONG_PRESS_TIME)
       {
         Serial.println("Long Press");
-        Serial.println();
-
-        getSavedInfo(&currentSsid, &currentPass, &currentUuid);
-        Serial.printf("ssid: %s\n", currentSsid.c_str());
-        Serial.printf("pass: %s\n", currentPass.c_str());
-        Serial.printf("uuid: %s\n", currentUuid.c_str());
-        Serial.println();
-        
-        Serial.println("Putting values into saved info");
-        putSavedInfo("Death Star", "honorprose034", "6281f1d0-59e2-4682-9662-a85fad04ebf7");
-
-        Serial.println("Waiting .5 sec...");
-        delay(500);
-
-        getSavedInfo(&currentSsid, &currentPass, &currentUuid);
-        Serial.printf("ssid: %s\n", currentSsid.c_str());
-        Serial.printf("pass: %s\n", currentPass.c_str());
-        Serial.printf("uuid: %s\n", currentUuid.c_str());
-        Serial.println();
       }
     }
   }
