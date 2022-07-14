@@ -77,7 +77,8 @@ const char* ntpServer = "pool.ntp.org";
 void setup()
 {
   Serial.begin(115200);
-
+  Serial.printf("Starting Program...\n\n");
+  
   // Init pinmodes
   pinMode(GREEN_LED, OUTPUT);
   pinMode(BLUE_LED, OUTPUT);
