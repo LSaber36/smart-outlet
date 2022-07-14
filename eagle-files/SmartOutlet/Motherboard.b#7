@@ -2399,11 +2399,11 @@ design rules under a new name.</description>
 </element>
 <element name="C18" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:36448449" package="1206" package3d_urn="urn:adsk.eagle:package:36448508/2" value="10uF" x="22.225" y="31.115" smashed="yes" rot="MR90">
 <attribute name="PROD_ID" value="CAP-10057" x="-55.245" y="106.045" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="VALUE" x="22.479" y="27.305" size="0.8128" layer="22" font="vector" ratio="20" rot="MR90" align="top-center"/>
+<attribute name="VALUE" x="23.241" y="27.305" size="0.8128" layer="22" font="vector" ratio="20" rot="MR90" align="top-center"/>
 </element>
 <element name="C19" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:36448449" package="1206" package3d_urn="urn:adsk.eagle:package:36448508/2" value="10uF" x="29.845" y="31.115" smashed="yes" rot="MR90">
 <attribute name="PROD_ID" value="CAP-10057" x="-53.975" y="46.355" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="VALUE" x="30.099" y="27.305" size="0.8128" layer="22" font="vector" ratio="20" rot="MR90" align="top-center"/>
+<attribute name="VALUE" x="29.591" y="27.305" size="0.8128" layer="22" font="vector" ratio="20" rot="MR90" align="top-center"/>
 </element>
 <element name="C2" library="microbuilder" package="0805" override_package3d_urn="urn:adsk.eagle:package:36448892/2" override_package_urn="urn:adsk.eagle:footprint:36448893/1" value="1µF" x="33.02" y="28.702" smashed="yes" rot="R180">
 <attribute name="VALUE" x="35.179" y="28.321" size="0.8128" layer="21"/>
@@ -2657,10 +2657,9 @@ design rules under a new name.</description>
 <wire x1="30.622" y1="21.696" x2="30.622" y2="23.495" width="0.254" layer="16"/>
 <via x="30.622" y="23.495" extent="1-16" drill="0.35"/>
 <wire x1="30.622" y1="23.495" x2="30.495" y2="23.622" width="0.254" layer="1"/>
-<wire x1="30.495" y1="27.955" x2="30.495" y2="23.622" width="0.254" layer="1"/>
-<wire x1="30.495" y1="27.955" x2="30.368" y2="28.082" width="0.254" layer="1"/>
-<wire x1="32.07" y1="28.702" x2="30.988" y2="28.702" width="0.254" layer="1"/>
-<wire x1="30.988" y1="28.702" x2="30.368" y2="28.082" width="0.254" layer="1"/>
+<wire x1="30.495" y1="28.082" x2="30.495" y2="23.622" width="0.254" layer="1"/>
+<wire x1="32.07" y1="28.702" x2="31.115" y2="28.702" width="0.254" layer="1"/>
+<wire x1="31.115" y1="28.702" x2="30.495" y2="28.082" width="0.254" layer="1"/>
 <wire x1="16.241" y1="6.746" x2="12.372" y2="6.746" width="0.254" layer="16"/>
 <wire x1="16.241" y1="6.746" x2="16.256" y2="6.731" width="0.254" layer="16"/>
 <via x="16.256" y="6.731" extent="1-16" drill="0.35"/>
@@ -2708,9 +2707,9 @@ design rules under a new name.</description>
 <wire x1="18.034" y1="33.8582" x2="18.034" y2="38.1" width="0.254" layer="16"/>
 <contactref element="S2" pad="2"/>
 <contactref element="S1" pad="2"/>
-<wire x1="31.75" y1="29.464" x2="30.368" y2="28.082" width="0.254" layer="16"/>
-<via x="30.368" y="28.082" extent="1-16" drill="0.35"/>
-<wire x1="31.75" y1="31.75" x2="31.75" y2="29.464" width="0.254" layer="16"/>
+<wire x1="31.75" y1="29.337" x2="30.495" y2="28.082" width="0.254" layer="16"/>
+<via x="30.495" y="28.082" extent="1-16" drill="0.35"/>
+<wire x1="31.75" y1="31.75" x2="31.75" y2="29.337" width="0.254" layer="16"/>
 <wire x1="14.435" y1="34.29" x2="14.435" y2="25.146" width="0.254" layer="1"/>
 <wire x1="14.435" y1="25.146" x2="14.435" y2="22.86" width="0.254" layer="1"/>
 <wire x1="7.577" y1="24.789" x2="6.326" y2="24.789" width="0.254" layer="1"/>

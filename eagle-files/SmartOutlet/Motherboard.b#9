@@ -185,8 +185,8 @@ Board</text>
 <text x="2.54" y="38.227" size="0.8128" layer="21" rot="R90" align="center">Out</text>
 <text x="8.89" y="55.245" size="1.27" layer="21" rot="R90" align="center">Relay</text>
 <text x="15.494" y="41.656" size="0.8128" layer="21" rot="R90" align="center">ACS712</text>
-<text x="6.985" y="14.097" size="0.8128" layer="21" align="center">+</text>
-<text x="6.985" y="16.637" size="0.8128" layer="21" align="center">-</text>
+<text x="6.477" y="14.097" size="0.8128" layer="21" align="center">+</text>
+<text x="6.477" y="16.637" size="0.8128" layer="21" align="center">-</text>
 </plain>
 <libraries>
 <library name="microbuilder">
