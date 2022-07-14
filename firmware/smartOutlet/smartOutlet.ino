@@ -10,6 +10,8 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
+#include <Preferences.h>
+
 #define GREEN_LED 32
 #define BLUE_LED 33
 #define BUTTON_PIN 26
@@ -23,6 +25,11 @@
 #define SERVICE_UUID            "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_RX  "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_TX  "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+
+// Define preferences object for flash access
+Preferences savedInfo;
+String currentSsid, currentPass, currentUuid;
+volatile bool hasSavedInfo = false;
 
 // Define ADC object
 Adafruit_ADS1115 ads;
@@ -40,7 +47,8 @@ unsigned long count = 0;
 
 // Realtime Data
 volatile bool dataChanged = false, firstStreamUpdate = true, firebaseEstablished = false;
-String deviceID = "6281f1d0-59e2-4682-9662-a85fad04ebf7"; 
+// String deviceID = "6281f1d0-59e2-4682-9662-a85fad04ebf7"; 
+String deviceID; 
 int devicePower = 0;
 
 // ADC data
@@ -49,8 +57,8 @@ float averageVoltage;
 bool ADCInitialized = false;
 
 // Button data
-uint8_t currButtonState;
-uint8_t prevButtonState;
+uint8_t currButtonState = 1;
+uint8_t prevButtonState = 1;
 unsigned long prevMillis = 0, releasedPressTime = 0, depressedPressTime = 0;
 bool prevRelayState, relayState = false;
 
@@ -62,6 +70,7 @@ BLECharacteristic *RxChar;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 uint8_t txValue = 'A';
+int8_t incomingData = 0, incomingDataCounter = 0;
 
 const char* ntpServer = "pool.ntp.org";
 
@@ -77,9 +86,28 @@ void setup()
 
   digitalWrite(RELAY_PIN, LOW);
 
+  // Check flash for existing values and print them
+  getSavedInfo(&currentSsid, &currentPass, &currentUuid);
+  Serial.printf("ssid: %s\n", currentSsid.c_str());
+  Serial.printf("pass: %s\n", currentPass.c_str());
+  Serial.printf("uuid: %s\n", currentUuid.c_str());
+  Serial.println();
+
+  if (currentSsid == "" || currentPass == "" || currentUuid == "")
+  {
+    Serial.println("No data found, can't connect to network");
+    hasSavedInfo = false;
+  }
+  else if (currentSsid != "" || currentPass != "" || currentUuid != "")
+  {
+    Serial.println("Found data, attempting network connection");
+    hasSavedInfo = true;
+    deviceID = currentUuid;
+    setupWiFi(currentSsid, currentPass);
+    setupFirebase();
+  }
+
   setupADC();
-  setupWiFi();
-  setupFirebase();
   setupBLE();
 }
 
@@ -138,5 +166,5 @@ void loop()
   prevRelayState = relayState;
 
   // This is necessary to avoid watchdog timer errors
-  delay(5);
+  delay(10);
 }
