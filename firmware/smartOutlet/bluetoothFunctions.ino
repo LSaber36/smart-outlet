@@ -61,11 +61,11 @@ class MyCallbacks: public BLECharacteristicCallbacks
         Serial.println("Ready for wifi creds");
         incomingData = INCOMING_WIFI_CREDS;
         incomingDataCounter = 0;
+        firebaseEstablished = false;
+
         // Cancel current connection if it exists and and clear out existing creds
         if (WiFi.status() == WL_CONNECTED)
           WiFi.disconnect();
-
-        firebaseEstablished = false;
 
         resetSavedInfo();
       }
