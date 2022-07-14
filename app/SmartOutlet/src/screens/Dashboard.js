@@ -40,7 +40,8 @@ const PAGE = {
 	ENTER_WIFI: 4,
 	WIFI_PERMISSIONS_ERROR: 5,
 	BLE_PERMISSIONS_ERROR: 6,
-	ENTER_NAME: 7
+	ENTER_NAME: 7,
+	REGISTRATION_COMPLETE: 8
 };
 
 const CODES = {
@@ -241,6 +242,13 @@ export const Dashboard = ({ navigation }) => {
 					console.log('Wifi Permissions Error: ' + error);
 				});
 		}
+		else if (modalPage === PAGE.REGISTRATION_COMPLETE) {
+			// Show the page for 5 seconds
+			setTimeout(() => {
+				setModalVisible(false);
+				setModalPage(PAGE.MODAL_CLOSED);
+			}, 5000);
+		}
 	}, [modalPage]);
 
 	const validateWifiCreds = (password) => new Promise((resolve, reject) => {
@@ -439,6 +447,11 @@ export const Dashboard = ({ navigation }) => {
 			modalMessage =
 			'Please grant both bluetooth and location permissions to this application.';
 		}
+		else if (modalPage === PAGE.REGISTRATION_COMPLETE) {
+			modalMessage =
+			'Congratulations, your new device has been added!\n\nIt should be visible on your dashboard.\n\n' +
+			'Try toggling the led to verify that it works.';
+		}
 
 		return (
 			<View style = { modalStyles.inputContainer }>
@@ -510,8 +523,7 @@ export const Dashboard = ({ navigation }) => {
 									else if (modalPage === PAGE.ENTER_NAME) {
 										actions.resetForm();
 										addOutlet(activeUserData, outletRefList, values.name, newOutletId);
-										setModalVisible(false);
-										setModalPage(PAGE.MODAL_CLOSED);
+										setModalPage(PAGE.REGISTRATION_COMPLETE);
 									}
 								} }
 							>
