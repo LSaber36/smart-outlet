@@ -65,6 +65,8 @@ class MyCallbacks: public BLECharacteristicCallbacks
         if (WiFi.status() == WL_CONNECTED)
           WiFi.disconnect();
 
+        firebaseEstablished = false;
+
         resetSavedInfo();
       }
       else if (convertedRxValue == TEST_WIFI)
@@ -87,6 +89,7 @@ class MyCallbacks: public BLECharacteristicCallbacks
       }
       else if (convertedRxValue == CHECK_UUID)
       {
+        Serial.printf("Received UUID: %s\n", (currentUuid != "") ? "true" : "false");
         TxChar->setValue(std::to_string(UUID_RECEIVED));
         TxChar->notify();
       }
