@@ -52,9 +52,9 @@ const CODES = {
 	WIFI_CONNECTION_SUCCESSFUL: '4',
 	WIFI_CONNECTION_FAILED: '5',
 	NEW_UUID: '6',
-	TEST_FIREBASE: '7',
-	FIREBASE_CONNECTION_SUCCESSFUL: '8',
-	FIREBASE_CONNECTION_FAILED: '9',
+	CHECK_UUID: '7',
+	UUID_RECEIVED: '8',
+	REBOOT_DEVICE: '9',
 
 	BLUETOOTH_FINISHED: '64'
 };
@@ -152,7 +152,7 @@ export const Dashboard = ({ navigation }) => {
 													[
 														CODES.NEW_UUID,
 														newId,
-														CODES.TEST_FIREBASE
+														CODES.CHECK_UUID
 													]
 												)
 													.then(() => {
@@ -166,27 +166,22 @@ export const Dashboard = ({ navigation }) => {
 												console.log('Wifi connection failed');
 												setWifiPageError('Outlet wifi connection failed, please re-enter your wifi password');
 											}
-											else if (receivedValue === CODES.FIREBASE_CONNECTION_SUCCESSFUL) {
-												console.log('Firebase connection successful');
+											else if (receivedValue === CODES.UUID_RECEIVED) {
+												console.log('UUID received, rebooting device');
 
-												// Tell ESP32 to cancel bluetooth connection
+												// Tell ESP32 to reboot
 												sendDataToCharacteristic(
 													connectedDevice,
-													CODES.BLUETOOTH_FINISHED
+													CODES.REBOOT_DEVICE
 												)
 													.then(() => {
-														console.log('Sent close connection message');
-														connectedDevice.cancelConnection();
 													})
 													.catch((error) => {
 														console.log(error);
 													});
 
-												setModalPage(PAGE.ENTER_NAME);
-											}
-											else if (receivedValue === CODES.FIREBASE_CONNECTION_FAILED) {
-												console.log('Firebase connection failed');
-												setWifiPageError('Outlet firebase connection failed, please re-enter your wifi password');
+												console.log('Sent reboot message');
+												setModalPage(PAGE.REBOOT_MESSAGE);
 											}
 
 											// Prevent any commands from being run twice
