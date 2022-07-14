@@ -1,4 +1,4 @@
-enum CODES
+enum BLUETOOTH_CODES
 {
   ACCEPTED = 1,
   DENIED = 2,
@@ -11,6 +11,13 @@ enum CODES
   FIREBASE_CONNECTION_FAILED = 9,
 
   BLUETOOTH_FINISHED = 64
+};
+
+enum INCOMING_DATA_CODES
+{
+  NO_INCOMING_VARS = 1,
+  INCOMING_WIFI_CREDS = 2,
+  INCOMING_UUID = 3
 };
 
 class MyServerCallbacks: public BLEServerCallbacks
@@ -31,36 +38,91 @@ class MyCallbacks: public BLECharacteristicCallbacks
 {
   void onWrite(BLECharacteristic *pCharacteristic) {
     std::string rxValue = pCharacteristic->getValue();
+    int convertedRxValue = atoi(rxValue.data());
 
     if (rxValue.length() > 0) {
-      Serial.printf("\n******************\n");
-      Serial.printf("Received: %s", rxValue.data());
-      Serial.printf("\n******************\n\n");
-
-      if (atoi(rxValue.data()) == BLUETOOTH_FINISHED)
+      if (convertedRxValue == BLUETOOTH_FINISHED)
       {
         blinkLED(BLUE_LED, 100, 300, 2);
         Serial.println("Shutting off bluetooth");
         pServer->getAdvertising()->stop();
       }
-      else if (atoi(rxValue.data()) == ACCEPTED)
+      else if (convertedRxValue == ACCEPTED)
       {
         Serial.println("Ready for wifi creds");
+        incomingData = INCOMING_WIFI_CREDS;
+        incomingDataCounter = 0;
+        // Cancel current connection if it exists and and clear out existing creds
+        if (WiFi.status() == WL_CONNECTED)
+          WiFi.disconnect();
+
+        resetSavedInfo();
       }
-      else if (atoi(rxValue.data()) == TEST_WIFI)
+      else if (convertedRxValue == TEST_WIFI)
       {
-        Serial.println("Checking wifi connection");
-        // TODO: Actually check if WiFi connection establishes or not
-        TxChar->setValue(std::to_string(WIFI_CONNECTION_SUCCESSFUL));
+        Serial.println("\nChecking wifi connection");
+        setupWiFi(currentSsid, currentPass);
+
+        TxChar->setValue(std::to_string(
+          (WiFi.status() == WL_CONNECTED) ? 
+          WIFI_CONNECTION_SUCCESSFUL :
+          WIFI_CONNECTION_FAILED
+        ));
         TxChar->notify();
       }
-      else if (atoi(rxValue.data()) == TEST_FIREBASE)
+      else if (convertedRxValue == NEW_UUID)
       {
-        // TODO: Actually check if Firebase connection establishes or not
+        Serial.println("Ready for new uuid");
+        incomingData = INCOMING_UUID;
+        incomingDataCounter = 0;
+      }
+      else if (convertedRxValue == TEST_FIREBASE)
+      {
         Serial.println("Checking firebase connection");
+        // TODO: Figure out how to set this up since it trips watchdog timer currently
+        // setupFirebase();
         TxChar->setValue(std::to_string(FIREBASE_CONNECTION_SUCCESSFUL));
         TxChar->notify();
       }
+
+
+      // Process the counter for storing incoming data
+      if (incomingData == INCOMING_WIFI_CREDS)
+      {
+        // Process new wifi cred variables
+        if (incomingDataCounter == 1)
+        {
+          currentSsid = rxValue.data();
+        }  
+        else if (incomingDataCounter == 2)
+        {
+          currentPass = rxValue.data();
+          putSsidPass(currentSsid, currentPass);
+          Serial.println("\nCollected data:");
+          Serial.printf("ssid: %s\n", currentSsid.c_str());
+          Serial.printf("pass: %s\n", currentPass.c_str());
+          incomingDataCounter = -1;
+          incomingData = NO_INCOMING_VARS;
+        }
+
+        incomingDataCounter ++;
+      }
+      else if (incomingData == INCOMING_UUID)
+      {
+        // Process new UUID variables
+        if (incomingDataCounter == 1)
+        {
+          currentUuid = rxValue.data();
+          putUuid(currentUuid);
+          Serial.println("\nCollected data:");
+          Serial.printf("uuid: %s\n", currentUuid.c_str());
+          incomingDataCounter = -1;
+          incomingData = NO_INCOMING_VARS;
+        }
+          
+        incomingDataCounter ++;
+      }
+
     }
   }
 };
