@@ -34,7 +34,7 @@ String currentSsid, currentPass, currentUuid;
 volatile bool hasSavedInfo = false;
 
 // Define ADC object
-Adafruit_ADS1115 ads;
+Adafruit_ADS1015 ads;       
 
 // Define Firebase Data objects
 FirebaseData fbdo;
@@ -54,8 +54,14 @@ String deviceID;
 int devicePower = 0;
 
 // ADC data
-float ADCMultiplier = 0.1875F;
+float ADCMultiplier = 2.0F;
+float ADCResult;  //Voltage
+float ADCValue;   //Current
 float averageVoltage;
+float maxv;
+float minv;
+float counter;
+
 bool ADCInitialized = false;
 
 // Button data
