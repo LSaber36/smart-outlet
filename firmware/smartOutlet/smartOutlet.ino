@@ -96,7 +96,8 @@ void setup()
   pinMode(RELAY_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
-  digitalWrite(RELAY_PIN, LOW);
+  // Turn the relay off
+  digitalWrite(RELAY_PIN, HIGH);
 
   // Check flash for existing values and print them
   getSavedInfo(&currentSsid, &currentPass, &currentUuid);
