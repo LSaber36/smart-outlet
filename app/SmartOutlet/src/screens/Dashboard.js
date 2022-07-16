@@ -267,8 +267,8 @@ export const Dashboard = ({ navigation }) => {
 			.catch((error) => {
 				console.log('Connect to wifi error: ' + error.code);
 				if (error.code === 'userDenied') {
-					console.log('Connection canceled, please check your password');
-					setWifiPageError('Connection canceled, please check your password');
+					console.log('Connection canceled, please check your password and retry');
+					setWifiPageError('Connection canceled, please check your password and retry');
 				}
 				reject('Wifi validation error: ' + error);
 			});
