@@ -57,7 +57,6 @@ void getADCReading()
     Serial.printf("Voltage Reading: %.2f\n", ADCResult);
     Serial.printf("MaxV: %.2f\n", maxv);
     Serial.printf("MinV: %.2f\n", minv);
-    Serial.printf("Mean: %.2f\n", mean);
     Serial.printf("IRMS Current?: %.2f\n", ADCValue);
     Serial.println();
 
