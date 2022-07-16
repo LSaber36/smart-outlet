@@ -1,15 +1,24 @@
 void setupWiFi(String ssid, String pass)
 {
+  unsigned long startTime = 0;
+
   WiFi.begin(ssid.c_str(), pass.c_str());
   Serial.print("\nConnecting to Wi-Fi");
   
   configTime(-18000, 3600, ntpServer);
 
+  startTime = millis();
   // TO-DO: Add a timeout to this
-  while (WiFi.status() != WL_CONNECTED)
+  while ((WiFi.status() != WL_CONNECTED) && ((millis() - startTime) < WIFI_TIMEOUT))
   {
     Serial.print(".");
     delay(300);
+  }
+
+  if ((millis() - startTime) >= WIFI_TIMEOUT)
+  {
+    Serial.println("\nWifi conenction failed");
+    ESP.restart();
   }
 
   Serial.print("\nConnected with IP: ");
