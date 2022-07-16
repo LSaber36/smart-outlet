@@ -25,7 +25,8 @@ import {
 	scanForOutlet,
 	connectToOutlet,
 	sendDataToCharacteristic,
-	sendMultipleDataToCharacteristic
+	sendNewUUIDInfo,
+	sendWifiInfo
 } from '../services/bluetoothServices';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
@@ -147,7 +148,7 @@ export const Dashboard = ({ navigation }) => {
 												console.log('New outlet ID: ' + newId);
 												// Send new UUID over bluetooth with connection request
 
-												sendMultipleDataToCharacteristic(
+												sendNewUUIDInfo(
 													connectedDevice,
 													[
 														CODES.NEW_UUID,
@@ -521,7 +522,7 @@ export const Dashboard = ({ navigation }) => {
 											.then(() => {
 												// Network password was validated
 												if (connectedBleDevice !== null && networkName != '' && values.password != '') {
-													sendMultipleDataToCharacteristic(
+													sendWifiInfo(
 														connectedBleDevice,
 														[
 															CODES.ACCEPTED,

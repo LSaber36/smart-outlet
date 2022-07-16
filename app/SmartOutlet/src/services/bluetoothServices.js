@@ -112,21 +112,78 @@ export const getDataFromCharacteristic = (device) => new Promise((resolve, rejec
 		});
 });
 
-export const sendMultipleDataToCharacteristic = (device, values) => new Promise((resolve, reject) => {
+export const sendWifiInfo = (device, values) => new Promise((resolve, reject) => {
 	// Iterate through each value in values and send it one by one
 	if (values.length != 0) {
 		console.log('');
 		console.log('Writing multiple values...');
 
-		values.map((value) => {
-			sendDataToCharacteristic(device, value)
-				.then(() => {
-					console.log('Sent data:     ' + value);
-				})
-				.catch((error) => {
-					reject('Send multiple error: ' + error);
-				});
-		});
+		sendDataToCharacteristic(device, values[0])
+			.then(() => {
+				console.log('Sent data:     ' + values[0]);
+
+				sendDataToCharacteristic(device, values[1])
+					.then(() => {
+						console.log('Sent data:     ' + values[1]);
+
+						sendDataToCharacteristic(device, values[2])
+							.then(() => {
+								console.log('Sent data:     ' + values[2]);
+
+								sendDataToCharacteristic(device, values[3])
+									.then(() => {
+										console.log('Sent data:     ' + values[3]);
+									})
+									.catch((error) => {
+										reject('Send multiple error: ' + error);
+									});
+							})
+							.catch((error) => {
+								reject('Send multiple error: ' + error);
+							});
+					})
+					.catch((error) => {
+						reject('Send multiple error: ' + error);
+					});
+			})
+			.catch((error) => {
+				reject('Send multiple error: ' + error);
+			});
+
+		// Only resolve if all data sends don't fail
+		resolve();
+	}
+});
+
+export const sendNewUUIDInfo = (device, values) => new Promise((resolve, reject) => {
+	// Iterate through each value in values and send it one by one
+	if (values.length != 0) {
+		console.log('');
+		console.log('Writing multiple values...');
+
+		sendDataToCharacteristic(device, values[0])
+			.then(() => {
+				console.log('Sent data:     ' + values[0]);
+
+				sendDataToCharacteristic(device, values[1])
+					.then(() => {
+						console.log('Sent data:     ' + values[1]);
+
+						sendDataToCharacteristic(device, values[2])
+							.then(() => {
+								console.log('Sent data:     ' + values[2]);
+							})
+							.catch((error) => {
+								reject('Send multiple error: ' + error);
+							});
+					})
+					.catch((error) => {
+						reject('Send multiple error: ' + error);
+					});
+			})
+			.catch((error) => {
+				reject('Send multiple error: ' + error);
+			});
 
 		// Only resolve if all data sends don't fail
 		resolve();
