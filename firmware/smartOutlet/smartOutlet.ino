@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <Firebase_ESP_Client.h>
 #include <addons/TokenHelper.h>
+#include <addons/RTDBHelper.h>
 #include "firebaseInfo.h"
 #include "time.h"
 
@@ -37,20 +38,18 @@ volatile bool hasSavedInfo = false;
 Adafruit_ADS1115 ads;
 
 // Define Firebase Data objects
-FirebaseData fbdo;
 FirebaseData stream;
+FirebaseData fbdo;
 
 // Define Firebase auth and config objects
 FirebaseAuth auth;
 FirebaseConfig config;
 
 unsigned long sendDataPrevMillis = 0;
-unsigned long count = 0;
 
 // Realtime Data
 volatile bool dataChanged = false, firstStreamUpdate = true, firebaseEstablished = false;
-// String deviceID = "6281f1d0-59e2-4682-9662-a85fad04ebf7"; 
-String deviceID; 
+String deviceID = "";
 int devicePower = 0;
 
 // ADC data
@@ -64,7 +63,7 @@ uint8_t prevButtonState = 1;
 unsigned long prevMillis = 0, releasedPressTime = 0, depressedPressTime = 0;
 unsigned long prevButtonCountTime = 0, buttonCountTime = 0;
 uint8_t buttonPressCount = 0;
-bool prevRelayState, relayState = false;
+volatile bool prevRelayState, relayState = false;
 
 // Bluetooth data
 BLEServer *pServer = NULL;
@@ -73,10 +72,12 @@ BLECharacteristic *TxChar;
 BLECharacteristic *RxChar;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
-uint8_t txValue = 'A';
 int8_t incomingData = 0, incomingDataCounter = 0;
 
 const char* ntpServer = "pool.ntp.org";
+
+// Mode for knowing wheter to boot in normal operation or in pairing mode
+String mode;
 
 void setup()
 {
@@ -98,75 +99,94 @@ void setup()
   Serial.printf("uuid: %s\n", currentUuid.c_str());
   Serial.println();
 
-  if (currentSsid == "" || currentPass == "" || currentUuid == "")
+  getMode(&mode);
+  Serial.printf("Mode: %s\n", mode);
+
+  if (mode == "")
   {
-    Serial.println("No data found, can't connect to network");
-    hasSavedInfo = false;
-  }
-  else if (currentSsid != "" || currentPass != "" || currentUuid != "")
-  {
-    Serial.println("Found data, attempting network connection");
-    hasSavedInfo = true;
-    deviceID = currentUuid;
-    setupWiFi(currentSsid, currentPass);
-    setupFirebase();
+    putMode("normal");
+    mode = "normal";
   }
 
-  setupADC();
-  setupBLE();
+  if (mode == "pairing")
+  {
+    Serial.println("Entered pairing mode");
+    enterPairingMode();
+  }
+  else if (mode == "normal")
+  {
+    Serial.println("Entered normal mode");
+    if (currentSsid == "" || currentPass == "" || currentUuid == "")
+    {
+      Serial.println("No data found, can't connect to network");
+      hasSavedInfo = false;
+    }
+    else if (currentSsid != "" || currentPass != "" || currentUuid != "")
+    {
+      Serial.println("Found data, attempting network connection");
+      hasSavedInfo = true;
+      deviceID = currentUuid;
+      setupWiFi(currentSsid, currentPass);
+      setupFirebase();
+      setupADC();
+    }
+  }
 }
 
 void loop()
 {
-  getButtons();
-  getADCReading();
-  syncFirebase();
-
-  if (dataChanged)
+  if (mode == "normal")
   {
-    if (firstStreamUpdate)
+    getButtons();
+    getADCReading();
+    syncFirebase();
+
+    if (dataChanged)
     {
-      firstStreamUpdate = false;
-      firebaseEstablished = true;
-      Serial.println("\nFirebase Connection Established");
-      // Indicate that the code is running
-      blinkLED(GREEN_LED, 100, 150, 2);
-      blinkLED(BLUE_LED, 100, 150, 2);
+      if (firstStreamUpdate)
+      {
+        firstStreamUpdate = false;
+        firebaseEstablished = true;
+        Serial.println("\nFirebase Connection Established");
+        // Indicate that the code is running
+        blinkLED(GREEN_LED, 100, 150, 2);
+        blinkLED(BLUE_LED, 100, 150, 2);
+      }
+
+      // Process new data received away from callback for efficiency
+      Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
+      dataChanged = false;
     }
 
-    // Process new data received away from callback for efficiency
-    Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
-    blinkLED(GREEN_LED, 100, 200, 2);
-    dataChanged = false;
-  }
+    if (deviceConnected)
+    {        
+      delay(1000); // bluetooth stack will go into congestion, if too many packets are sent
+    }
 
-  if (deviceConnected)
-  {        
-		delay(1000); // bluetooth stack will go into congestion, if too many packets are sent
-	}
+    if (!deviceConnected && oldDeviceConnected)
+    {
+      // Do stuff here after disconnected
+      // give the bluetooth stack the chance to get things ready
+      delay(500);
+      
+      oldDeviceConnected = deviceConnected;
+    }
+    if (deviceConnected && !oldDeviceConnected)
+    {
+      // Do stuff here after connection is established
+      blinkLED(BLUE_LED, 100, 300, 2);
+      oldDeviceConnected = deviceConnected;
+    }
 
-  if (!deviceConnected && oldDeviceConnected)
-  {
-    // Do stuff here after disconnected
-    // give the bluetooth stack the chance to get things ready
-    delay(500);
-    
-    oldDeviceConnected = deviceConnected;
-  }
-  if (deviceConnected && !oldDeviceConnected)
-  {
-    // Do stuff here after connection is established
-    blinkLED(BLUE_LED, 100, 300, 2);
-    oldDeviceConnected = deviceConnected;
-  }
+    // Only call digitalWrite if the state has changed (reduces unnecessary calls)
+    if (relayState != prevRelayState)
+    {
+      digitalWrite(RELAY_PIN, relayState);
+      digitalWrite(GREEN_LED, relayState);
+    }
 
-  // Only call digitalWrite if the state has changed (reduces unnecessary calls)
-  if (relayState != prevRelayState)
-  {
-    digitalWrite(RELAY_PIN, relayState);
+    prevRelayState = relayState;
   }
-
-  prevRelayState = relayState;
 
   // This is necessary to avoid watchdog timer errors
   delay(10);

@@ -29,7 +29,7 @@ void getButtons()
 
       if (releasedPressTime <= SHORT_PRESS_TIME)
       {
-        Serial.println("Short press");
+        // Short press
 
         if (buttonPressCount == 0)
         {
@@ -41,7 +41,7 @@ void getButtons()
       }
       else if (releasedPressTime <= LONG_PRESS_TIME)
       {
-        Serial.println("Long Press");
+        // Long press
       }
     }
   }
@@ -51,9 +51,11 @@ void getButtons()
 
     if (depressedPressTime - prevMillis > LONG_PRESS_TIME)
     {
+      // Really long press
       // Trigger bluetooth to start
       Serial.println("Really long press while holding");
-      pairingMode();
+      putMode("pairing");
+      ESP.restart();
     }
   }
 
@@ -65,8 +67,11 @@ void getButtons()
     if (buttonPressCount == NUM_MULTI_PRESS)
     {
       Serial.println("Short multi press");
+      String datapath = deviceID + "/state";
 
-      
+      // Update the state of the outlet in the database
+      Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, datapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
+      Serial.println();
 
       buttonPressCount = 0;
     }
@@ -114,6 +119,20 @@ void putUuid(String uuid)
 {
   savedInfo.begin("network-info", false);
   savedInfo.putString("uuid", uuid);
+  savedInfo.end();
+}
+
+void putMode(String mode)
+{
+  savedInfo.begin("boot_mode", false);
+  savedInfo.putString("mode", mode);
+  savedInfo.end();
+}
+
+void getMode(String * mode)
+{
+  savedInfo.begin("boot_mode", false);
+  *mode = savedInfo.getString("mode", "");
   savedInfo.end();
 }
 

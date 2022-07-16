@@ -20,6 +20,7 @@ void setupWiFi(String ssid, String pass)
 void streamCallback(FirebaseStream data)
 {
   // Save the captured data to variables for later processing
+  Serial.printf("Received: %s\n", (data.boolData() ? "true" : "false"));
   relayState = data.boolData();
   dataChanged = true;
 }
@@ -46,30 +47,30 @@ unsigned long getTime()
 
 void setupFirebase()
 {
-  String dataPath = "/" + deviceID + "/state";
-
   Serial.println("Setting up firebase connection");
 
   // Assign the api key (required)
   config.api_key = API_KEY;
-  config.database_url = DATABASE_URL;
 
   // Assign the user sign in credentials
   auth.user.email = USER_EMAIL;
   auth.user.password = USER_PASSWORD;
 
+  // Assign database url
+  config.database_url = DATABASE_URL;
+  
   // Assign the callback function for the long running token generation task
   config.token_status_callback = tokenStatusCallback;
   config.max_token_generation_retry = 10;
 
   fbdo.setResponseSize(4096);
-
   Firebase.setSystemTime(getTime());
-  Firebase.reconnectWiFi(true);
   Firebase.setDoubleDigits(5);
-  Firebase.begin(&config, &auth);
 
-  if (!Firebase.RTDB.beginStream(&stream, dataPath))
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+
+  if (!Firebase.RTDB.beginStream(&stream, "/" + deviceID + "/state"))
     Serial.printf("Stream begin error, %s\n\n", stream.errorReason().c_str());
 
   Firebase.RTDB.setStreamCallback(&stream, streamCallback, streamTimeoutCallback);
@@ -78,22 +79,10 @@ void setupFirebase()
 void syncFirebase()
 {
   // Firebase.ready() should be called repeatedly to handle authentication tasks.
-  if (WiFi.status() == WL_CONNECTED && 
-      Firebase.ready() && 
+  if (Firebase.ready() && 
       (millis() - sendDataPrevMillis > SEND_INTERVAL || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
-    blinkLED(GREEN_LED, 100, 0, 1);
 
-    /*
-    // This is the code that can update the state of the database, it should do so because of a button
-    // ================================================================================================
-    Serial.println("Updating realtime database...");
-    Firebase.RTDB.setBool(&fbdo, F("/" + deviceID + "/state"), relayState);
-    Serial.printf("Get bool: %s", Firebase.RTDB.getBool(&fbdo, F("/1/state"), &relayState) ? relayState ? "True" : "False" : fbdo.errorReason().c_str());
-
-    Print newline for formatting
-    Serial.println();
-    */
   }
 }

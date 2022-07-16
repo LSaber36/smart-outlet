@@ -24,7 +24,6 @@ class MyServerCallbacks: public BLEServerCallbacks
 {
   void onConnect(BLEServer* pServer) {
     deviceConnected = true;
-    txValue = 'A';
     Serial.println("Device Connected");
   };
 
@@ -45,7 +44,10 @@ class MyCallbacks: public BLECharacteristicCallbacks
       {
         blinkLED(BLUE_LED, 100, 300, 2);
         Serial.println("Shutting off bluetooth");
-        pServer->getAdvertising()->stop();
+        
+        putMode("normal");
+        Serial.println("Rebooting device");
+        ESP.restart();
       }
       else if (convertedRxValue == REBOOT_DEVICE)
       {
@@ -54,6 +56,8 @@ class MyCallbacks: public BLECharacteristicCallbacks
         delay(5000);
         Serial.println("Rebooting device");
         delay(100);
+        
+        putMode("normal");
         ESP.restart();
       }
       else if (convertedRxValue == ACCEPTED)
@@ -136,8 +140,12 @@ class MyCallbacks: public BLECharacteristicCallbacks
   }
 };
 
-void setupBLE()
+void enterPairingMode()
 {
+  Serial.println("Starting bluetooth");
+
+  blinkLED(BLUE_LED, 100, 300, 4);
+  
   // Create the BLE Device
   BLEDevice::init("New SmartOutlet Device");
 
@@ -170,17 +178,9 @@ void setupBLE()
   pService->start();
 
   RxChar->setCallbacks(new MyCallbacks());
-}
-
-void pairingMode()
-{
-  Serial.println("Starting bluetooth");
-
-  blinkLED(BLUE_LED, 100, 300, 4);
 
   // Start advertising
   pServer->getAdvertising()->start();
 
-  TxChar->setValue(&txValue, sizeof(txValue));
-  TxChar->notify();
+  Serial.println("Bluetooth started");
 }
