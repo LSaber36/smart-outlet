@@ -135,6 +135,7 @@ void setup()
       hasSavedInfo = true;
       deviceID = currentUuid;
       setupWiFi(currentSsid, currentPass);
+      delay(750);
       setupFirebase();
       setupADC();
     }
