@@ -1,4 +1,4 @@
-void setupWiFi(String ssid, String pass)
+bool setupWiFi(String ssid, String pass)
 {
   unsigned long startTime = 0;
 
@@ -18,12 +18,13 @@ void setupWiFi(String ssid, String pass)
   if ((millis() - startTime) >= WIFI_TIMEOUT)
   {
     Serial.println("\nWifi conenction failed");
-    ESP.restart();
+    return false;
   }
 
   Serial.print("\nConnected with IP: ");
   Serial.println(WiFi.localIP());
   Serial.print("\n");
+  return true;
 }
 
 void streamCallback(FirebaseStream data)

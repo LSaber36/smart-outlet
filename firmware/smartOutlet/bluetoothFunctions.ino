@@ -76,12 +76,10 @@ class MyCallbacks: public BLECharacteristicCallbacks
       else if (convertedRxValue == TEST_WIFI)
       {
         Serial.println("\nChecking wifi connection");
-        setupWiFi(currentSsid, currentPass);
+        bool result = setupWiFi(currentSsid, currentPass);
 
         TxChar->setValue(std::to_string(
-          (WiFi.status() == WL_CONNECTED) ? 
-          WIFI_CONNECTION_SUCCESSFUL :
-          WIFI_CONNECTION_FAILED
+          (result) ? WIFI_CONNECTION_SUCCESSFUL : WIFI_CONNECTION_FAILED
         ));
         TxChar->notify();
       }
