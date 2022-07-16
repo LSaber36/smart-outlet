@@ -11,19 +11,19 @@ void setupADC()
   {
     Serial.println("Initialized ADS");
     ADCInitialized = true;
-  }
+  
+    counter = 0;
+    averageVoltage = 0;
 
-  counter = 0;
-  averageVoltage = 0;
-
-  while (counter < 50)
-  {
-    ADCResult = ads.readADC_Differential_0_1() * ADCMultiplier/1000;
-    averageVoltage = averageVoltage + ADCResult;
-    counter++;
-    delay(7);
+    while (counter < 50)
+    {
+      ADCResult = ads.readADC_Differential_0_1() * ADCMultiplier / 1000;
+      averageVoltage = averageVoltage + ADCResult;
+      counter++;
+      delay(7);
+    }
+    averageVoltage = averageVoltage / counter;
   }
-  averageVoltage = averageVoltage / counter;
 }
 
 void getADCReading()
