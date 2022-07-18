@@ -60,7 +60,9 @@ float ADCValue;   //Current
 float averageVoltage;
 float maxv;
 float minv;
-float counter;
+uint8_t sampleCounter;
+unsigned long prevADCTime = 0;
+bool firstADCCheck = true;
 
 bool ADCInitialized = false;
 
@@ -119,6 +121,8 @@ void setup()
   if (mode == "pairing")
   {
     Serial.println("Entered pairing mode");
+    digitalWrite(GREEN_LED, LOW);
+    digitalWrite(BLUE_LED, LOW);
     enterPairingMode();
   }
   else if (mode == "normal")
@@ -144,9 +148,10 @@ void setup()
 
 void loop()
 {
+  getButtons();
+
   if (mode == "normal")
   {
-    getButtons();
     getADCReading();
     syncFirebase();
 
@@ -167,6 +172,17 @@ void loop()
       dataChanged = false;
     }
 
+    // Only call digitalWrite if the state has changed (reduces unnecessary calls)
+    if (relayState != prevRelayState)
+    {
+      digitalWrite(RELAY_PIN, relayState);
+      digitalWrite(GREEN_LED, relayState);
+    }
+
+    prevRelayState = relayState;
+  }
+  else if (mode == "pairing")
+  {
     if (deviceConnected)
     {        
       delay(1000); // bluetooth stack will go into congestion, if too many packets are sent
@@ -186,15 +202,6 @@ void loop()
       blinkLED(BLUE_LED, 100, 300, 2);
       oldDeviceConnected = deviceConnected;
     }
-
-    // Only call digitalWrite if the state has changed (reduces unnecessary calls)
-    if (relayState != prevRelayState)
-    {
-      digitalWrite(RELAY_PIN, relayState);
-      digitalWrite(GREEN_LED, relayState);
-    }
-
-    prevRelayState = relayState;
   }
 
   // This is necessary to avoid watchdog timer errors
