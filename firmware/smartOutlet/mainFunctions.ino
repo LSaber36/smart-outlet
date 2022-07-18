@@ -37,7 +37,6 @@ void getButtons()
         }
 
         buttonPressCount ++;
-        // relayState = !relayState;
       }
       else if (releasedPressTime <= LONG_PRESS_TIME)
       {
