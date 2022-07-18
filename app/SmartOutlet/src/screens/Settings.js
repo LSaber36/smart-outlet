@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
-import { loadUserData } from '../redux';
+import { loadUserData, setOutletRefList } from '../redux';
 import { InfoBox } from '../components';
 
 const { height, width } = Dimensions.get('screen');
@@ -92,6 +92,8 @@ export const Settings = () => {
 										.signOut()
 										.then(() => {
 											console.log('User signed out!');
+											console.log('Clearing local ref list');
+											dispatch(setOutletRefList([]));
 										})
 										.catch((error) => {
 											console.log(error);
