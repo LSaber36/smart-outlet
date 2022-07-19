@@ -36,6 +36,8 @@ export const Device = ({ navigation }) => {
 		scrollViewButtonView, mainButtonView, scrollViewButtonStyle, mainButtonStyle, deleteButton
 	} = deviceStyles;
 
+	const labels = Array.from(Array(historicalData.length), (x, i) => (i + 1).toString());
+
 	useEffect(() => {
 		const outletReference = database()
 			.ref('/' + selectedOutletID)
@@ -172,7 +174,7 @@ export const Device = ({ navigation }) => {
 				>
 					<LineChart
 						data = {{
-							labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+							labels: labels,
 							datasets: [
 								{ data: historicalData }
 							]
