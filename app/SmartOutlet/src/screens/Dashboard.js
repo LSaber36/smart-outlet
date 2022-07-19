@@ -438,7 +438,7 @@ export const Dashboard = ({ navigation }) => {
 		if (modalPage === PAGE.LOADING) {
 			modalMessage =
 			'We\'re searching for your device, hang tight.\n\n' +
-			'Make sure you\'ve put your device in pairing mode by pressing the faceplate button until the blue LED blinks.';
+			'Make sure your device in pairing mode and that you\'re connected to the network you want to register the device to.\n\n';
 		}
 		else if (modalPage === PAGE.SCAN_TIMEOUT) {
 			modalMessage =
