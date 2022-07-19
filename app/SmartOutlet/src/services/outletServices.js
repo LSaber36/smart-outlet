@@ -7,7 +7,8 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName, newOutle
 		.ref('/' + newOutletId.toString())
 		.set({
 			name: newOutletName,
-			state: false
+			state: false,
+			powerThreshold: 0
 		})
 		.then(() => {
 			console.log('Added outlet to RTDB           (ID: ' + newOutletId + ')');
@@ -22,7 +23,6 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName, newOutle
 		.doc(newOutletId.toString())
 		.set({
 			name: newOutletName,
-			powerThreshold: 0,
 			historicalData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		})
 		.then(() => {
@@ -101,9 +101,8 @@ export const setOutletState = (outletID, targetState) => {
 };
 
 export const setPowerThresh = (outletID, newThresh) => {
-	firestore()
-		.collection('Outlets')
-		.doc(outletID.toString())
+	database()
+		.ref('/' + outletID.toString())
 		.update({
 			powerThreshold: newThresh
 		})

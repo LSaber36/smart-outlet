@@ -89,7 +89,7 @@ export const Device = ({ navigation }) => {
 							onSubmit = { (values, actions) => {
 								actions.resetForm();
 								console.log('New Thresh: ' + values.thresh);
-								setPowerThresh(selectedOutletID, values.thresh);
+								setPowerThresh(selectedOutletID, parseInt(values.thresh));
 								setModalVisible(false);
 							} }
 						>
@@ -230,7 +230,7 @@ export const Device = ({ navigation }) => {
 						/>
 						<InfoBox
 							header = 'Power Threshold'
-							value = { powerThreshold }
+							value = { (currentOutletData.powerThreshold != undefined) ? currentOutletData.powerThreshold : 'Undefined' }
 						/>
 						<InfoBox
 							header = 'ID'
