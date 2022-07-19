@@ -25,8 +25,7 @@ export const Device = ({ navigation }) => {
 	const [currentOutletData, setCurrentOutletData] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
 	const [historicalData, setHistoricalData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-	const [powerThreshold, setPowerThreshold] = useState(0);
-	const [percentPowerUsed, setPercentPowerUsed] = useState(75);
+	const [percentPowerUsed, setPercentPowerUsed] = useState();
 	const [deleteOrThreshhold, setDeleteOrThreshhold] = useState(true);
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
 
@@ -41,6 +40,7 @@ export const Device = ({ navigation }) => {
 		const outletReference = database()
 			.ref('/' + selectedOutletID)
 			.on('value', snapshot => {
+				console.log('Updated current outlet data: ' + snapshot.val().powerThreshold);
 				setCurrentOutletData(snapshot.val());
 			});
 
@@ -50,18 +50,27 @@ export const Device = ({ navigation }) => {
 			.onSnapshot(documentSnapshot => {
 				if (documentSnapshot != undefined) {
 					let tempHistoricalData = documentSnapshot.get('historicalData');
-					let tempPowerThreshold = documentSnapshot.get('powerThreshold');
 					let tempPercentPowerUsed;
 
 					console.log('Historical Data: ' + JSON.stringify(tempHistoricalData));
-					console.log('Power Threshold: ' + tempPowerThreshold);
 
-					setPowerThreshold(tempPowerThreshold);
 					setHistoricalData(tempHistoricalData);
+
 					// Calculate the data, filter out values above 100, and round up to nearest integer
-					tempPercentPowerUsed = (tempPowerThreshold / Math.max(...tempHistoricalData)) * 100;
-					tempPercentPowerUsed = Math.round(tempPercentPowerUsed);
-					tempPercentPowerUsed = (tempPercentPowerUsed < 100) ? tempPercentPowerUsed : 100;
+					// Get the sum of historical data
+					tempPercentPowerUsed = (tempHistoricalData.reduce((partialSum, a) => partialSum + a, 0));
+					console.log('Cum sum for historical data: ' + tempPercentPowerUsed);
+					console.log('Current power threshold: ' + currentOutletData.powerThreshold);
+
+					if (currentOutletData.powerThreshold === undefined || currentOutletData.powerThreshold === 0) {
+						// This accounts for a divide by zero error
+						tempPercentPowerUsed = undefined;
+					}
+					else {
+						tempPercentPowerUsed = (tempPercentPowerUsed / currentOutletData.powerThreshold) * 100;
+						tempPercentPowerUsed = Math.round(tempPercentPowerUsed);
+						tempPercentPowerUsed = (tempPercentPowerUsed < 100) ? tempPercentPowerUsed : 100;
+					}
 
 					console.log('Percent power used: ' + tempPercentPowerUsed);
 					setPercentPowerUsed(tempPercentPowerUsed);
@@ -72,7 +81,7 @@ export const Device = ({ navigation }) => {
 			database().ref('/' + selectedOutletID).off('value', outletReference);
 			outletHistoricalDataUnsubscribe();
 		};
-	}, []);
+	}, [currentOutletData.powerThreshold]);
 
 	const renderModalBody = () => {
 		return (
@@ -194,7 +203,7 @@ export const Device = ({ navigation }) => {
 						<View style = { [progressChartView, center] }>
 							<ProgressChart
 								data = {{
-									data: [percentPowerUsed / 100.0]
+									data: [ (percentPowerUsed !== undefined) ? (percentPowerUsed / 100.0) : 0]
 								}}
 								width = { width * 0.36 }
 								height = { 130 }
@@ -210,7 +219,7 @@ export const Device = ({ navigation }) => {
 								style = { graphStyle }
 							/>
 							<Text style = { centerProgressText }>
-								{ percentPowerUsed }%
+								{ (percentPowerUsed !== undefined) ? (percentPowerUsed + '%') : '' }
 							</Text>
 						</View>
 						<View style = { infoTextView }>
