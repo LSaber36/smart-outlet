@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
-import { loadUserData } from '../redux';
+import { loadUserData, setOutletRefList } from '../redux';
 import { InfoBox } from '../components';
 
 const { height, width } = Dimensions.get('screen');
@@ -14,8 +14,7 @@ const { height, width } = Dimensions.get('screen');
 export const Settings = () => {
 	const {	container, fullWidthHeight, buttonContainer, modalContainer } = styles;
 	const {
-		avatarView, avatarStyle, userDataView, userDataHeader,
-		userData, buttonView, mainButtonStyle
+		avatarView, avatarStyle, userDataView, buttonView, mainButtonStyle
 	} = dashboardStyles;
 
 	const { activeUserData } = useSelector(state => state.user);
@@ -92,6 +91,8 @@ export const Settings = () => {
 										.signOut()
 										.then(() => {
 											console.log('User signed out!');
+											console.log('Clearing local ref list');
+											dispatch(setOutletRefList([]));
 										})
 										.catch((error) => {
 											console.log(error);
@@ -158,19 +159,6 @@ const dashboardStyles = {
 		paddingTop: '5%',
 		borderRadius: 10,
 		backgroundColor: colors.secondaryLight
-	},
-	userDataHeader: {
-		color: colors.dark,
-		fontSize: 20,
-		marginTop: '10%',
-		alignItems: 'flex-start'
-	},
-	userData: {
-		color: colors.dark,
-		fontSize: 15,
-		marginTop: '2%',
-		alignItems: 'flex-start',
-		marginLeft: '1%'
 	},
 	buttonView: {
 		height: '10%',
