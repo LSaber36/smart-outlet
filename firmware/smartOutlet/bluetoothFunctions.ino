@@ -78,9 +78,9 @@ class MyCallbacks: public BLECharacteristicCallbacks
         Serial.println("\nChecking wifi connection");
         bool result = setupWiFi(currentSsid, currentPass);
 
-        TxChar->setValue(std::to_string(
+        TxChar->setValue(String(
           (result) ? WIFI_CONNECTION_SUCCESSFUL : WIFI_CONNECTION_FAILED
-        ));
+        ).c_str());
         TxChar->notify();
       }
       else if (convertedRxValue == NEW_UUID)
@@ -92,7 +92,7 @@ class MyCallbacks: public BLECharacteristicCallbacks
       else if (convertedRxValue == CHECK_UUID)
       {
         Serial.printf("Received UUID: %s\n", (currentUuid != "") ? "true" : "false");
-        TxChar->setValue(std::to_string(UUID_RECEIVED));
+        TxChar->setValue(String(UUID_RECEIVED).c_str());
         TxChar->notify();
       }
 
