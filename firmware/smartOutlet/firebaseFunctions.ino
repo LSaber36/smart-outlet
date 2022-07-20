@@ -47,6 +47,7 @@ void streamCallback(FirebaseStream data)
     dataChanged = INITIAL_UPDATE;
     Firebase.RTDB.getBool(&fbdo, String(deviceID + "/state"));
     relayState = fbdo.to<bool>();
+    prevRelayState = !relayState;
     Firebase.RTDB.getInt(&fbdo, String(deviceID + "/powerThreshold"));
     powerThreshold = fbdo.to<int>();
   }
