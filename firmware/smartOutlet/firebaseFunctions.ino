@@ -43,8 +43,12 @@ void streamCallback(FirebaseStream data)
     dataChanged = POWER_THRESHOLD;
   }
   else
-  {
+  {                
     dataChanged = INITIAL_UPDATE;
+    Firebase.RTDB.getBool(&fbdo, String(deviceID + "/state"));
+    relayState = fbdo.to<bool>();
+    Firebase.RTDB.getInt(&fbdo, String(deviceID + "/powerThreshold"));
+    powerThreshold = fbdo.to<int>();
   }
 }
 
@@ -108,7 +112,5 @@ void syncFirebase()
     sendDataPrevMillis = millis();
 
     // This is where we want to read the ADC and add to the current sum  
-
-    
   }
 }

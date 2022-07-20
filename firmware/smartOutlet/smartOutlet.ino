@@ -168,7 +168,6 @@ void loop()
 
   if (mode == "normal")
   {
-    // getADCReading();
     syncFirebase();
 
     if (dataChanged != NO_CHANGE)
@@ -191,6 +190,12 @@ void loop()
       else if (dataChanged == POWER_THRESHOLD)
       {
         Serial.printf("Received threshold update: %d\n", powerThreshold);
+      }
+      else if (dataChanged == INITIAL_UPDATE)
+      {
+        Serial.println("Initial update, initializing variables");
+        Serial.printf("powerThreshold: %d\n", powerThreshold);
+        Serial.printf("state: %s\n", (relayState) ? "true" : "false");
       }
       
       dataChanged = NO_CHANGE;
