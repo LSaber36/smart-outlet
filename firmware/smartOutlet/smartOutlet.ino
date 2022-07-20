@@ -36,7 +36,7 @@ String currentSsid, currentPass, currentUuid;
 volatile bool hasSavedInfo = false;
 
 // Define ADC object
-Adafruit_ADS1015 ads;       
+Adafruit_ADS1015 ads;
 
 // Define Firebase Data objects
 FirebaseData stream;
