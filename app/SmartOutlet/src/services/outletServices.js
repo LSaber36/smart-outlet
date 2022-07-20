@@ -23,7 +23,7 @@ export const addOutlet = (activeUserData, outletRefList, newOutletName, newOutle
 		.doc(newOutletId.toString())
 		.set({
 			name: newOutletName,
-			historicalData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			historicalData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		})
 		.then(() => {
 			console.log('Added new outlet to firestore  (ID: ' + newOutletId + ')');
