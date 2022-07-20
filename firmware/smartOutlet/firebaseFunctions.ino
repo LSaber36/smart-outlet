@@ -108,10 +108,39 @@ void syncFirebase()
   // Firebase.ready() should be called repeatedly to handle authentication tasks.
   // Check every 5 seconds
   if (Firebase.ready() && 
-      (millis() - sendDataPrevMillis > SEND_INTERVAL || sendDataPrevMillis == 0))
+      (millis() - sendDataPrevMillis > UPDATE_INTERVAL || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
 
     // This is where we want to read the ADC and add to the current sum  
+    // currentHourCumSum += getADCReading();
+    // if (currentHourCumSum > powerThreshold)
+    // {
+    //   // Trigger a forced update
+    // }
+
+    getTime(&timeInfo);
+
+    if (timeInfo.tm_min != prevMin)
+    {
+      int8_t diffMinutes = ((timeInfo.tm_min - timerMin + 60) % 60);
+      Serial.println();
+      Serial.print("X:  " + timeInfo.tm_min);
+      Serial.println(timeInfo.tm_min);
+      Serial.print("Y: " + prevMin);
+      Serial.println(prevMin);
+      Serial.print("diff: ");
+      Serial.println(diffMinutes);
+
+      if (diffMinutes >= ADC_READ_INTERVAL)
+      {
+        // This is where want to read send the current sum to the database 
+        Serial.print("5 minutes has passed: ");
+        Serial.println(timeInfo.tm_min);
+        timerMin = timeInfo.tm_min;
+      }
+
+      prevMin = timeInfo.tm_min;
+    }
   }
 }
