@@ -190,7 +190,7 @@ export const Device = ({ navigation }) => {
 								height = { 205 }
 								yAxisSuffix = ' KWH'
 								yAxisInterval = { 1 }
-								verticalLabelRotation = { -55 }
+								verticalLabelRotation = { 0 }
 								onDataPointClick = { (data) => {
 									console.log('Set data point: ' + JSON.stringify(data));
 									setDatapointInfo(data);
