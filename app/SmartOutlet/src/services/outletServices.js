@@ -88,10 +88,8 @@ export const deleteOutlet = (activeUserData, outletRefList, outletID) => {
 
 export const setOutletState = (outletID, targetState) => {
 	database()
-		.ref('/' + outletID.toString())
-		.update({
-			state: targetState
-		})
+		.ref('/' + outletID.toString() + '/state')
+		.set(targetState)
 		.then(() => {
 			console.log('Set outlet state (State: ' + targetState + '   ID: ' + outletID + ')');
 		})
@@ -102,10 +100,8 @@ export const setOutletState = (outletID, targetState) => {
 
 export const setPowerThresh = (outletID, newThresh) => {
 	database()
-		.ref('/' + outletID.toString())
-		.update({
-			powerThreshold: newThresh
-		})
+		.ref('/' + outletID.toString() + '/powerThreshold')
+		.set(newThresh)
 		.then(() => {
 			console.log('Set power threshold to ' + newThresh + ' KWH');
 		})
