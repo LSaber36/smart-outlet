@@ -7,8 +7,9 @@ enum BLUETOOTH_CODES
   WIFI_CONNECTION_FAILED = 5,
   NEW_UUID = 6,
   CHECK_UUID = 7,
-  UUID_RECEIVED = 8,
-  REBOOT_DEVICE = 9,
+  UUID_VALID = 8,
+  UUID_INVALID = 9,
+  REBOOT_DEVICE = 10,
 
   BLUETOOTH_FINISHED = 64
 };
@@ -91,8 +92,11 @@ class MyCallbacks: public BLECharacteristicCallbacks
       }
       else if (convertedRxValue == CHECK_UUID)
       {
-        Serial.printf("Received UUID: %s\n", (currentUuid != "") ? "true" : "false");
-        TxChar->setValue(String(UUID_RECEIVED).c_str());
+        Serial.printf("Is UUID valid: %s\n", (currentUuid.length() > 1) ? "yes" : "no");
+        
+        TxChar->setValue(String(
+          (currentUuid.length() > 1) ? UUID_VALID : UUID_INVALID
+        ).c_str());
         TxChar->notify();
       }
 
@@ -125,8 +129,7 @@ class MyCallbacks: public BLECharacteristicCallbacks
         {
           currentUuid = rxValue.data();
           putUuid(currentUuid);
-          Serial.println("\nReceived UUID:");
-          Serial.printf("uuid: %s\n", currentUuid.c_str());
+          Serial.printf("\nReceived UUID: %s\n", currentUuid.c_str());
           incomingDataCounter = -1;
           incomingData = NO_INCOMING_VARS;
         }

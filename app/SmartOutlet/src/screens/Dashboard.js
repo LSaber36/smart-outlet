@@ -54,8 +54,9 @@ const CODES = {
 	WIFI_CONNECTION_FAILED: '5',
 	NEW_UUID: '6',
 	CHECK_UUID: '7',
-	UUID_RECEIVED: '8',
-	REBOOT_DEVICE: '9',
+	UUID_VALID: '8',
+	UUID_INVALID: '9',
+	REBOOT_DEVICE: '10',
 
 	BLUETOOTH_FINISHED: '64'
 };
@@ -140,7 +141,8 @@ export const Dashboard = ({ navigation }) => {
 											console.log('');
 											console.log('Received data: ' + receivedValue);
 
-											if (receivedValue === CODES.WIFI_CONNECTION_SUCCESSFUL) {
+											if (receivedValue === CODES.WIFI_CONNECTION_SUCCESSFUL ||
+													receivedValue === CODES.UUID_INVALID) {
 												console.log('Wifi connection successful');
 												let newId = uuid.v4();
 
@@ -167,7 +169,7 @@ export const Dashboard = ({ navigation }) => {
 												console.log('Wifi connection failed');
 												setWifiPageError('Outlet wifi connection failed, please re-enter your wifi password');
 											}
-											else if (receivedValue === CODES.UUID_RECEIVED) {
+											else if (receivedValue === CODES.UUID_VALID) {
 												console.log('UUID received, rebooting device');
 
 												// Tell ESP32 to reboot
