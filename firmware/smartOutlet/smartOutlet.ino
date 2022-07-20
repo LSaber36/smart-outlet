@@ -30,6 +30,14 @@
 #define CHARACTERISTIC_UUID_RX  "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define CHARACTERISTIC_UUID_TX  "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
+enum RECEIVED_DATA_UPDATE
+{
+  NO_CHANGE = 0,
+  RELAY_STATE = 1,
+  POWER_THRESHOLD = 2,
+  INITIAL_UPDATE = 3
+};
+
 // Define preferences object for flash access
 Preferences savedInfo;
 String currentSsid, currentPass, currentUuid;
@@ -49,7 +57,8 @@ FirebaseConfig config;
 unsigned long sendDataPrevMillis = 0;
 
 // Realtime Data
-volatile bool dataChanged = false, firstStreamUpdate = true, firebaseEstablished = false;
+volatile bool firstStreamUpdate = true, firebaseEstablished = false;
+volatile int dataChanged = NO_CHANGE;
 String deviceID = "";
 int devicePower = 0;
 
@@ -73,6 +82,7 @@ unsigned long prevMillis = 0, releasedPressTime = 0, depressedPressTime = 0;
 unsigned long prevButtonCountTime = 0, buttonCountTime = 0;
 uint8_t buttonPressCount = 0;
 volatile bool prevRelayState, relayState = false;
+volatile int powerThreshold = 0;
 
 // Bluetooth data
 BLEServer *pServer = NULL;
@@ -83,7 +93,10 @@ bool deviceConnected = false;
 bool oldDeviceConnected = false;
 int8_t incomingData = 0, incomingDataCounter = 0;
 
+// Define time variables
 const char* ntpServer = "pool.ntp.org";
+struct tm timeInfo;
+uint8_t prevMin = 0;
 
 // Mode for knowing wheter to boot in normal operation or in pairing mode
 String mode;
@@ -142,6 +155,9 @@ void setup()
       delay(750);
       setupFirebase();
       setupADC();
+      getTime(&timeInfo);
+      prevMin = timeInfo.tm_min;
+      Serial.printf("Current minutes:      %d\n", timeInfo.tm_min);
     }
   }
 }
@@ -152,10 +168,10 @@ void loop()
 
   if (mode == "normal")
   {
-    getADCReading();
+    // getADCReading();
     syncFirebase();
 
-    if (dataChanged)
+    if (dataChanged != NO_CHANGE)
     {
       if (firstStreamUpdate)
       {
@@ -168,8 +184,16 @@ void loop()
       }
 
       // Process new data received away from callback for efficiency
-      Serial.printf("Received stream update: %s\n", relayState ? "true" : "false");
-      dataChanged = false;
+      if (dataChanged == RELAY_STATE)
+      {
+        Serial.printf("Received state update: %s\n", (relayState) ? "true" : "false");
+      }
+      else if (dataChanged == POWER_THRESHOLD)
+      {
+        Serial.printf("Received threshold update: %d\n", powerThreshold);
+      }
+      
+      dataChanged = NO_CHANGE;
     }
 
     // Only call digitalWrite if the state has changed (reduces unnecessary calls)
