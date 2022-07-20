@@ -28,10 +28,12 @@ export const Device = ({ navigation }) => {
 	const [percentPowerUsed, setPercentPowerUsed] = useState();
 	const [deleteOrThreshhold, setDeleteOrThreshhold] = useState(true);
 	const { activeUserData, outletRefList, selectedOutletID } = useSelector(state => state.user);
+	const [datapointInfo, setDatapointInfo] = useState(null);
 
 	const {	container, fullWidthHeight, buttonContainer, center, modalContainer } = styles;
 	const {
-		textStyle, scrollViewContainer, scrollViewStyle, scrollViewContent, graphStyle,
+		textStyle, scrollViewContainer, scrollViewStyle, scrollViewContent, graphContainerStyle, graphStyle,
+		dataPointInfo, dataPointHeader, dataPointItem,
 		percentUsedView, progressChartView, centerProgressText, descProgressText, infoView, infoTextView,
 		scrollViewButtonView, mainButtonView, scrollViewButtonStyle, mainButtonStyle, deleteButton
 	} = deviceStyles;
@@ -172,35 +174,51 @@ export const Device = ({ navigation }) => {
 					style = { scrollViewStyle }
 					contentContainerStyle = { scrollViewContent }
 				>
-					<LineChart
-						data = {{
-							labels: labels,
-							datasets: [
-								{ data: historicalData }
-							]
-						}}
-						width = { width * 0.8 }
-						height = { 220 }
-						yAxisSuffix = ' KWH'
-						yAxisInterval = { 1 }
-						verticalLabelRotation = { -55 }
-						chartConfig = {{
-							backgroundGradientFrom: colors.primaryDark,
-							backgroundGradientFromOpacity: 1.0,
-							backgroundGradientTo: colors.primaryDark,
-							backgroundGradientToOpacity: 1.0,
-							decimalPlaces: 0,
-							color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-							labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-							propsForDots: {
-								r: '4',
-								strokeWidth: '1',
-								stroke: colors.graphDotOutline
-							}
-						}}
-						bezier
-						style = { graphStyle }
-					/>
+					<View style = { graphContainerStyle }>
+						<ScrollView
+							horizontal = { true }
+							contentContainerStyle = { center }
+						>
+							<LineChart
+								data = {{
+									labels: labels,
+									datasets: [
+										{ data: historicalData }
+									]
+								}}
+								width = { width * 1.5 }
+								height = { 205 }
+								yAxisSuffix = ' KWH'
+								yAxisInterval = { 1 }
+								verticalLabelRotation = { -55 }
+								onDataPointClick = { (data) => {
+									console.log('Set data point: ' + JSON.stringify(data));
+									setDatapointInfo(data);
+								} }
+								chartConfig = {{
+									backgroundGradientFrom: colors.primaryDark,
+									backgroundGradientFromOpacity: 1.0,
+									backgroundGradientTo: colors.primaryDark,
+									backgroundGradientToOpacity: 1.0,
+									decimalPlaces: 0,
+									color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+									labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+									propsForDots: {
+										r: '4',
+										strokeWidth: '1',
+										stroke: colors.graphDotOutline
+									}
+								}}
+								bezier
+								style = { graphStyle }
+							/>
+						</ScrollView>
+					</View>
+					<View style = { dataPointInfo }>
+						<Text style = { dataPointHeader }>Datapoint Info</Text>
+						<Text style = { dataPointItem }>Hour:  { (datapointInfo !== null) ? datapointInfo.index : '' }</Text>
+						<Text style = { dataPointItem }>KWH:  { (datapointInfo !== null) ? datapointInfo.value : '' }</Text>
+					</View>
 					<View style = { percentUsedView }>
 						<View style = { [progressChartView, center] }>
 							<ProgressChart
@@ -304,8 +322,32 @@ const deviceStyles = {
 	scrollViewContent: {
 		alignItems: 'center'
 	},
+	graphContainerStyle: {
+		height: 220,
+		width: width * 0.8,
+		borderRadius: 10,
+		backgroundColor: colors.primaryDark
+	},
 	graphStyle: {
 		borderRadius: 10
+	},
+	dataPointInfo: {
+		width: width * 0.8,
+		height: '8%',
+		borderRadius: 10,
+		marginTop: '3%',
+		padding: '2%',
+		backgroundColor: colors.primaryDark
+	},
+	dataPointHeader: {
+		color: colors.offWhite,
+		fontSize: 15,
+		paddingLeft: '3%'
+	},
+	dataPointItem: {
+		color: colors.offWhite,
+		fontSize: 15,
+		paddingLeft: '5%'
 	},
 	percentUsedView: {
 		width: width * 0.8,
