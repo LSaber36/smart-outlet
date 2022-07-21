@@ -123,6 +123,8 @@ void syncFirebase()
 
     if (timeInfo.tm_min != prevMin)
     {
+      currentHourCumSum += timeInfo.tm_min;
+
       int8_t diffMinutes = ((timeInfo.tm_min - timerMin + 60) % 60);
       Serial.println();
       Serial.print("X:  " + timeInfo.tm_min);
@@ -142,5 +144,63 @@ void syncFirebase()
 
       prevMin = timeInfo.tm_min;
     }
+
+    if (timeInfo.tm_hour != prevHour)
+    {
+      // The hour has increased by 1
+
+      // Day has increased by 1
+      if (timeInfo.tm_hour == 0)
+      {
+        Serial.println("Day has increased by 1");
+        // Reset the database info for the next day
+      }
+      else
+      {
+        // Write to the database the cumSum and reset it for the next hour
+        Serial.printf("Appending cumSum: %d\n", currentHourCumSum);
+        currentHourCumSum = 0;
+      }
+
+      prevHour = timeInfo.tm_hour;
+    }
   }
+}
+
+bool updateHistoricalData(int index, int value)
+{
+  FirebaseJson content;
+  FirebaseJsonData result;
+  FirebaseJsonArray arr;
+  String documentPath = "Outlets/" + deviceID;
+
+  // Update an index in the historicalData array on the database
+  if (Firebase.Firestore.getDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), "", "", ""))
+  {
+    content.setJsonData(fbdo.payload().c_str());
+    content.get(result, "fields/historicalData/arrayValue/values");
+
+    // Populate FirebaseJsonArray arr with the current array data from "historicalData"
+    arr.setJsonArrayData(result.to<String>().c_str());
+    arr.get(result, "/[" + String(index) + "]/integerValue", true);
+
+    // Update a value in FirebaseJsonArray arr with "value" at "index"
+    arr.set("/[" + String(index) + "]/integerValue", String(value));
+    arr.get(result, "/[" + String(index) + "]/integerValue", true);
+
+    // Set "historicalData" with the new array stored in FirebaseJsonArray arr
+    content.clear();
+    content.set("fields/historicalData/arrayValue/values", arr);
+    
+    if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "historicalData"))
+      Serial.printf("Updated value at index %d to %d\n", index, value);
+    else
+      return false;
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
 }
