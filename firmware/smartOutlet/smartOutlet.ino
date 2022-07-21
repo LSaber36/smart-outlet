@@ -159,11 +159,6 @@ void setup()
       delay(750);
       setupFirebase();
       setupADC();
-      getTime(&timeInfo);
-      prevMin = timeInfo.tm_min;
-      timerMin = timeInfo.tm_min;
-      prevHour = timeInfo.tm_hour;
-      Serial.printf("Current minutes:      %d\n", timeInfo.tm_min);
     }
   }
 }
@@ -183,6 +178,17 @@ void loop()
         firstStreamUpdate = false;
         firebaseEstablished = true;
         Serial.println("\nFirebase Connection Established");
+
+        getTime(&timeInfo);
+        prevMin = timeInfo.tm_min;
+        timerMin = timeInfo.tm_min;
+        prevHour = timeInfo.tm_hour;
+        Serial.printf("Current minutes: %d\n", timeInfo.tm_min);
+        
+        // Initialize the currentHourCumSum to what's in the database for the current hour in case of a power failure
+        currentHourCumSum = getHistoricalData(timeInfo.tm_hour);
+        Serial.printf("Set currentHourCumSum: %.1f\n", currentHourCumSum);
+
         // Indicate that the code is running
         blinkLED(GREEN_LED, 100, 150, 2);
         blinkLED(BLUE_LED, 100, 150, 2);
