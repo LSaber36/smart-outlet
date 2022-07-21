@@ -41,10 +41,6 @@ void getButtons()
       else if (releasedPressTime <= LONG_PRESS_TIME)
       {
         // Long press
-        if (mode == "normal")
-        {
-          updateHistoricalData(3, 50.5);
-        }
       }
     }
   }
