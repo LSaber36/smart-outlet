@@ -113,13 +113,16 @@ void syncFirebase()
     sendDataPrevMillis = millis();
 
     // Read the ADC and add to the current sum
-    // getADCReading();
-    // currentHourCumSum += power;
-    // if (currentHourCumSum > powerThreshold)
-    // {
-    //   // Trigger a forced update
-    //   updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
-    // }
+    getADCReading();
+    currentHourCumSum += power;
+
+    if (currentHourCumSum > powerThreshold)
+    {
+      // Trigger a forced update
+      updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
+      Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, datapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
+      Serial.println();
+    }
 
     getTime(&timeInfo);
 
@@ -133,29 +136,31 @@ void syncFirebase()
       if (diffMinutes >= ADC_READ_INTERVAL)
       {
         // This is where want to read send the current sum to the database 
-        Serial.printf("5 minutes has passed: %d\n", timeInfo.tm_min);
+        Serial.printf("\n5 minutes has passed: %d\n\n", timeInfo.tm_min);
+        updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
         timerMin = timeInfo.tm_min;
       }
 
       prevMin = timeInfo.tm_min;
     }
 
+    // The hour has increased by 1
     if (timeInfo.tm_hour != prevHour)
     {
-      // The hour has increased by 1
-
       // Day has increased by 1
       if (timeInfo.tm_hour == 0)
       {
         Serial.println("Day has increased by 1");
         // Reset the database info for the next day
-        // resetHistoricalData();
+        resetHistoricalData();
       }
       else
       {
         // Write to the database the cumSum and reset it for the next hour
         Serial.printf("Appending cumSum: %d\n", currentHourCumSum);
-        // updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
+        updateHistoricalData(prevHour, currentHourCumSum);
+
+        // We can count on the next hour being 0, so we don't need to update that
         currentHourCumSum = 0;
       }
 
