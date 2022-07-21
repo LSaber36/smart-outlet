@@ -68,6 +68,7 @@ void getADCReading()
       Serial.printf("IRMS Current?: %.2f\n", ADCValue);
       Serial.println();
 
+      power=ADCValue*120;
       firstADCCheck = true;
     }
   }
