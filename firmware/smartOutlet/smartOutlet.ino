@@ -62,7 +62,6 @@ volatile bool firstStreamUpdate = true, firebaseEstablished = false;
 volatile int dataChanged = NO_CHANGE;
 String deviceID = "";
 String stateDatapath = "";
-int devicePower = 0;
 
 // ADC data
 float ADCMultiplier = 2.0F;
@@ -86,6 +85,7 @@ unsigned long prevButtonCountTime = 0, buttonCountTime = 0;
 uint8_t buttonPressCount = 0;
 volatile bool prevRelayState, relayState = false;
 volatile int powerThreshold = 0;
+volatile bool powerThresholdExceeded = false;
 
 // Bluetooth data
 BLEServer *pServer = NULL;
