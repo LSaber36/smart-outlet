@@ -112,11 +112,13 @@ void syncFirebase()
   {
     sendDataPrevMillis = millis();
 
-    // This is where we want to read the ADC and add to the current sum  
-    // currentHourCumSum += getADCReading();
+    // Read the ADC and add to the current sum
+    // getADCReading();
+    // currentHourCumSum += power;
     // if (currentHourCumSum > powerThreshold)
     // {
     //   // Trigger a forced update
+    //   updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
     // }
 
     getTime(&timeInfo);
@@ -126,19 +128,12 @@ void syncFirebase()
       currentHourCumSum += timeInfo.tm_min;
 
       int8_t diffMinutes = ((timeInfo.tm_min - timerMin + 60) % 60);
-      Serial.println();
-      Serial.print("X:  " + timeInfo.tm_min);
-      Serial.println(timeInfo.tm_min);
-      Serial.print("Y: " + prevMin);
-      Serial.println(prevMin);
-      Serial.print("diff: ");
-      Serial.println(diffMinutes);
+      Serial.printf("diff: %d = %d - %d\n", diffMinutes, timeInfo.tm_min, prevMin);
 
       if (diffMinutes >= ADC_READ_INTERVAL)
       {
         // This is where want to read send the current sum to the database 
-        Serial.print("5 minutes has passed: ");
-        Serial.println(timeInfo.tm_min);
+        Serial.printf("5 minutes has passed: %d\n", timeInfo.tm_min);
         timerMin = timeInfo.tm_min;
       }
 
@@ -154,11 +149,13 @@ void syncFirebase()
       {
         Serial.println("Day has increased by 1");
         // Reset the database info for the next day
+        // resetHistoricalData();
       }
       else
       {
         // Write to the database the cumSum and reset it for the next hour
         Serial.printf("Appending cumSum: %d\n", currentHourCumSum);
+        // updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
         currentHourCumSum = 0;
       }
 
