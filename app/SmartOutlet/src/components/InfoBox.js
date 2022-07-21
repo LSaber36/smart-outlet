@@ -22,6 +22,7 @@ export const InfoBox = ({ header, value }) => {
 const infoBoxStyles = {
 	container: {
 		width: width * 0.8,
+		padding: '2%',
 		marginBottom: '6%',
 		alignItems: 'center',
 		borderRadius: 10,
@@ -31,7 +32,7 @@ const infoBoxStyles = {
 		width: '90%'
 	},
 	infoHeader: {
-		fontSize: 20,
+		fontSize: 17,
 		color: colors.offWhite
 	},
 	infoView: {
@@ -39,7 +40,7 @@ const infoBoxStyles = {
 	},
 	infoText: {
 		color: colors.offWhite,
-		fontSize: 20,
+		fontSize: 17,
 		marginTop: '2%'
 	}
 };
