@@ -43,7 +43,7 @@ void getButtons()
         // Long press
         if (mode == "normal")
         {
-          updateHistoricalData(3, 55);
+          updateHistoricalData(3, 50.5);
         }
       }
     }

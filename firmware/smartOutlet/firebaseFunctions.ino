@@ -167,7 +167,7 @@ void syncFirebase()
   }
 }
 
-bool updateHistoricalData(int index, int value)
+bool updateHistoricalData(int index, float value)
 {
   FirebaseJson content;
   FirebaseJsonData result;
@@ -182,23 +182,29 @@ bool updateHistoricalData(int index, int value)
 
     // Populate FirebaseJsonArray arr with the current array data from "historicalData"
     arr.setJsonArrayData(result.to<String>().c_str());
-    arr.get(result, "/[" + String(index) + "]/integerValue", true);
 
     // Update a value in FirebaseJsonArray arr with "value" at "index"
-    arr.set("/[" + String(index) + "]/integerValue", String(value));
-    arr.get(result, "/[" + String(index) + "]/integerValue", true);
+    // Need to set then remove to avoid having nothing in the specified array index
+    arr.set("/[" + String(index) + "]/doubleValue", String(value, 1));
+    arr.remove("/[" + String(index) + "]/integerValue");
 
     // Set "historicalData" with the new array stored in FirebaseJsonArray arr
     content.clear();
     content.set("fields/historicalData/arrayValue/values", arr);
     
     if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "historicalData"))
-      Serial.printf("Updated value at index %d to %d\n", index, value);
+    {
+      Serial.printf("Updated value at index %d to %.1f\n", index, value);
+    }
     else
+    {
+      Serial.println(fbdo.errorReason());
       return false;
+    }
   }
   else
   {
+    Serial.println(fbdo.errorReason());
     return false;
   }
 
