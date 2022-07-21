@@ -107,29 +107,31 @@ void syncFirebase()
 {
   // Firebase.ready() should be called repeatedly to handle authentication tasks.
   // Check every 5 seconds
-  if (Firebase.ready() && 
+  if (Firebase.ready() && firebaseEstablished &&
       (millis() - sendDataPrevMillis > UPDATE_INTERVAL || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
 
     // Read the ADC and add to the current sum
     getADCReading();
+    Serial.printf("Adding %.1f to %.1f:  %.1f\n", power, currentHourCumSum, (currentHourCumSum + power));
     currentHourCumSum += power;
 
-    if (currentHourCumSum > powerThreshold)
+    if (!powerThresholdExceeded && currentHourCumSum > powerThreshold)
     {
       // Trigger a forced update
       updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
       Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, stateDatapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
       Serial.println();
+
+      // Ensure that we aren't making unnecessary database calls every 3 seconds
+      powerThresholdExceeded = true;
     }
 
     getTime(&timeInfo);
 
     if (timeInfo.tm_min != prevMin)
     {
-      currentHourCumSum += timeInfo.tm_min;
-
       int8_t diffMinutes = ((timeInfo.tm_min - timerMin + 60) % 60);
       Serial.printf("diff: %d = %d - %d\n", diffMinutes, timeInfo.tm_min, timerMin);
 
@@ -162,6 +164,7 @@ void syncFirebase()
 
         // We can count on the next hour being 0, so we don't need to update that
         currentHourCumSum = 0;
+        powerThresholdExceeded = false;
       }
 
       prevHour = timeInfo.tm_hour;
