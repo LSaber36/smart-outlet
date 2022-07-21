@@ -128,7 +128,7 @@ void syncFirebase()
       currentHourCumSum += timeInfo.tm_min;
 
       int8_t diffMinutes = ((timeInfo.tm_min - timerMin + 60) % 60);
-      Serial.printf("diff: %d = %d - %d\n", diffMinutes, timeInfo.tm_min, prevMin);
+      Serial.printf("diff: %d = %d - %d\n", diffMinutes, timeInfo.tm_min, timerMin);
 
       if (diffMinutes >= ADC_READ_INTERVAL)
       {
