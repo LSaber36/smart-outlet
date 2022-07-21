@@ -208,6 +208,39 @@ bool updateHistoricalData(int index, float value)
   return true;
 }
 
+float getHistoricalData(int index)
+{
+  FirebaseJson content;
+  FirebaseJsonData result;
+  FirebaseJsonArray arr;
+  float retVal = -1.0;
+  String documentPath = "Outlets/" + deviceID;
+
+  // Update an index in the historicalData array on the database
+  if (Firebase.Firestore.getDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), "", "", ""))
+  {
+    content.setJsonData(fbdo.payload().c_str());
+    content.get(result, "fields/historicalData/arrayValue/values");
+
+    // Populate FirebaseJsonArray arr with the current array data from "historicalData"
+    arr.setJsonArrayData(result.to<String>().c_str());
+
+    // Get the value at the current array, making sure to convert to a float and return    
+    if (arr.get(result, "/[" + String(index) + "]/doubleValue", true))
+      retVal = (float)result.doubleValue;
+    else if (arr.get(result, "/[" + String(index) + "]/integerValue", true))
+      retVal = (float)result.intValue;
+    
+    Serial.printf("Got float value: %.1f\n", retVal);
+    return retVal;
+  }
+  else
+  {
+    Serial.println(fbdo.errorReason());
+    return retVal;
+  }
+}
+
 bool resetHistoricalData()
 {
   FirebaseJson content;
