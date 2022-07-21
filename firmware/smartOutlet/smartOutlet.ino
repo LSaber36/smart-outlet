@@ -61,6 +61,7 @@ unsigned long sendDataPrevMillis = 0;
 volatile bool firstStreamUpdate = true, firebaseEstablished = false;
 volatile int dataChanged = NO_CHANGE;
 String deviceID = "";
+String stateDatapath = "";
 int devicePower = 0;
 
 // ADC data
@@ -155,6 +156,7 @@ void setup()
       Serial.println("Found data, attempting network connection");
       hasSavedInfo = true;
       deviceID = currentUuid;
+      stateDatapath = deviceID + "/state";
       setupWiFi(currentSsid, currentPass);
       delay(750);
       setupFirebase();

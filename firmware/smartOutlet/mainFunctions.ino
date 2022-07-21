@@ -75,12 +75,11 @@ void getButtons()
     if (buttonPressCount == NUM_MULTI_PRESS)
     {
       Serial.println("Short multi press");
-      String datapath = deviceID + "/state";
 
       if (mode == "normal")
       {
         // Update the state of the outlet in the database
-        Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, datapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
+        Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, stateDatapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
         Serial.println();
       }
 

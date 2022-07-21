@@ -120,7 +120,7 @@ void syncFirebase()
     {
       // Trigger a forced update
       updateHistoricalData(timeInfo.tm_hour, currentHourCumSum);
-      Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, datapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
+      Serial.printf("Set bool... %s\n", Firebase.RTDB.setBool(&fbdo, stateDatapath, !relayState) ? "ok" : fbdo.errorReason().c_str());
       Serial.println();
     }
 
