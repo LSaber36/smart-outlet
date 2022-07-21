@@ -62,11 +62,11 @@ void getADCReading()
       if((maxv - minv) < .1)
         ADCValue = 0;  
 
-      Serial.printf("Voltage Reading: %.2f\n", ADCResult);
-      Serial.printf("MaxV: %.2f\n", maxv);
-      Serial.printf("MinV: %.2f\n", minv);
-      Serial.printf("IRMS Current?: %.2f\n", ADCValue);
-      Serial.println();
+      // Serial.printf("Voltage Reading: %.2f\n", ADCResult);
+      // Serial.printf("MaxV: %.2f\n", maxv);
+      // Serial.printf("MinV: %.2f\n", minv);
+      // Serial.printf("IRMS Current?: %.2f\n", ADCValue);
+      // Serial.println();
 
       power = ADCValue * 120;
       firstADCCheck = true;
