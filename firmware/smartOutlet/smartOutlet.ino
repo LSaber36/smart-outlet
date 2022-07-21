@@ -100,7 +100,7 @@ const char* ntpServer = "pool.ntp.org";
 struct tm timeInfo;
 int8_t prevMin = 0, timerMin = 0;
 int8_t prevHour = 0;
-int currentHourCumSum = 0;
+float currentHourCumSum = 0;
 
 // Mode for knowing wheter to boot in normal operation or in pairing mode
 String mode;
