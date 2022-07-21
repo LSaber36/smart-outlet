@@ -325,6 +325,7 @@ const deviceStyles = {
 	graphContainerStyle: {
 		height: 220,
 		width: width * 0.8,
+		padding: '2%',
 		borderRadius: 10,
 		backgroundColor: colors.primaryDark
 	},
@@ -335,7 +336,7 @@ const deviceStyles = {
 		width: width * 0.8,
 		height: '8%',
 		borderRadius: 10,
-		marginTop: '3%',
+		marginTop: '2%',
 		padding: '2%',
 		backgroundColor: colors.primaryDark
 	},
