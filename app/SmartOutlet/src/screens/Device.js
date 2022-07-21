@@ -38,7 +38,7 @@ export const Device = ({ navigation }) => {
 		scrollViewButtonView, mainButtonView, scrollViewButtonStyle, mainButtonStyle, deleteButton
 	} = deviceStyles;
 
-	const labels = Array.from(Array(historicalData.length), (x, i) => (i + 1).toString());
+	const labels = Array.from(Array(historicalData.length), (x, i) => (i).toString());
 
 	useEffect(() => {
 		const outletReference = database()
