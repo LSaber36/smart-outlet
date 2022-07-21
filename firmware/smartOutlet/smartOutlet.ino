@@ -70,6 +70,7 @@ float ADCValue;   //Current
 float averageVoltage;
 float maxv;
 float minv;
+float power;
 uint8_t sampleCounter;
 unsigned long prevADCTime = 0;
 bool firstADCCheck = true;
