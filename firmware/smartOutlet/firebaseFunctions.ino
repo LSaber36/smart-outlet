@@ -210,3 +210,50 @@ bool updateHistoricalData(int index, float value)
 
   return true;
 }
+
+bool resetHistoricalData()
+{
+  FirebaseJson content;
+  FirebaseJsonData result;
+  FirebaseJsonArray arr;
+  String documentPath = "Outlets/" + deviceID;
+
+  // Update an index in the historicalData array on the database
+  if (Firebase.Firestore.getDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), "", "", ""))
+  {
+    content.setJsonData(fbdo.payload().c_str());
+    content.get(result, "fields/historicalData/arrayValue/values");
+
+    // Populate FirebaseJsonArray arr with the current array data from "historicalData"
+    arr.setJsonArrayData(result.to<String>().c_str());
+
+    // Update each value in the array to 0, effectively resetting it
+    // Need to set then remove to avoid having nothing in the specified array index
+    for (uint8_t i = 0; i < 24; i++)
+    {
+      arr.set("/[" + String(i) + "]/doubleValue", String(0.0, 1));
+      arr.remove("/[" + String(i) + "]/integerValue");
+    }
+
+    // Set "historicalData" with the new array stored in FirebaseJsonArray arr
+    content.clear();
+    content.set("fields/historicalData/arrayValue/values", arr);
+    
+    if (Firebase.Firestore.patchDocument(&fbdo, PROJECT_ID, "", documentPath.c_str(), content.raw(), "historicalData"))
+    {
+      Serial.println("Reset all values in array to 0");
+    }
+    else
+    {
+      Serial.println(fbdo.errorReason());
+      return false;
+    }
+  }
+  else
+  {
+    Serial.println(fbdo.errorReason());
+    return false;
+  }
+
+  return true;
+}
