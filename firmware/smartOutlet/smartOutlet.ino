@@ -134,6 +134,12 @@ void setup()
     putMode("normal");
     mode = "normal";
   }
+  // If there's ever the bug with the UUID being "7", don't let the outlet enter normal mode
+  // The user MUST repair the outlet to get past this
+  else if (currentUuid == "7")
+  {
+    mode = "pairing";
+  }
 
   if (mode == "pairing")
   {
