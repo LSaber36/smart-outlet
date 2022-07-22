@@ -17,12 +17,14 @@ void setupADC()
 
     while (sampleCounter < 50)
     {
-      ADCResult = ads.readADC_Differential_0_1() * ADCMultiplier / 1000;
+      ADCResult = ads.readADC_SingleEnded(0) * ADCMultiplier / 1000;
       averageVoltage = averageVoltage + ADCResult;
       sampleCounter++;
-      delay(7);
+      delay(4);
     }
     averageVoltage = averageVoltage / sampleCounter;
+    maxv = averageVoltage;
+
   }
 }
 
@@ -37,38 +39,33 @@ void getADCReading()
       firstADCCheck = false;
     }
 
-    maxv = averageVoltage;
-    minv = averageVoltage;
-
-    if (millis() - prevADCTime < 1000)
+    if (millis() - prevADCTime < 3000)
     {
-      ADCResult = ads.readADC_Differential_0_1() * ADCMultiplier / 1000;
+      //ADCResult = ads.readADC_Differential_0_1() * ADCMultiplier / 1000;
+      ADCResult = ads.readADC_SingleEnded(0) * ADCMultiplier / 1000;
 
       // Get the min and max values for 1 second
       if (maxv < ADCResult)
-        maxv = ADCResult;
-      
-      if (minv > ADCResult)
-        minv = ADCResult;
+        maxv = ADCResult;   
+
     }
+
     else
-    {
-      if ((averageVoltage - minv) > (maxv - averageVoltage))
-        maxv = averageVoltage + averageVoltage - minv;
-        
+    {        
       ADCValue = (maxv - averageVoltage) * 10;
       
       //Ignore small voltage differences
-      if((maxv - minv) < .1)
+      if((maxv - averageVoltage) < .02)
         ADCValue = 0;  
 
-      // Serial.printf("Voltage Reading: %.2f\n", ADCResult);
-      // Serial.printf("MaxV: %.2f\n", maxv);
-      // Serial.printf("MinV: %.2f\n", minv);
-      // Serial.printf("IRMS Current?: %.2f\n", ADCValue);
-      // Serial.println();
+      Serial.printf("Voltage Reading: %.2f\n", ADCResult);
+      Serial.printf("MaxV: %.2f\n", maxv);
+      Serial.printf("Average Voltage: %.2f\n", averageVoltage);
+      Serial.printf("IRMS Current?: %.2f\n", ADCValue);
+      Serial.println();
 
-      power = ADCValue * 120;
+      power = (ADCValue * 120) / 1000;
+      maxv = averageVoltage;
       firstADCCheck = true;
     }
   }

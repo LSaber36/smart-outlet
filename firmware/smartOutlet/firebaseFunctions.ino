@@ -113,8 +113,7 @@ void syncFirebase()
     sendDataPrevMillis = millis();
 
     // Read the ADC and add to the current sum
-    getADCReading();
-    Serial.printf("Adding %.1f to %.1f:  %.1f\n", power, currentHourCumSum, (currentHourCumSum + power));
+    Serial.printf("Adding %.3f to %.3f:  %.3f\n", power, currentHourCumSum, (currentHourCumSum + power));
     currentHourCumSum += power;
 
     if (!powerThresholdExceeded && currentHourCumSum > powerThreshold)
